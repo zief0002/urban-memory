@@ -1,0 +1,68 @@
+\captionsetup[figure]{labelfont=bf, textfont=it, width=.75\textwidth, justification=raggedright}
+\captionsetup[table]{labelfont=bf, textfont=it, justification=raggedright, width=.75\textwidth}
+
+
+% \mdfdefinestyle{proof}{
+%    skipabove         = .5\baselineskip ,
+%    skipbelow         = .5\baselineskip ,
+%    leftmargin        = 20pt ,
+%    rightmargin       = 10pt ,
+%    innermargin       = 0pt ,
+%    innerleftmargin   = 10pt ,
+%    innerrightmargin  = 0pt ,
+%    innerbottommargin = 0pt ,
+%    linewidth         = 1pt,
+%    linecolor         = gray,
+%    topline           = true,
+%    bottomline        = true,
+%    rightline         = true
+% }
+
+% closed box instead of open box for the qed symbol:
+\newcommand*\closedbox{%
+   \leavevmode\hbox to.77778em{\hfil\rule{.675em}{.675em}\hfil}}
+\let\qedsymbol\closedbox
+
+\mdfdefinestyle{proof}{
+   skipabove         = .5\baselineskip ,
+   skipbelow         = .5\baselineskip ,
+   leftmargin        = 0pt ,
+   rightmargin       = 0pt ,
+   innermargin       = 0pt ,
+   innertopmargin    = .5em ,
+   innerleftmargin   = .5em ,
+   innerrightmargin  = 0pt ,
+   innerbottommargin = 0pt ,
+   hidealllines      = true ,
+   singleextra       = {
+     \draw (O) -- ++(0,.675em) (O) -- ++(.675em,0) ;
+     \draw (P-|O) -- ++(0,-.675em) (P-|O) -- ++(.675em,0) ;
+   },
+   firstextra        = {
+     \draw (P-|O) -- ++(0,-.675em) (P-|O) -- ++(.675em,0) ;
+   },
+   secondextra       = {
+     \draw (O) -- ++(0,.675em) (O) -- ++(.675em,0) ;
+   },
+}
+
+% put the new mdframed style around the proof environment:
+\surroundwithmdframed[style=proof]{proof}
+
+
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+
+\mdfdefinestyle{mystyle}{
+  userdefinedwidth=5in, 
+  align=center, 
+  backgroundcolor=yellow, 
+  roundcorner=10pt, 
+  skipabove=2em
+  }
+
+\mdfdefinestyle{mystyle2}{userdefinedwidth=5.5in, align=center, skipabove=10pt, topline=false, bottomline=false, 
+linecolor=myorange, linewidth=5pt}
+
+

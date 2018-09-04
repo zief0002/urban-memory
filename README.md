@@ -24,10 +24,17 @@ To download individual PDF files, open the file link and then click on the `Down
 
 Andrew Zieffler ([zief0002@umn.edu](mailto://zief0002@umn.edu)) <br />
 **Office:** [Education Sciences Building 178](https://www.google.com/maps/place/Education+Sciences+Building/@44.9784043,-93.2394586,15z/data=!4m2!3m1!1s0x0:0x45656dac481b9150)  <br />
+**Hours:** Wednesdays 9:00am–10:00am; and by appointment <br />
 
 
 
 <br />
+
+### Teaching Assistant
+
+Jonathan Brown ([brow3019@umn.edu](mailto://brow3019@umn.edu)) <br />
+**Office:** [Education Sciences Building 192](https://www.google.com/maps/place/Education+Sciences+Building/@44.9784043,-93.2394586,15z/data=!4m2!3m1!1s0x0:0x45656dac481b9150)  (or the table immediately outside Room 192) <br />
+**Hours:** Tuesdays and Thursdays 12:00pm–1:00pm; and by appointment <br />
 
 
 ---
@@ -42,6 +49,22 @@ The required textbook is:
 
 - Fox, J. (2015). _Applied regression analysis and generalized linear models_ (3rd edition). Los Angeles: Sage.
 
+
+<br />
+
+---
+
+#### Some R Resources
+
+Here are some R resources:
+
+- [Summer R Slides and Materials](https://drive.google.com/drive/folders/1AkGUh3NlFs3Zqp-ieD1SckDTYJ5cbk-p) by Alicia Hofelich Mohr
+- Andy's EPsy 8251 notes
+	- [Introduction to R and RStudio](http://www.datadreaming.org/files/01-introduction-to-r.html#1)
+	- [Data Wrangling with dplyr](http://www.datadreaming.org/files/02-data-wrangling-with-dplyr.html#1)
+	- [Plotting with ggplot2](http://www.datadreaming.org/files/03-plotting-with-ggplot2.html#1)
+	- [Other materials](https://github.com/zief0002/epsy-8251) on github
+- [R for Data Science](http://r4ds.had.co.nz/) book by Garret Grolemund and Hadley Wickham 
 
 <br />
 

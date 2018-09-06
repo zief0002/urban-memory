@@ -34,7 +34,7 @@ Andrew Zieffler ([zief0002@umn.edu](mailto://zief0002@umn.edu)) <br />
 
 Jonathan Brown ([brow3019@umn.edu](mailto://brow3019@umn.edu)) <br />
 **Office:** [Education Sciences Building 192](https://www.google.com/maps/place/Education+Sciences+Building/@44.9784043,-93.2394586,15z/data=!4m2!3m1!1s0x0:0x45656dac481b9150)  (or the table immediately outside Room 192) <br />
-**Hours:** Tuesdays and Thursdays 12:00pm–1:00pm; and by appointment <br />
+**Hours:** Mondays and Thursdays 12:00pm–1:00pm; and by appointment <br />
 
 
 ---

@@ -83,126 +83,42 @@ In this unit we will explore common formulas and rules that will be used to prov
 <br />
 ---
 
-<!--
 
-#### Data Wrangling with dplyr
 
-Here is an R vignette that will help you learn dplyr:
+#### Unit 02: Some Theory Underlying Simple Linear Regression
 
-- [dplyr Tutorial](http://genomicsclass.github.io/book/pages/dplyr_tutorial.html)
+In this unit we will derive and prove several properties of the OLS simple regression model. We will also examine how violations of the underlying assumptions of the regression model affect these properties. In addition to the materials in the `notes` folder and what we cover in class, there many resources online. Google search terms include:
 
-Additional dplyr resources
+- "Properties of OLS estimators"
+- "Simple linear regression"
+- "Regression theory"
 
-- [dplyr Cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)
-
-<br />
----
-
-#### Plotting with ggplot2
-
-Here are two videos to watch that will help you learn ggplot2:
-
-- [Plotting with ggplot: Part 1](https://www.youtube.com/watch?v=HeqHMM4ziXA) [video]
-- [Plotting with ggplot: Part 2](https://www.youtube.com/watch?v=n8kYa9vu1l8) [video]
-
-Additional ggplot2 resources
-
-- [ggplot2 Cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/08/ggplot2-cheatsheet.pdf)
-- [ggplot2 Extensions](http://ggplot2-exts.github.io/index.html)
-- [Cookbook for R: Graphs](http://www.cookbook-r.com/Graphs/)
-
-<br />
----
-
-#### Simple Linear Regression: Description
-
-Read the following:
-
-- Lewis-Beck & Lewis-Beck (Chap. 1)
-
-Additional resources
-
-- [corrr Package Vignette](https://github.com/drsimonj/corrr)
-- [Guess the Correlation Game](http://guessthecorrelation.com/) [fun game]
 
 <br />
 ---
 
 
-#### Simple Linear Regression: Inference
+#### Unit 03: A Bit of Linear Algebra
 
-Read the following:
+In this unit we will learn some of the basic linear/matrix algebra that is useful for regression analyses. The notes for this unit are available as HTML slides at:
 
-- Lewis-Beck & Lewis-Beck (Chap. 2)
+- [Matrix Computations in R](http://www.datadreaming.org/files/epsy-8264/04-a-bit-of-matrix-algebra.html#1) [Class Notes]
+- [Properties of Transpose Matrices](http://www.math.nyu.edu/~neylon/linalgfall04/project1/dj/proptranspose.htm) [Notes by Tyler Neyon]
 
-Additional resources
+In addition to the materials in the `notes` folder and what we cover in class, there many other resources for learning linear/matrix algebra. Here are some resources that may be helpful in that endeavor:
 
-- [Dance of the p-values](https://www.youtube.com/watch?v=ez4DgdurRPg) [video]
-- [xkcd: p-values](https://xkcd.com/1478/) [cartoon]
+- 3Blue1Brown. (2016). [Essence of linear algebra](https://www.youtube.com/watch?v=kjBOesZCoqc&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab). *(A series of YouTube videos that teaches linear algebra)*
+- Burrill, G., Burrill, J., Landwehr, J. & Witmer, J. (1998). [Advanced modeling and matrices](http://www.amstat.org/asa/files/pdfs/ddmseries/AdvancedModelingandMatrices--TeachersEdition.pdf) Orangeburg, NY: Dale Seymour Publications. *(This is a module from Data-Driven Mathematics written for secondary school students and teachers)*
+- Fox, J. (2009). [A mathematical primer for social statistics](https://primo.lib.umn.edu/primo-explore/fulldisplay?docid=UMN_ALMA21325943720001701&context=L&vid=TWINCITIES&search_scope=mncat_discovery&tab=article_discovery&lang=en_US). Thousand Oaks, CA: Sage. *(Available online via UMN Library)*
+- Irizarry, R., & Love, M. (2018). [Biomedical data science](http://genomicsclass.github.io/book/) PH525x series. *(Chapter 4 addresses matrix algebra)*
+- Namboodiri, N. K. (1984). Matrix algebra: An introduction. Thousand Oaks, CA: Sage.
 
-<br />
----
+For more advanced matrix applications:
 
-#### Multiple Linear Regression
-
-Read the following:
-
-- Lewis-Beck & Lewis-Beck (Chap. 3)
-- [Confounding Variables](http://www.icpsr.umich.edu/icpsrweb/instructors/setups2008/exercises/notes/confounding.jsp) [short web article]
-
-<br />
----
-
-#### Regression Assumptions
-
-Re-read the following:
-
-- Lewis-Beck & Lewis-Beck (Chap. 2)
-
-Additional resources
-
-- [broom Package Vignette](https://cran.r-project.org/web/packages/broom/vignettes/broom.html)
-- [Visualizing Residuals](https://drsimonj.svbtle.com/visualising-residuals) [blog post]
-- Osborne, J. W., &amp; Overbay, A. (2004). [The power of outliers (and why researchers should ALWAYS check for them)](http://pareonline.net/getvn.asp?v=9&n=6). _Practical Assessment, Research &amp; Evaluation, 9_(6).
+- Brownlee, J. (2018). [A gentle introduction to matrix factorization for machine learning](https://machinelearningmastery.com/introduction-to-matrix-decompositions-for-machine-learning/). [Blog Post]. *(Gives an introduction to matrix decomposition methods (e.g., LU, QR); these methods reduce a matrix into constituent parts that make it easier to calculate more complex matrix operations such as finfding an inverse.)*
+- Thomas, R., & Howard, J. (2017). [Computational Linear Algebra](http://www.fast.ai/2017/07/17/num-lin-alg/). fast.ai. *(An online course using Jupyter Notebooks and Python focused on the question: How do we do matrix computations with acceptable speed and acceptable accuracy?)*
 
 <br />
 ---
 
-#### Categorical Predictors
 
-Read the following:
-
-- [What is Dummy Coding?](https://stats.idre.ucla.edu/other/mult-pkg/faq/general/faqwhat-is-dummy-coding/) [web article]
-- [What is Effect Coding?](https://stats.idre.ucla.edu/other/mult-pkg/faq/general/faqwhat-is-effect-coding/) [web article]
-
-Additional resources
-
-- [Science isn't Broken](https://fivethirtyeight.com/features/science-isnt-broken/#part1) [web article]
-- Gelman, A., Hill, J., & Yajima, M. (2012). [Why we (usually) don’t have to worry about multiple comparisons](http://www.stat.columbia.edu/~gelman/research/published/multiple2f.pdf). _Journal of Research on Educational Effectiveness, 5_, 189&ndash;211.
-
-<br />
----
-
-#### Post Hoc Tests
-
-Read the following:
-
-- Veazie, P. J. (2006). [When to combine hypotheses and adjust for multiple Tests](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1713204/). _Health Services Research, 41_(3 Pt 1), 804&ndash;818. doi:  10.1111/j.1475-6773.2006.00512.x 
-
-Here are some additional resources:
-
-- [Add p-Values and Significance Levels to ggplots](http://www.sthda.com/english/wiki/add-p-values-and-significance-levels-to-ggplots) [web article]
-
-<br />
----
-
-#### Log-Transformations
-
-Read the following:
-
-- [Interpreting Coefficients in Regression with Log-Transformed Variables](https://www.cscu.cornell.edu/news/statnews/stnews83.pdf)
-- [Interpret Regression Coefficient Estimates](http://www.cazaar.com/ta/econ113/interpreting-beta)
-
-<br />
----
--->

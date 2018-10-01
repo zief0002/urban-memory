@@ -103,6 +103,7 @@ In this unit we will derive and prove several properties of the OLS simple regre
 In this unit we will learn some of the basic linear/matrix algebra that is useful for regression analyses. The notes for this unit are available as HTML slides at:
 
 - [Matrix Computations in R](http://www.datadreaming.org/files/epsy-8264/04-a-bit-of-matrix-algebra.html#1) [Class Notes]
+- [Introduction to Matrix Algebra](http://www.datadreaming.org/files/epsy-8264/05-introduction-to-matrix-algebra.html) [Class Notes]
 - [Properties of Transpose Matrices](http://www.math.nyu.edu/~neylon/linalgfall04/project1/dj/proptranspose.htm) [Notes by Tyler Neyon]
 
 In addition to the materials in the `notes` folder and what we cover in class, there many other resources for learning linear/matrix algebra. Here are some resources that may be helpful in that endeavor:

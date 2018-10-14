@@ -116,10 +116,19 @@ In addition to the materials in the `notes` folder and what we cover in class, t
 
 For more advanced matrix applications:
 
-- Brownlee, J. (2018). [A gentle introduction to matrix factorization for machine learning](https://machinelearningmastery.com/introduction-to-matrix-decompositions-for-machine-learning/). [Blog Post]. *(Gives an introduction to matrix decomposition methods (e.g., LU, QR); these methods reduce a matrix into constituent parts that make it easier to calculate more complex matrix operations such as finfding an inverse.)*
+- Brownlee, J. (2018). [A gentle introduction to matrix factorization for machine learning](https://machinelearningmastery.com/introduction-to-matrix-decompositions-for-machine-learning/). [Blog Post]. *(Gives an introduction to matrix decomposition methods (e.g., LU, QR); these methods reduce a matrix into constituent parts that make it easier to calculate more complex matrix operations such as finding an inverse.)*
 - Thomas, R., & Howard, J. (2017). [Computational Linear Algebra](http://www.fast.ai/2017/07/17/num-lin-alg/). fast.ai. *(An online course using Jupyter Notebooks and Python focused on the question: How do we do matrix computations with acceptable speed and acceptable accuracy?)*
 
 <br />
 ---
 
 
+#### Unit 08: Collinearity Diagnostics
+
+In this unit we will learn about some empirical diagnostics useful for detecting collinearity. The notes for this unit are available as HTML slides at:
+
+- [Collinearity Diagnostics](http://www.datadreaming.org/files/epsy-8264/08-collinearity-diagnostics.html) [Class Notes]
+
+<br />
+
+---

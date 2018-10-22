@@ -132,3 +132,27 @@ In this unit we will learn about some empirical diagnostics useful for detecting
 <br />
 
 ---
+
+#### Unit 09: Biased Estimation and Shrinkage
+
+In this unit we will learn about ridge regression, a form of biased estimation, and how we can use it to alleviate collinearity. The notes for this unit are available as HTML slides at:
+
+- [Biased Estimation and Shrinkage](http://www.datadreaming.org/files/epsy-8264/09-biased-estimation-and-shrinkage.html) [Class Notes]
+
+<br />
+
+---
+
+#### Unit 10: Polynomial Regression 
+
+In this unit we will learn about polynomial regression, one method to deal with non-linearity. The notes for this unit are available as HTML slides at:
+
+- [Polynomial Regression I](http://www.datadreaming.org/files/epsy-8264/10-polynomial-regression-01.html) [Class Notes]
+
+We will also learn about cross-validation as a method for model selection. The notes for this unit are available as HTML slides at:
+
+- [Polynomial Regression II: Cross-Validation](http://www.datadreaming.org/files/epsy-8264/10-polynomial-regression-02.html) [Class Notes]
+
+<br />
+
+---

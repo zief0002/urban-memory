@@ -13,7 +13,7 @@ This GitHub repository is the home for the _EPsy 8264: Advanced Multiple Regress
 
 To download all of the materials simultaneously from this site, click on the `Clone or Download` button and select `Download ZIP`. This will download a ZIP file of the entire site on your local computer. 
 
-To download individual PDF files, open the file link and then click on the `Download` button. CSV files can be individually download by opening their links, clicking on the `Raw` button. This should display the text of the CSV in your browser window. If you right-click on this text, you should be able to `Save as` or `Save page as` ()or something along those lines). 
+To download individual PDF files, open the file link and then click on the `Download` button. CSV files can be individually download by opening their links, clicking on the `Raw` button. This should display the text of the CSV in your browser window. If you right-click on this text, you should be able to `Save as` or `Save page as` (or something along those lines). 
 
 <br />
 
@@ -125,7 +125,7 @@ For more advanced matrix applications:
 
 #### Unit 08: Collinearity Diagnostics
 
-In this unit we will learn about some empirical diagnostics useful for detecting collinearity. The notes for this unit are available as HTML slides at:
+In this unit we will learn about some empirical diagnostics useful for detecting collinearity. The notes for this unit are available as an HTML file at:
 
 - [Collinearity Diagnostics](http://www.datadreaming.org/files/epsy-8264/08-collinearity-diagnostics.html) [Class Notes]
 
@@ -135,23 +135,50 @@ In this unit we will learn about some empirical diagnostics useful for detecting
 
 #### Unit 09: Biased Estimation and Shrinkage
 
-In this unit we will learn about ridge regression, a form of biased estimation, and how we can use it to alleviate collinearity. The notes for this unit are available as HTML slides at:
+In this unit we will learn about ridge regression, a form of biased estimation, and how we can use it to alleviate collinearity. The notes for this unit are available as an HTML file at:
 
 - [Biased Estimation and Shrinkage](http://www.datadreaming.org/files/epsy-8264/09-biased-estimation-and-shrinkage.html) [Class Notes]
+
+In addition to the class notes and what we cover in class, there many other resources for learning about shrinkage methods. Here are some resources that may be helpful in that endeavor:
+
+- James, G., Witten, D., Hastie, T., & Tibshirani, R. (2013). [An introduction to statistical learning: with applications in R](https://www-bcf.usc.edu/~gareth/ISL/). New York: Springer.
+- [Statistical Learning MOOC](https://lagunita.stanford.edu/courses/HumanitiesSciences/StatLearning/Winter2016/about) taught by Hastie and Tibshirani
 
 <br />
 
 ---
 
-#### Unit 10: Polynomial Regression 
+#### Unit 10: Heteroskedasticity and WLS Estimation
 
-In this unit we will learn about polynomial regression, one method to deal with non-linearity. The notes for this unit are available as HTML slides at:
+In this unit we will learn about heteroskedasticity, and three methods to deal with this violation of the linear model's assumptions: (1) variance stabilizing transformations; (2) Weighted Least Squares (WLS) estimation; and (3) adjusting the SEs via sandwich estimation. The notes for this unit are available as an HTML file at:
 
-- [Polynomial Regression I](http://www.datadreaming.org/files/epsy-8264/10-polynomial-regression-01.html) [Class Notes]
+- [Heteroskedasticity and WLS](http://www.datadreaming.org/files/epsy-8264/10-heteroskedasticity-and-wls.html) [Class Notes]
 
-We will also learn about cross-validation as a method for model selection. The notes for this unit are available as HTML slides at:
+<br />
 
-- [Polynomial Regression II: Cross-Validation](http://www.datadreaming.org/files/epsy-8264/10-polynomial-regression-02.html) [Class Notes]
+---
+
+#### Unit 11: Polynomial Regression 
+
+In this unit we will learn about one method for dealing with nonlinearity: polynomial regression. The notes for this unit are available as an HTML file at:
+
+- [Polynomial Regression I](http://www.datadreaming.org/files/epsy-8264/11-polynomial-regression.html) [Class Notes]
+
+
+<br />
+
+---
+
+#### Unit 12: Cross-Validation 
+
+In this unit we will learn about cross-validation as a method for model selection. The notes for this unit are available as an HTML file at:
+
+- [Cross-Validation](http://www.datadreaming.org/files/epsy-8264/12-cross-validation.html) [Class Notes]
+
+In addition to the class notes and what we cover in class, there many other resources for learning about cross-validation. Here are some resources that may be helpful in that endeavor:
+
+- James, G., Witten, D., Hastie, T., & Tibshirani, R. (2013). [An introduction to statistical learning: with applications in R](https://www-bcf.usc.edu/~gareth/ISL/). New York: Springer.
+- [Statistical Learning MOOC](https://lagunita.stanford.edu/courses/HumanitiesSciences/StatLearning/Winter2016/about) taught by Hastie and Tibshirani
 
 <br />
 

@@ -25,8 +25,8 @@
   
   
   <!--  https://schema.org/Article -->
-  <meta property="article:published" itemprop="datePublished" content="2018-09-30" />
-  <meta property="article:created" itemprop="dateCreated" content="2018-09-30" />
+  <meta property="article:published" itemprop="datePublished" content="2020-08-18" />
+  <meta property="article:created" itemprop="dateCreated" content="2020-08-18" />
   <meta name="article:author" content="Andrew Zieffler" />
   
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
@@ -44,7 +44,7 @@
   <!--radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Introduction to Matrix Algebra"]},{"type":"character","attributes":{},"value":["A brief introduction to matrix algebra that is useful for regression and some R syntax for carrying out matrix operations.\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Andrew Zieffler"]},{"type":"character","attributes":{},"value":["http://www.datadreaming.org/"]}]}]},{"type":"character","attributes":{},"value":["2018-09-30"]},{"type":"character","attributes":{},"value":["radix::radix_article"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Introduction to Matrix Algebra"]},{"type":"character","attributes":{},"value":["A brief introduction to matrix algebra that is useful for regression and some R syntax for carrying out matrix operations.\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Andrew Zieffler"]},{"type":"character","attributes":{},"value":["http://www.datadreaming.org/"]}]}]},{"type":"character","attributes":{},"value":["2020-08-18"]},{"type":"character","attributes":{},"value":["radix::radix_article"]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   
@@ -65,6 +65,10 @@
     width: 100%;
   }
   
+  .pandoc-table>caption {
+    margin-bottom: 10px;
+  }
+  
   .pandoc-table th:not([align]) {
     text-align: left;
   }
@@ -79,6 +83,10 @@
   
   .l-screen-inset {
     padding-right: 16px;
+  }
+  
+  .l-screen .caption {
+    margin-left: 10px;
   }
   
   .shaded {
@@ -188,6 +196,10 @@
   /* Tweak code blocks (note that this CSS is repeated above in an injection
      into the d-code shadow dom) */
   
+  d-code {
+    overflow-x: auto !important;
+  }
+  
   pre.d-code code.d-code {
     padding-left: 10px;
     font-size: 12px;
@@ -218,6 +230,11 @@
   }
   
   @media(min-width: 768px) {
+  
+  d-code {
+    overflow-x: visible !important;
+  }
+  
   pre.d-code code.d-code  {
       padding-left: 18px;
       font-size: 14px;
@@ -600,9 +617,9 @@
       var fn = $('#' + id);
       var fn_p = $('#' + id + '>p');
       fn_p.find('.footnote-back').remove();
-      var text = fn_p.text();
+      var text = fn_p.html();
       var dtfn = $('<d-footnote></d-footnote>');
-      dtfn.text(text);
+      dtfn.html(text);
       $(this).replaceWith(dtfn);
     });
     // remove footnotes
@@ -628,7 +645,10 @@
       var clz = "";
       var language = pre.attr('class');
       if (language) {
-        if ($.inArray(language, ["r", "cpp", "c", "java"]) != -1)
+        // map unknown languages to "clike" (without this they just dissapear)
+        if ($.inArray(language, ["bash", "clike", "css", "go", "html",
+                                 "javascript", "js", "julia", "lua", "markdown",
+                                 "markup", "mathml", "python", "svg", "xml"]) == -1)
           language = "clike";
         language = ' language="' + language + '"';
         var dt_code = $('<d-code block' + language + clz + '></d-code>');
@@ -843,9 +863,19 @@
     // prevent underline for linked images
     $('a > img').parent().css({'border-bottom' : 'none'});
   
-    // mark figures created by knitr chunks as 100% width
+    // mark non-body figures created by knitr chunks as 100% width
     $('.layout-chunk').each(function(i, val) {
-      $(this).find('img, .html-widget').css('width', '100%');
+      var figures = $(this).find('img, .html-widget');
+      if ($(this).attr('data-layout') !== "l-body") {
+        figures.css('width', '100%');
+      } else {
+        figures.css('max-width', '100%');
+        figures.filter("[width]").each(function(i, val) {
+          var fig = $(this);
+          fig.css('width', fig.attr('width') + 'px');
+        });
+  
+      }
     });
   
     // auto-append index.html to post-preview links in file: protocol
@@ -857,7 +887,7 @@
   
     // get rid of index.html references in header
     if (window.location.protocol !== "file:") {
-      $('.radix-site-header a').each(function(i,val) {
+      $('.radix-site-header a[href]').each(function(i,val) {
         $(this).attr('href', $(this).attr('href').replace("index.html", "./"));
       });
     }
@@ -866,6 +896,8 @@
     $('tr.header').parent('thead').parent('table').addClass('pandoc-table');
     $('.kable-table').children('table').addClass('pandoc-table');
   
+    // add figcaption style to table captions
+    $('caption').parent('table').addClass("figcaption");
   
     // initialize posts list
     if (window.init_posts_list)
@@ -877,6 +909,7 @@
       $('#disqus_thread').toggleClass('hidden');
       if (!$('#disqus_thread').hasClass('hidden')) {
         var offset = $(this).offset();
+        $(window).resize();
         $('html, body').animate({
           scrollTop: offset.top - 35
         });
@@ -1905,7 +1938,7 @@ distill-header .nav a {
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Introduction to Matrix Algebra","description":"A brief introduction to matrix algebra that is useful for regression and some R syntax for carrying out matrix operations.","authors":[{"author":"Andrew Zieffler","authorURL":"http://www.datadreaming.org/","affiliation":"&nbsp;","affiliationURL":"#"}],"publishedDate":"2018-09-30T00:00:00.000-05:00","citationText":"Zieffler, 2018"}
+{"title":"Introduction to Matrix Algebra","description":"A brief introduction to matrix algebra that is useful for regression and some R syntax for carrying out matrix operations.","authors":[{"author":"Andrew Zieffler","authorURL":"http://www.datadreaming.org/","affiliation":"&nbsp;","affiliationURL":"#"}],"publishedDate":"2020-08-18T00:00:00.000-05:00","citationText":"Zieffler, 2020"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -1916,13 +1949,13 @@ distill-header .nav a {
 
 <div class="d-title">
 <h1>Introduction to Matrix Algebra</h1>
-<p>A brief introduction to matrix algebra that is useful for regression and some R syntax for carrying out matrix operations.</p>
+<p><p>A brief introduction to matrix algebra that is useful for regression and some R syntax for carrying out matrix operations.</p></p>
 </div>
 
 <div class="d-byline">
   Andrew Zieffler <a href="http://www.datadreaming.org/" class="uri">http://www.datadreaming.org/</a> 
   
-<br />2018-09-30
+<br />2020-08-18
 </div>
 
 <div class="d-article">
@@ -2009,7 +2042,7 @@ Use the <code>matrix()</code> function to create vectors with <code>nrow=1</code
 \end{bmatrix}
 \]</span></p>
 <h2 id="square-matrices">Square Matrices</h2>
-<p>WHen the number of rows and columns are equal (<span class="math inline">\(n=k\)</span>), the matrix is referred to as a <em>square matrix</em>. For example, <strong>X</strong> and <strong>Y</strong> are both square matrices.</p>
+<p>When the number of rows and columns are equal (<span class="math inline">\(n=k\)</span>), the matrix is referred to as a <em>square matrix</em>. For example, <strong>X</strong> and <strong>Y</strong> are both square matrices.</p>
 <p><span class="math display">\[
 \underset{2\times 2}{\mathbf{X}} = \begin{bmatrix}
 4 &amp; 1 \\ 
@@ -2051,7 +2084,7 @@ diag(Y)</code></pre>
 <pre><code>
 [1]  0  3 -2</code></pre>
 </div>
-<p>CAUTION: The <code>diag()</code> function also works on non-square matrices. However, it returns the elements on the diagonal starting with the element in the first row and column.</p>
+<p>🚧 CAUTION: The <code>diag()</code> function also works on non-square matrices. However, it returns the elements on the diagonal starting with the element in the first row and column.</p>
 <div class="layout-chunk" data-layout="l-body">
 <pre class="r"><code>
 X = matrix(
@@ -2067,7 +2100,7 @@ X</code></pre>
 [2,]    1    4
 [3,]    1    0</code></pre>
 <pre class="r"><code>
-# Find 'diagonal' elements
+# Find &#39;diagonal&#39; elements
 diag(X)</code></pre>
 <pre><code>
 [1] 0 4</code></pre>
@@ -2391,7 +2424,7 @@ t(A)</code></pre>
 [1,]    1    2    5
 [2,]    3    4    9</code></pre>
 <pre class="r"><code>
-# Compute A'A
+# Compute A&#39;A
 t(A) %*% A</code></pre>
 <pre><code>
      [,1] [,2]

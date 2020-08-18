@@ -104,7 +104,7 @@ $$
 
 ## Square Matrices
 
-WHen the number of rows and columns are equal ($n=k$), the matrix is referred to as a *square matrix*. For example, **X** and **Y** are both square matrices.
+When the number of rows and columns are equal ($n=k$), the matrix is referred to as a *square matrix*. For example, **X** and **Y** are both square matrices.
 
 $$
 \underset{2\times 2}{\mathbf{X}} = \begin{bmatrix}
@@ -146,7 +146,7 @@ Y
 diag(Y)
 ```
 
-CAUTION: The `diag()` function also works on non-square matrices. However, it returns the elements on the diagonal starting with the element in the first row and column.
+`r emo::ji("construction")` CAUTION: The `diag()` function also works on non-square matrices. However, it returns the elements on the diagonal starting with the element in the first row and column.
 
 ```{r}
 X = matrix(

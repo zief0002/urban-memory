@@ -49,20 +49,18 @@ In addition to the notes (and what we cover in class), there many resources onli
 
 ---
 
-### Unit 03: A Bit of Linear Algebra
+### A Bit of Linear Algebra
 
 In this unit we will learn some of the basic linear/matrix algebra that is useful for regression analyses. 
 
 **Prior to Class:**
 
 - Read Fox (Sections 1.1; 1.4)
-- [Introduction to Matrix Algebra](http://www.datadreaming.org/files/epsy-8264/05-introduction-to-matrix-algebra.html)
+- [Introduction to Matrix Algebra](http://zief0002.github.io/epsy-8264/misc/05-introduction-to-matrix-algebra.html)
+
 
 The notes for this unit are available as HTML slides at:
 
-- [Matrix Computations in R](http://www.datadreaming.org/files/epsy-8264/04-a-bit-of-matrix-algebra.html#1) [Class Notes]
-
-- [Properties of Transpose Matrices](http://www.math.nyu.edu/~neylon/linalgfall04/project1/dj/proptranspose.htm) [Notes by Tyler Neyon]
 
 In addition to the materials in the `notes` folder and what we cover in class, there many other resources for learning linear/matrix algebra. Here are some resources that may be helpful in that endeavor:
 

@@ -1,0 +1,159 @@
+---
+title: "EPsy 8264"
+output:
+  rmdformats::material:
+    highlight: kate
+    css: website-style.css
+    includes:
+      in_header: header.html
+---
+
+
+```{r knitr_init, echo=FALSE, cache=FALSE}
+library(knitr)
+library(rmdformats)
+library(fontawesome)
+
+## Global options
+options(max.print="75")
+opts_chunk$set(echo=FALSE,
+	             cache=TRUE,
+               prompt=FALSE,
+               tidy=TRUE,
+               comment=NA,
+               message=FALSE,
+               warning=FALSE)
+opts_knit$set(width=75)
+```
+
+
+# Welcome
+
+
+Welcome to *EPsy 8264: Advanced Multiple Regression Analysis*. This is an advanced seminar for doctoral students in education. The pre-requisites for this course are *EPsy 8251* and *EPsy 8252*.   
+
+<!-- - **Syllabus, assignments, data, and script files:** [github repository](https://github.com/zief0002/epsy-8251) -->
+<!-- - **Course notes and readings:** [website](https://zief0002.github.io/book-8252/) | [github repository](https://github.com/zief0002/book-8252) -->
+
+
+<br />
+
+### Instructor {-}
+
+Andrew Zieffler ([zief0002@umn.edu](mailto://zief0002@umn.edu)) <br />
+**Virtual Office:** Zoom  <br />
+<!-- **Physical Office:** [Education Sciences Building 178](https://www.google.com/maps/place/Education+Sciences+Building/@44.9784043,-93.2394586,15z/data=!4m2!3m1!1s0x0:0x45656dac481b9150)  <br /> -->
+**Office Hours:** Wednesday 9:00 AM&ndash;10:00 AM; and by appointment
+
+
+### Teaching Assistant {-}
+
+Vimal Rao ([rao00013@umn.edu](mailto://rao00013@umn.edu))  <br />
+**Virtual Office:** Zoom  <br />
+<!-- **Physical Office:** [Education Sciences Building 192](https://www.google.com/maps/place/Education+Sciences+Building/@44.9784043,-93.2394586,15z/data=!4m2!3m1!1s0x0:0x45656dac481b9150)  <br /> -->
+**Office Hours:** Tuesday 5:30 PM&ndash;6:30 PM; and by appointment
+
+<br />
+
+
+### Classroom
+
+- Tuesday/Thursday (9:45&ndash;11:00): [Zoom](https://umn.zoom.us/j/94255043570?pwd=blBRQUk2UU9DeE8vdXFJR0xDVGx0dz09)
+
+
+<br />
+
+
+### Syllabus {-}
+
+- The course syllabus is available  [here](https://github.com/zief0002/epsy-8261/raw/master/syllabus/f20-epsy-8264-syllabus.pdf).
+
+
+<br />
+
+
+### Textbooks {-}
+
+The course textbooks are available via the University of Minnesota library (Fox) and online (Grolemund &amp; Wickham).
+
+- Fox, J. (2013). [A mathematical primer for social statistics](https://primo.lib.umn.edu/permalink/f/1q7ssba/UMN_ALMA21325943720001701). Sage. 
+- Grolemund, G., &amp; Wickham, H. (2017). [R for data science](http://r4ds.had.co.nz/). O'Reilly.
+
+
+<br />
+
+
+### Prerequisites {-}
+
+Prerequisite knowledge include topics from a basic statistics course: 
+
+- Foundational topics in data analysis;
+  + Design (e.g., random assignment and random sampling)
+  + Descriptive statistics and plots
+  + One- and two-sample tests
+
+And, topics from *EPsy 8251: Methods in Data Analysis for Educational Research I*:   
+  
+- Statistical Computation
+  + Using R
+  + Data wrangling/manipulation
+  + Plotting
+- Correlation;
+- Simple regression analysis;
+  + Model-level and coefficient-level interpretation
+  + Ordinary least squares estimation
+  + Standardized regression
+  + Partitioning sums of squares
+  + Model-level and coefficient-level inference
+  + Assumption checking/residual analysis
+- Multiple linear regression
+  + Model-level and coefficient-level interpretation and inference
+  + Assumption checking/residual analysis
+  + Working with categorical predictors (including adjusting *p*-values for multiple tests)
+  + Interaction effects
+  
+And topics from *EPsy 8252: Methods in Data Analysis for Educational Research II*:
+
+- Dealing with nonlinearity;
+  + Quadratic effects
+  + Log-transformations
+- Probability distributions;
+  + Probability density
+- Maximum likelihood estimation;
+- Model selection;
+  + Information criteria
+- Linear mixed-effects models (cross-sectional/longitudinal)
+  + Basic ideas of mixed-effects models
+  + Fitting models with random-intercepts and random-slopes
+  + Assumptions
+  + Likelihood ratio tests
+- Generalized linear models
+  + Logistic models
+
+For the topics listed, students would be expected to be able to carry out an appropriate data analysis and properly interpret the results. It is also assumed that everyone enrolled in the course has some familiarity with using R. If you need a refresher on any of these topics, see:
+
+- [Computational Toolkit for Educational Scientists](https://zief0002.github.io/toolkit/)
+- [Statistical Modeling and Computation for Educational Scientists](https://zief0002.github.io/modeling/) [EPsy 8251 material]
+- [EPsy 8252 website](http://zief0002.github.io/epsy-8252/)
+
+<br />
+
+
+
+```{r child = 'calendar.Rmd'}
+```
+
+
+```{r child = 'assignments.Rmd'}
+```
+
+
+```{r child = 'data.Rmd'}
+```
+
+
+```{r child = 'materials.Rmd'}
+```
+
+
+

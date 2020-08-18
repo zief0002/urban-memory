@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css?family=Crimson+Text|Open+Sans');
+@import url('https://fonts.googleapis.com/css?family=Lato|Lora');
+
+body {
+  margin:10;
+  padding:5
+}
+
+p {
+  font-family: 'Lora', serif;
+  font-size: 11pt;
+}
+
+
+li {
+  font-family: 'Lora', serif;
+  font-size: 11pt;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Lato', sans-serif;
+}
+
+pre code { font-size:  1.2rem; }
+
+
+blockquote { margin: 0px; }
+
+blockquote p {
+    color: #353535;
+    background: rgba(127,127,127,.125);
+    border-left: 3px solid #C00;
+    margin: 8px 0px 24px 0px;
+    padding: 10px;
+    font-size: 80%;
+}
+

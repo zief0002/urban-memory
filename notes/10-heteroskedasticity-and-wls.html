@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="EPsy 8264" />
+
+
+<title>Heteroskedasticity: Variance Stabilizing Transformations, Weighted Least Squares Estimation, and Sandwich Estimation</title>
+
+<link href="10-heteroskedasticity-and-wls_files/tufte-css-2015.12.29/tufte.css" rel="stylesheet" />
+<link href="10-heteroskedasticity-and-wls_files/tufte-css-2015.12.29/envisioned.css" rel="stylesheet" />
+<link href="10-heteroskedasticity-and-wls_files/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="10-heteroskedasticity-and-wls_files/highlightjs-9.12.0/highlight.js"></script>
+<script src="10-heteroskedasticity-and-wls_files/kePrint-0.0.1/kePrint.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+<link rel="stylesheet" href="my_style.css" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Heteroskedasticity: Variance Stabilizing Transformations, Weighted Least Squares Estimation, and Sandwich Estimation</h1>
+<h4 class="author"><em>EPsy 8264</em></h4>
+<h4 class="date"><em>October 2018</em></h4>
+
+
+
+<p>In this set of notes, we will use data from <em>slid.csv</em>. This file include data collected in 1994 from employed citizens living in Ontario between the ages of 16 and 65 for Statistics Canada’s <em>Survey of Labour and Income Dynamics</em> (SLID). The variables in the datset are:</p>
+<ul>
+<li><strong>wages:</strong> Composite hourly wage rate based on all the participant’s jobs</li>
+<li><strong>age:</strong> Age of the participant (in years)</li>
+<li><strong>education:</strong> Number of years of schooling</li>
+<li><strong>male:</strong> A dummy-coded predictor for sex (0=Female; 1=Male)</li>
+</ul>
+<p>The goal of the analysis will be to model the hourly wage rate using age, education and sex as predictors.</p>
+<pre class="r"><code># Load libraries
+library(broom)
+library(car)
+library(corrr)
+library(dplyr)
+library(ggplot2)
+library(readr)
+
+# Import data
+slid = read_csv(&quot;~/Dropbox/epsy-8264/data/slid.csv&quot;)
+head(slid)</code></pre>
+<pre><code>## # A tibble: 6 x 4
+##   wages   age education  male
+##   &lt;dbl&gt; &lt;int&gt;     &lt;int&gt; &lt;int&gt;
+## 1  10.6    40        15     1
+## 2  11      19        13     1
+## 3  17.8    46        14     1
+## 4  14      50        16     0
+## 5   8.2    31        15     1
+## 6  17.0    30        13     0</code></pre>
+<p>As with any analysis, we will begin by examining the scatterplots of each predictor with the outcome. These plots suggest that each of the predictors is related to the outcome.</p>
+<div class="figure fullwidth">
+<img src="10-heteroskedasticity-and-wls_files/figure-html/unnamed-chunk-2-1.png" alt=" " width="1152"  />
+<p class="caption marginnote shownote">
+</p>
+</div>
+<p>Next, we fit a model regressing wages on the three predictors simultaneously and examine the residual plots.</p>
+<pre class="r"><code># Fit model
+lm.1 = lm(wages ~ 1 + age + education + male, data = slid)
+
+# Examine residual plots
+qqPlot(lm.1)
+residualPlot(lm.1)</code></pre>
+<div class="figure fullwidth">
+<img src="10-heteroskedasticity-and-wls_files/figure-html/unnamed-chunk-4-1.png" alt=" " width="768"  />
+<p class="caption marginnote shownote">
+</p>
+</div>
+<p>Examining the residual plots:</p>
+<ul>
+<li>The linearity assumption may be violated; the loess line suggests some non-linearity (maybe due to omitted interaction/polynomial terms)</li>
+<li>The normality assumption may be violated; the upper end of the distribution deviates from what would be expected from a normal distribution in the QQ-plot.</li>
+<li>The homoskedasticity assumption is likely violated; the plot of studentized residuals versus the fitted values shows severe fanning; the variation in residuals seems to increase for higher fitted values.</li>
+</ul>
+<p>Including the age by education interaction term (<code>age:education</code>) seems to alleviate the nonlinearity issue, but the residual plots indicate there still may be violations of the normality and homogeneity of variance assumptions. Violating noramility is less problematic here since the Central Limit Theorem will ensure that the inferences are still approximately valid. Violating homoskedasticity, on the other hand, is more problematic.</p>
+<pre class="r"><code># Fit model
+lm.2 = lm(wages ~ 1 + age + education + male + age:education, data = slid)</code></pre>
+<div class="figure fullwidth">
+<img src="10-heteroskedasticity-and-wls_files/figure-html/unnamed-chunk-6-1.png" alt=" " width="768"  />
+<p class="caption marginnote shownote">
+</p>
+</div>
+<div id="violating-homoskedasticity" class="section level3">
+<h3>Violating Homoskedasticity</h3>
+<p>Recall that violating homoskedasticity results in:</p>
+<ul>
+<li>Incorrect computation of the sampling variances and covariances; and because of this</li>
+<li>The OLS estimates are no longer BLUE.</li>
+</ul>
+<p>This means that the SEs (and resulting <span class="math inline">\(t\)</span>- and <span class="math inline">\(p\)</span>-values) for the coefficients are incorrect. In addition, the OLS estimators are no longer the most efficient estimators. How bad this is depends on several factors (e.g., how much the variances differ, sample sizes)</p>
+</div>
+<div id="heteroskedasticity-what-is-it-and-how-do-we-deal-with-it" class="section level2">
+<h2>Heteroskedasticity: What is it and How do we Deal with It?</h2>
+<p>Recall that the variance–covariance matrix for the residuals was:</p>
+<p><span class="math display">\[
+\boldsymbol{\sigma^2}(\boldsymbol{\epsilon}) =  \begin{bmatrix}\sigma^2_{\epsilon} &amp; 0 &amp; 0 &amp; \ldots &amp; 0 \\ 0 &amp; \sigma^2_{\epsilon} &amp; 0 &amp; \ldots &amp; 0\\ 0 &amp; 0 &amp; \sigma^2_{\epsilon} &amp; \ldots &amp; 0\\ \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\ 0 &amp; 0 &amp; 0 &amp; \ldots &amp; \sigma^2_{\epsilon}\end{bmatrix}
+\]</span></p>
+<p>This implied homoskedasticity; the variance for each residual was identical, namely <span class="math inline">\(\sigma^2_{\epsilon}\)</span>. Since the variance estimate for each residual was the same, we could estimate a single value for these variances, the MSE, and use that to obtain the sampling variances and covariances for the coefficients:</p>
+<p><span class="math display">\[
+\boldsymbol{\sigma^2_B} = \sigma^2_{\epsilon} (\mathbf{X}^{\prime}\mathbf{X})^{-1}
+\]</span></p>
+<p>Heteroskedasticy implies that the residual variances are not constant. We can represnt the variance–covariance of the residuals under heteroskedasticity as:</p>
+<p><span class="math display">\[
+\boldsymbol{\sigma^2}(\boldsymbol{\epsilon}) =  \begin{bmatrix}\sigma^2_{1} &amp; 0 &amp; 0 &amp; \ldots &amp; 0 \\ 0 &amp; \sigma^2_{2} &amp; 0 &amp; \ldots &amp; 0\\ 0 &amp; 0 &amp; \sigma^2_{3} &amp; \ldots &amp; 0\\ \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\ 0 &amp; 0 &amp; 0 &amp; \ldots &amp; \sigma^2_{n}\end{bmatrix}
+\]</span></p>
+<p>In this matrix, each residual has a potentially different variance. Now, estimating <span class="math inline">\(\sigma^2_{\epsilon}\)</span> becomes more complicated, as does estimating the sampling variances and covariances of the regression coefficients .</p>
+<p>There are at least three primary methods for dealing with heteroskedasticity: (1) transform the <span class="math inline">\(Y\)</span>-values using a variance stablizing transformation; (2) fit the model using weighted least squares rather than OLS; or (3) adjust the SEs and covariances to account for the non-constant variances. We will examine each of these in turn.</p>
+<div id="variance-stabilizing-transformations" class="section level3">
+<h3>Variance Stabilizing Transformations</h3>
+<p>The idea behind using a variance stabilizing transformation on <span class="math inline">\(Y\)</span> is that the transformed <span class="math inline">\(Y\)</span>-values will be homoskedastic. If so, we can fit the OLS regression model using the transformed <span class="math inline">\(Y\)</span>-values; the inferences will be valid; and, if necessary, we can back-transform for better interpretations. There are several transformations that can be applied to <span class="math inline">\(Y\)</span> that might stabilize the variances. Two common transformations are:</p>
+<ul>
+<li>Log-transformation; <span class="math inline">\(\ln(Y)_i\)</span></li>
+<li>Square-root transformation; <span class="math inline">\(\sqrt{Y_i}\)</span></li>
+</ul>
+<p><label for="tufte-mn-1" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-1" class="margin-toggle"><span class="marginnote"><span style="display: block;">Prior to applying these transformations, you may need to add a constant value to each <span class="math inline"><span class="math inline">\(Y\)</span></span> value so that <span class="math inline"><span class="math inline">\(Y&amp;gt;0\)</span></span> (log-transformation) or <span class="math inline"><span class="math inline">\(Y \get 0\)</span></span> (square-root transformation).</span></span></p>
+<p>Both of these transformations are power transformations. Power transformations have the mathematical form</p>
+<p><span class="math display">\[
+Y_i^{p}
+\]</span></p>
+<p>The following are all power transformations of <span class="math inline">\(Y\)</span>:</p>
+<p><span class="math display">\[
+\begin{split}
+&amp; ~\vdots \\[0.5em]
+&amp; Y^4 \\[0.5em]
+&amp; Y^3 \\[0.5em]
+&amp; Y^2 \\[1.5em]
+&amp; Y^1 = Y \\[1.5em]
+&amp; Y^{0.5} = \sqrt{Y} \\[0.5em]
+&amp; Y^0 \equiv \ln(Y) \\[0.5em]
+&amp; Y^{-1} = \frac{1}{Y} \\[0.5em]
+&amp; Y^{-2} = \frac{1}{Y^2} \\[0.5em]
+&amp; ~\vdots
+\end{split}
+\]</span></p>
+<p>Powers such that <span class="math inline">\(p&lt;1\)</span> are refrred to as downward transformations, and those with <span class="math inline">\(p&gt;1\)</span> are referred to as upward transformations. Both the log-transformation and square-root transformation are downward transformations of <span class="math inline">\(Y\)</span>.</p>
+<pre class="r"><code># Create transformed Ys
+slid = slid %&gt;%
+  mutate(
+    sqrt_wages = sqrt(wages),
+    ln_wages = log(wages)
+  )
+
+# Fit models
+lm_sqrt = lm(sqrt_wages ~ 1 + age + education + male, data = slid)
+lm_ln = lm(ln_wages ~ 1 + age + education + male, data = slid)</code></pre>
+<p>The plots below show the residuals based on fitting a model with each of these transformations applied to the <code>wages</code> data.</p>
+<div class="figure fullwidth">
+<img src="10-heteroskedasticity-and-wls_files/figure-html/unnamed-chunk-9-1.png" alt=" " width="768"  />
+<p class="caption marginnote shownote">
+</p>
+</div>
+<p>Both of these residual plots seem to show less heterogeneity than the residuals fro mthe model with the untransformed wages. However, neither transformation seems to have “fixed” the problem completely.</p>
+<div id="box-cox-transformation" class="section level4">
+<h4>Box-Cox Transformation</h4>
+<p>In their seminal paper, <span class="citation">Box &amp; Cox (1964)</span> proposed a series of power transformations that could be applied to data in order to better meet assumptions such as linearity, normality, and homogeneity of variance. The general form of the Box-Cox model is:</p>
+<p><span class="math display">\[
+Y^{(\lambda)}_i = \beta_0 + \beta_1(X1_{i}) + \beta_2(X2_{i}) + \ldots + \beta_k(Xk_{i}) + \epsilon_i
+\]</span></p>
+<p>where the errors are independent and <span class="math inline">\(\mathcal{N}(0,\sigma^2_{\epsilon})\)</span>, and</p>
+<p><span class="math display">\[
+Y^{(\lambda)}_i = \begin{cases} 
+   \frac{Y_i^{\lambda}-1}{\lambda} &amp; \text{for } \lambda \neq 0 \\[1em]
+   \ln(Y_i)       &amp; \text{for } \lambda = 0
+  \end{cases}
+\]</span></p>
+<p>This is only defined for positive values of <span class="math inline">\(Y\)</span>.</p>
+<p>The <code>powerTransform()</code> function from the <strong>car</strong> library can be used to determine the optimal value of <span class="math inline">\(\lambda\)</span>. The <code>boxCox()</code> function from the same library gives a profile plot showing the log-likelohoods for a sequence of <span class="math inline">\(\lambda\)</span> values. If you do not specify the sequence of <span class="math inline">\(\lambda\)</span> values it will use <code>lambda = seq(from = -2, to = 2, by = 1/10)</code> by default.</p>
+<pre class="r"><code>powerTransform(lm.1)</code></pre>
+<pre><code>## Estimated transformation parameter 
+##         Y1 
+## 0.08598786</code></pre>
+<pre class="r"><code>boxCox(lm.1, lambda = seq(from = -2, to = 2, by = 1/10))</code></pre>
+<p><img src="10-heteroskedasticity-and-wls_files/figure-html/unnamed-chunk-10-1.png" width="576"  /></p>
+<p>The output from the <code>powerTransform()</code> function gives the optimal power for the transformation of <span class="math inline">\(Y\)</span>, namely <span class="math inline">\(\lambda = 0.086\)</span>. To actually implement this we use the transformation in the Box-Cox algorithm from earlier.</p>
+<pre class="r"><code>slid = slid %&gt;%
+  mutate(
+    bc_wages = (wages ^ 0.086 - 1) / 0.086
+  )
+
+# Fit models
+lm_bc = lm(bc_wages ~ 1 + age + education + male, data = slid)</code></pre>
+<p>The residual plots show much better behaved residuals, although even this optimal transformation still shows heteroskedasticity.</p>
+<div class="figure fullwidth">
+<img src="10-heteroskedasticity-and-wls_files/figure-html/unnamed-chunk-12-1.png" alt=" " width="768"  />
+<p class="caption marginnote shownote">
+</p>
+</div>
+<p>One problem with using this transformation is that the regression coefficients do not have a direct interpretation. For example, the age coefficient would be interpreted as: each one-year difference in age is associated with a 0.0227-unit difference in the transformed <span class="math inline">\(Y\)</span> controlling for differences in education and sex. But what does a 0.227-unit difference in transformed <span class="math inline">\(Y\)</span> mean when we translate that back to wages?</p>
+<pre class="r"><code>tidy(lm_bc)</code></pre>
+<pre><code>## # A tibble: 4 x 5
+##   term        estimate std.error statistic   p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)   1.04    0.0475        21.9 1.80e-100
+## 2 age           0.0227  0.000687      33.0 2.85e-211
+## 3 education     0.0707  0.00272       26.0 5.14e-138
+## 4 male          0.282   0.0164        17.2 4.99e- 64</code></pre>
+<p>The likelihood profile for the sequence of <span class="math inline">\(\lambda\)</span> values also indicates that <span class="math inline">\(\lambda = 0.086\)</span> is optimal; it produces the maximum likelihood of all the <span class="math inline">\(\lambda\)</span> values. The benefit to also examining the profile plot is that we get a 95% CI for <span class="math inline">\(\lambda\)</span> as well. This interval offers a range of <span class="math inline">\(\lambda\)</span> values that will give comparable transformations. Since the limits are not outputted by the function, we may need to zoom in to determine these limits by tweaking the sequence of <span class="math inline">\(\lambda\)</span> values in the <code>boxCox()</code> function.</p>
+<pre class="r"><code>boxCox(lm.1, lambda = seq(from = 0.03, to = 0.2, by = .001))</code></pre>
+<p><img src="10-heteroskedasticity-and-wls_files/figure-html/unnamed-chunk-14-1.png" width="576"  /></p>
+<p>It looks as though <span class="math inline">\(.03 \leq \lambda \leq 0.14\)</span> all give comparable transformations. Unfortunately, none of these transformations have straight-forward interpretations. If, for example, the CI had included 0, then we could have used the simple log-transformation which does have a direct interpretation of the coefficients.</p>
+</div>
+</div>
+<div id="weighted-least-squares-estimation" class="section level3">
+<h3>Weighted Least Squares Estimation</h3>
+<p>Another method for dealing with heteroskedasticity is to change the method we use for estiating the coefficients and standard errors. The most common method for doing this is to use weighted least squares estimation (WLS) rather than ordinary least squares (OLS).</p>
+<p>Under heteroskedasticity recall that the residual variance of the ith residual is <span class="math inline">\(\sigma^2_i\)</span>, and the variance–covariance matrix of the rsiduals is defined as,</p>
+<p><span class="math display">\[
+\boldsymbol{\Sigma} =  \begin{bmatrix}\sigma^2_{1} &amp; 0 &amp; 0 &amp; \ldots &amp; 0 \\ 0 &amp; \sigma^2_{2} &amp; 0 &amp; \ldots &amp; 0\\ 0 &amp; 0 &amp; \sigma^2_{3} &amp; \ldots &amp; 0\\ \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\ 0 &amp; 0 &amp; 0 &amp; \ldots &amp; \sigma^2_{n}\end{bmatrix},
+\]</span></p>
+<p>This implies that the <span class="math inline">\(n\)</span> observations no longer have the same reliability. Observations with small variances have more reliability than observations with large variances. The idea behind WLS estimation is that those observations that are less reliable are down-weighted in the estimation of the overall error variance.</p>
+<div id="assume-error-variances-are-known" class="section level4">
+<h4>Assume Error Variances are Known</h4>
+<p>Let’s assume that each of the error variances, <span class="math inline">\(\sigma^2_i\)</span>, are known. This is generally not a valid assumption, but it gives us a point to start from. If we know these values, we can modify the likelihood function from OLS by substituting these values in for the OLS error variance, <span class="math inline">\(\sigma^2_{\epsilon}\)</span>.</p>
+<p><span class="math display">\[
+\begin{split}
+\mathrm{OLS:} \qquad \mathcal{L}(\boldsymbol{\beta}) &amp;= \prod_{i=1}^n \frac{1}{\sqrt{2\pi\sigma^2_{\epsilon}}}\exp\left[-\frac{1}{2\sigma^2_{\epsilon}} \big(Y_i-\beta_0 - \beta_1X_{1i} - \beta_2X_{2i} - \ldots - \beta_kX_{ki}\big)^2\right] \\[1em]
+\mathrm{WLS:} \qquad \mathcal{L}(\boldsymbol{\beta}) &amp;= \prod_{i=1}^n \frac{1}{\sqrt{2\pi\sigma^2_{i}}}\exp\left[-\frac{1}{2\sigma^2_{i}} \big(Y_i-\beta_0 - \beta_1X_{1i} - \beta_2X_{2i} - \ldots - \beta_kX_{ki}\big)^2\right]
+\end{split}
+\]</span></p>
+<p>Next, we define the reciprocal of the error variances as <span class="math inline">\(w_i\)</span>, or <em>weight</em>:</p>
+<p><span class="math display">\[
+w_i = \frac{1}{\sigma^2_i}
+\]</span></p>
+<p>This can be used to simplify the likelihood function for WLS:</p>
+<p><span class="math display">\[
+\begin{split}
+\mathcal{L}(\boldsymbol{\beta}) &amp;= \bigg[\prod_{i=1}^n \sqrt{\frac{w_i}{2\pi}}\bigg]\exp\left[-\frac{1}{2} \sum_{i=1}^n w_i\big(Y_i-\beta_0 - \beta_1X_{1i} - \beta_2X_{2i} - \ldots - \beta_kX_{ki}\big)^2\right]
+\end{split}
+\]</span></p>
+<p>We can then find the coefficient estimates by maximizing <span class="math inline">\(\mathcal{L}(\boldsymbol{\beta})\)</span> with respect to each of the coefficients; these derivatives will result in <span class="math inline">\(k\)</span> normal equations. Solving this system of normal equations we find that:</p>
+<p><span class="math display">\[
+\mathrm{B} = (\mathbf{X}^{\intercal}\mathbf{W}\mathbf{X})^{-1}\mathbf{X}^{\intercal}\mathbf{W}\mathbf{Y}
+\]</span></p>
+<p>where <strong>W</strong> is a diagonal matrix of the weights,</p>
+<p><span class="math display">\[
+\mathbf{W} =  \begin{bmatrix}w_{1} &amp; 0 &amp; 0 &amp; \ldots &amp; 0 \\ 0 &amp; w_{2} &amp; 0 &amp; \ldots &amp; 0\\ 0 &amp; 0 &amp; w_{3} &amp; \ldots &amp; 0\\ \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\ 0 &amp; 0 &amp; 0 &amp; \ldots &amp; w_{n}\end{bmatrix}
+\]</span></p>
+<p>The variance–covariance matrix for the regression coefficients can be computed using:</p>
+<p><span class="math display">\[
+\boldsymbol{\sigma^2}(\mathrm{B}) = \sigma^2_{\epsilon}(\mathbf{X}^{\intercal}\mathbf{W}\mathbf{X})^{-1}
+\]</span></p>
+<p>where the estimate for <span class="math inline">\(\sigma^2_{\epsilon}\)</span> is:</p>
+<p><span class="math display">\[
+\hat\sigma^2_{\epsilon} = \frac{\sum_{i=1}^n w_i \times \epsilon_i^2}{n - k - 1}
+\]</span></p>
+<p>To illustrate WLS, consider the data collected in 1877 by Francis Galton (<em>galton.csv</em>). This dataset includes diameter measurements of pea plants (<code>parent</code>), and the average (<code>progeny</code>) and standard deviation (<code>sd</code>) diametere based on 10 pea plants grown from the parent’s seeds.</p>
+<pre class="r"><code>pea = read_csv(&quot;~/Dropbox/epsy-8264/data/galton.csv&quot;)</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   parent = col_double(),
+##   progeny = col_double(),
+##   sd = col_double()
+## )</code></pre>
+<pre class="r"><code>head(pea, 7)</code></pre>
+<pre><code>## # A tibble: 7 x 3
+##   parent progeny     sd
+##    &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
+## 1   0.21   0.173 0.0199
+## 2   0.2    0.171 0.0194
+## 3   0.19   0.164 0.0190
+## 4   0.18   0.164 0.0204
+## 5   0.17   0.161 0.0165
+## 6   0.16   0.162 0.0159
+## 7   0.15   0.160 0.0176</code></pre>
+<p>In his analysis, Galton was trying to predict the diameters for the progeny peas using the parent peas’ diameters. Fitting this model using OLS, we find:</p>
+<pre class="r"><code>lm_ols = lm(progeny ~ 1 + parent, data = pea)
+tidy(lm_ols)</code></pre>
+<pre><code>## # A tibble: 2 x 5
+##   term        estimate std.error statistic    p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;
+## 1 (Intercept)    0.127   0.00699     18.2  0.00000929
+## 2 parent         0.210   0.0386       5.44 0.00285</code></pre>
+<p>The problem, of course, is that the variation in the residuals is not constant as the reliability for the 10 progeny measurements is not the same for the 7 parent peas. Because of this, we may want to fit a WLS regression model rather than an OLS model.</p>
+<pre class="r"><code># Get design matrix
+X = model.matrix(lm_ols)
+
+# Get Y vector
+Y = matrix(data = pea$progeny, nrow = 7)
+
+# Set up weight matrix, W
+w_i = 1 / (pea$sd ^ 2)
+W = diag(w_i)
+W</code></pre>
+<pre><code>##          [,1]     [,2]     [,3]     [,4]    [,5]     [,6]     [,7]
+## [1,] 2530.272    0.000    0.000    0.000    0.00    0.000    0.000
+## [2,]    0.000 2662.517    0.000    0.000    0.00    0.000    0.000
+## [3,]    0.000    0.000 2781.784    0.000    0.00    0.000    0.000
+## [4,]    0.000    0.000    0.000 2410.005    0.00    0.000    0.000
+## [5,]    0.000    0.000    0.000    0.000 3655.35    0.000    0.000
+## [6,]    0.000    0.000    0.000    0.000    0.00 3935.712    0.000
+## [7,]    0.000    0.000    0.000    0.000    0.00    0.000 3217.328</code></pre>
+<pre class="r"><code># Compute coefficients
+B = solve(t(X) %*% W %*% X) %*% t(X) %*% W %*% Y
+B</code></pre>
+<pre><code>##                  [,1]
+## (Intercept) 0.1279642
+## parent      0.2048012</code></pre>
+<pre class="r"><code># Compute errors from WLS
+e_i = pea$progeny - X %*% B
+
+# Compute MSE estimate
+mse = sum( w_i * (e_i ^ 2) ) / 5
+
+# Compute variance-covariance matrix for B
+vc_b = mse * solve(t(X) %*% W %*% X)
+vc_b</code></pre>
+<pre><code>##               (Intercept)        parent
+## (Intercept)  4.639303e-05 -0.0002582772
+## parent      -2.582772e-04  0.0014557908</code></pre>
+<p>The results of fitting both the OLS and WLS models appear below. Comparing the two sets of results, there is little change in the coefficients and SEs for this data set when using WLS estimation rather than OLS estimation.</p>
+<table>
+<thead>
+<tr>
+<th style="border-bottom:hidden" colspan="1">
+</th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px;">
+OLS
+</div>
+</th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px;">
+WLS
+</div>
+</th>
+</tr>
+<tr>
+<th style="text-align:left;">
+Coefficient
+</th>
+<th style="text-align:center;">
+B
+</th>
+<th style="text-align:center;">
+SE
+</th>
+<th style="text-align:center;">
+B
+</th>
+<th style="text-align:center;">
+SE
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Intercept
+</td>
+<td style="text-align:center;">
+0.127
+</td>
+<td style="text-align:center;">
+0.0070
+</td>
+<td style="text-align:center;">
+0.1280
+</td>
+<td style="text-align:center;">
+0.0068
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Parent
+</td>
+<td style="text-align:center;">
+0.210
+</td>
+<td style="text-align:center;">
+0.0386
+</td>
+<td style="text-align:center;">
+0.2048
+</td>
+<td style="text-align:center;">
+0.0382
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="fitting-the-wls-estimation-in-the-lm-function" class="section level4">
+<h4>Fitting the WLS estimation in the lm() Function</h4>
+<p>The <code>lm()</code> function can also be used to fit a model using WLS estimation. To do this we inlcude the <code>weights=</code> argument in <code>lm()</code>. This takes a vector of weights representing the <span class="math inline">\(w_i\)</span> values for each of the <span class="math inline">\(n\)</span> observations.</p>
+<pre class="r"><code>lm_wls_2 = lm(progeny ~ 1 + parent, data = pea, weights = I(1 / (sd ^ 2)))
+tidy(lm_wls_2)</code></pre>
+<pre><code>## # A tibble: 2 x 5
+##   term        estimate std.error statistic    p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;
+## 1 (Intercept)    0.128   0.00681     18.8  0.00000787
+## 2 parent         0.205   0.0382       5.37 0.00302</code></pre>
+<p>Not only can we use <code>tidy()</code> and <code>glance()</code> to obtain coefficient and model-level summaries, but we can also use <code>augment()</code>, <code>confint()</code>, or any other function that takes a fitted model as its input.</p>
+</div>
+<div id="what-if-error-variances-are-unknown" class="section level4">
+<h4>What if Error Variances are Unknown?</h4>
+<p>The previous example assumed that the variance–covariance matrix of the residuals was known. In practice, this is almost never the case. When we do not know the error variances, we need to estimate them from the data.</p>
+<p>To estimate the error variances for each observation, we:</p>
+<ol style="list-style-type: decimal">
+<li>Fit an OLS model to the data, and obtain the residuals.</li>
+<li>Square these residuals and regress them (using OLS) on the same set of predictors.</li>
+<li>Obtain the fitted values from Step 2.</li>
+<li>Create the weights using <span class="math inline">\(w_i = \frac{1}{\hat{y}_i}\)</span> where <span class="math inline">\(\hat{y}_i\)</span> are the fitted values from Step 3.</li>
+<li>Fit the WLS using the weights from Step 4.</li>
+</ol>
+<p>This is a two-stage process in which we (1) estimate the weights, and (2) use those weights in the WLS estimation. We will illustrate this methodology using the SLID data.</p>
+<pre class="r"><code># Step 1: Fit the OLS regression
+lm_step_1 = lm(wages ~ 1 + age + education + male + age:education, data = slid)
+
+# Step 2: Obtain the residuals and square them
+out_1 = augment(lm_step_1) %&gt;%
+  mutate(
+    e_sq = .resid ^ 2
+  )
+
+# Step 2: Regresss e^2 on the predictors from Step 1
+lm_step_2 = lm(e_sq ~ 1 + age + education + male + age:education, data = out_1)
+
+# Step 3: Obtain the fitted values from Step 2
+y_hat = fitted(lm_step_2)
+
+
+# Step 4: Create the weights
+w_i = 1 / (y_hat ^ 2)
+
+# Step 5: Use the fitted values as weights in the WLS
+lm_step_5 = lm(wages ~ 1 + age + education + male + age:education, data = slid, weights = w_i)</code></pre>
+<p>Before examining any output from this model, let’s examine the residual plots. The residual plots suggest that the homoskedasticity asumption is much more reasonably satisfied; although it is still not perfect. The normality assumption looks untenable here.</p>
+<p><label for="tufte-mn-2" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-2" class="margin-toggle"><span class="marginnote"><span style="display: block;">One way to proceed is to apply a variance stabilizing transformation to <span class="math inline"><span class="math inline">\(Y\)</span></span> (e.g., log-transform) and fit a WLS model. To do this you would go through the steps of estimating the weights again based on the transformed <span class="math inline"><span class="math inline">\(Y\)</span></span>.</span></span></p>
+<pre class="r"><code># Examine residual plots
+qqPlot(lm_step_5)
+residualPlot(lm_step_5)</code></pre>
+<div class="figure fullwidth">
+<img src="10-heteroskedasticity-and-wls_files/figure-html/unnamed-chunk-23-1.png" alt=" " width="768"  />
+<p class="caption marginnote shownote">
+</p>
+</div>
+<p>The WLS coefficient estimates, standard errors, and coefficient-level inference are presented below.</p>
+<pre class="r"><code># Examine coefficient-level output
+tidy(lm_step_5)</code></pre>
+<pre><code>## # A tibble: 5 x 5
+##   term          estimate std.error statistic   p.value
+##   &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)     4.97    0.227        21.9  1.37e-100
+## 2 age             0.0801  0.00591      13.5  6.95e- 41
+## 3 education      -0.201   0.0316       -6.36 2.30e- 10
+## 4 male            2.24    0.166        13.5  1.56e- 40
+## 5 age:education   0.0185  0.000921     20.1  1.77e- 85</code></pre>
+</div>
+</div>
+<div id="adjusting-the-standard-errors" class="section level3">
+<h3>Adjusting the Standard Errors</h3>
+<p>Since the effect of heteroskedasticity is that the sampling variances and covariances are incorrect, one method of dealing with this is to use the OLS coefficients, but make adjustments to the variance–covariance matrix of the coefficients. Then the adjusted SEs are the square roots of these adjusted sampling variances.</p>
+<p>We can compute the variance–covariance matrix of the regression coefficients using:</p>
+<p><span class="math display">\[
+V(\mathbf{B}) = (\mathbf{X}^{\intercal}\mathbf{X})^{-1}\mathbf{X}^{\intercal}\boldsymbol{\Sigma}\mathbf{X} (\mathbf{X}^{\intercal}\mathbf{X})^{-1}
+\]</span></p>
+<p>where, under the standard regression assumptions, <span class="math inline">\(\boldsymbol{\Sigma} = \sigma^2_{\epsilon}\mathbf{I}\)</span>, which simplifies to</p>
+<p><span class="math display">\[
+V(\mathbf{B}) = \sigma^2_{\epsilon} (\mathbf{X}^{\intercal}\mathbf{X})^{-1}
+\]</span></p>
+<p>If the errors are, however, heteroskedastic, then we need to use the heteroskedastic variance–covariance of the residuals,</p>
+<p><span class="math display">\[
+\boldsymbol{\Sigma} =  \begin{bmatrix}\sigma^2_{1} &amp; 0 &amp; 0 &amp; \ldots &amp; 0 \\ 0 &amp; \sigma^2_{2} &amp; 0 &amp; \ldots &amp; 0\\ 0 &amp; 0 &amp; \sigma^2_{3} &amp; \ldots &amp; 0\\ \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\ 0 &amp; 0 &amp; 0 &amp; \ldots &amp; \sigma^2_{n}\end{bmatrix},
+\]</span></p>
+<p>Remember that one of the formulas for variance of a random variable <span class="math inline">\(X\)</span> (in the first set of notes) was</p>
+<p><span class="math display">\[
+\sigma^2_X = \mathbb{E}\bigg(\big[X_i - \mathbb{E}(X)\big]^2\bigg)
+\]</span></p>
+<p>This means for the ith error variance, <span class="math inline">\(\sigma^2_i\)</span>, can be computed as</p>
+<p><span class="math display">\[
+\sigma^2_{i} = \mathbb{E}\bigg(\big[\epsilon_i - \mathbb{E}(\epsilon)\big]^2\bigg)
+\]</span></p>
+<p>Which, since <span class="math inline">\(\mathbb{E}(\epsilon)=0\)</span> simplifies to</p>
+<p><span class="math display">\[
+\sigma^2_{i} = \mathbb{E}\big(\epsilon_i^2\big)
+\]</span></p>
+<p>This suggests that we can estimate <span class="math inline">\(\boldsymbol{\Sigma}\)</span> as:</p>
+<p><span class="math display">\[
+\hat{\boldsymbol{\Sigma}} =  \begin{bmatrix}\epsilon^2_{1} &amp; 0 &amp; 0 &amp; \ldots &amp; 0 \\ 0 &amp; \epsilon^2_{2} &amp; 0 &amp; \ldots &amp; 0\\ 0 &amp; 0 &amp; \epsilon^2_{3} &amp; \ldots &amp; 0\\ \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\ 0 &amp; 0 &amp; 0 &amp; \ldots &amp; \epsilon^2_{n}\end{bmatrix},
+\]</span></p>
+<p>This modification is often referred to as a <em>sandwich estimator</em> because the <span class="math inline">\(\mathbf{X}^{\intercal}\boldsymbol{\Sigma}\mathbf{X}\)</span> is “sandwiched” between two occurences of <span class="math inline">\((\mathbf{X}^{\intercal}\mathbf{X})^{-1}\)</span>.</p>
+<p>To compute the adjusted variance–covariance matrix of the coefficients we fit the OLS regression and use that to define the design matrix and the <span class="math inline">\(\hat{\boldsymbol{\Sigma}}\)</span> matrix.</p>
+<pre class="r"><code># Fit OLS model
+lm.1 = lm(wages ~ 1 + age + education + male, data = slid)
+
+# Design matrix
+X = model.matrix(lm.1)
+
+# Sigma matrix
+e_squared = augment(lm.1)$.resid ^ 2  
+Sigma = e_squared * diag(3997)
+
+# Variance-covariance matrix for B
+V_b_huber_white = solve(t(X) %*% X) %*% t(X) %*% Sigma %*% X %*% solve(t(X) %*% X)
+
+# Compute SEs
+sqrt(diag(V_b_huber_white))</code></pre>
+<pre><code>## (Intercept)         age   education        male 
+## 0.635836527 0.008807793 0.038468695 0.207141705</code></pre>
+<p>The SEs we produce from this method are typically referred to as <em>Huber-White standard errors</em> because they were introduced in a paper by <span class="citation">Huber (1967)</span> and their some of their statistical prperties were proved in a paper by <span class="citation">White (1980)</span>.</p>
+<p>Simulation studies by <span class="citation">Long &amp; Ervin (2000)</span> suggest a slight modification to the Huber-White estimates; using</p>
+<p><span class="math display">\[
+\hat{\boldsymbol{\Sigma}} =  \begin{bmatrix}\frac{\epsilon^2_{1}}{(1-h_{11})^2} &amp; 0 &amp; 0 &amp; \ldots &amp; 0 \\ 0 &amp; \frac{\epsilon^2_{2}}{(1-h_{22})^2} &amp; 0 &amp; \ldots &amp; 0\\ 0 &amp; 0 &amp; \frac{\epsilon^2_{3}}{(1-h_{33})^2} &amp; \ldots &amp; 0\\ \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\ 0 &amp; 0 &amp; 0 &amp; \ldots &amp; \frac{\epsilon^2_{n}}{(1-h_{nn})^2}\end{bmatrix},
+\]</span></p>
+<p>We can compute this modification by adjusting the <code>e_squared</code> value in the R syntax as:</p>
+<pre class="r"><code># Sigma matrix
+e_squared = augment(lm.1)$.resid ^ 2  / ((1 - augment(lm.1)$.hat) ^ 2)  
+Sigma = e_squared * diag(3997)
+
+# Variance-covariance matrix for B
+V_b_huber_white_mod = solve(t(X) %*% X) %*% t(X) %*% Sigma %*% X %*% solve(t(X) %*% X)
+
+# Compute SEs
+sqrt(diag(V_b_huber_white_mod))</code></pre>
+<pre><code>## (Intercept)         age   education        male 
+## 0.637012622 0.008821005 0.038539628 0.207364732</code></pre>
+<p>We could use these SEs to compute the <span class="math inline">\(t\)</span>-values, associated <span class="math inline">\(p\)</span>-values, and confidence intervals for each of the coefficeints.</p>
+<p>The three sets of SEs are:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+Coefficient
+</th>
+<th style="text-align:right;">
+OLS
+</th>
+<th style="text-align:right;">
+Huber-White
+</th>
+<th style="text-align:right;">
+Modified Huber-White
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Intercept
+</td>
+<td style="text-align:right;">
+0.5989773
+</td>
+<td style="text-align:right;">
+0.6358365
+</td>
+<td style="text-align:right;">
+0.6370126
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Age
+</td>
+<td style="text-align:right;">
+0.0086640
+</td>
+<td style="text-align:right;">
+0.0088078
+</td>
+<td style="text-align:right;">
+0.0088210
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Education
+</td>
+<td style="text-align:right;">
+0.0342567
+</td>
+<td style="text-align:right;">
+0.0384687
+</td>
+<td style="text-align:right;">
+0.0385396
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Age x Education
+</td>
+<td style="text-align:right;">
+0.2070092
+</td>
+<td style="text-align:right;">
+0.2071417
+</td>
+<td style="text-align:right;">
+0.2073647
+</td>
+</tr>
+</tbody>
+</table>
+<p>In these data, the modified Huber-White adjusted SEs are quite similar to the SEs we obtained from OLS, despite the heteroskedasticity observed in the residuals. One advantage of this method is that we do not have to have a preconceived notion of the underlying pattern of variation like we do to use WLS estimation. If, however, we can identify the pattern of variation, then WLS estimation will produce more efficient (smaller) standard errors than sandwich estimation.</p>
+</div>
+</div>
+<div id="references" class="section level2 unnumbered">
+<h2>References</h2>
+<div id="refs" class="references">
+<div id="ref-Box:1964">
+<p>Box, G. E. P., &amp; Cox, D. R. (1964). An analysis of transformations. <em>Journal of the Royal Statisistical Society, Series B</em>, <em>26</em>, 211–246.</p>
+</div>
+<div id="ref-Huber:1967">
+<p>Huber, P. J. (1967). The behavior of maximum likelihood estimates under nonstandard conditiona. In L. M. Le Cam &amp; J. Neyman (Eds.), <em>Proceedings of the fifth berkeley symposium on mathematical statistics and probability</em> (pp. 221–233). Berkeley, CA: University of California Press.</p>
+</div>
+<div id="ref-Long:2000">
+<p>Long, J. S., &amp; Ervin, L. H. (2000). Using heteroskedasticity consistent standard errors in the linear regression model. <em>The American Statistician</em>, <em>54</em>, 217–224.</p>
+</div>
+<div id="ref-White:1980">
+<p>White, H. (1980). A heteroskedasticity-consistent covariance matrix estimator and a direct test for heteroskedasticity. <em>Econometrica</em>, <em>38</em>, 817–838.</p>
+</div>
+</div>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

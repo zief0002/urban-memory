@@ -167,3 +167,20 @@ mse * W %*% t(x) %*% x %*% W
 
 
 
+
+##################################################
+### LASSO
+##################################################
+
+# Choose lambda via cross-validation
+lasso_cv = cv.glmnet(x = x, y = y, alpha = 1, intercept = FALSE)
+
+
+# Fit LASSO regression
+lasso_best = glmnet(x = x, y = y, alpha = 1, lambda = lasso_cv$lambda.min, intercept = FALSE)
+
+# Get coefficient estimates
+tidy(lasso_best)
+
+
+

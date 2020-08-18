@@ -1,0 +1,135 @@
+---
+title: "In-Class Practice"
+author: "Matrix Algebra"
+header-includes:
+   - \usepackage{xcolor}
+   - \usepackage{mathtools}
+   - \definecolor{umn}{RGB}{153, 0, 85}
+   - \definecolor{umn2}{rgb}{0.1843137, 0.4509804, 0.5372549}
+output: 
+  pdf_document:
+    highlight: tango
+    latex_engine: xelatex
+    fig_width: 6
+    fig_height: 6
+mainfont: "Sabon"
+sansfont: "Helvetica Neue UltraLight"
+monofont: Inconsolata
+urlcolor: "umn"
+always_allow_html: yes
+---
+
+\frenchspacing
+
+
+This goal of this assignment is to give you experience using matrix algebra that will be useful for the remainder of the course. Work through each of the questions on this practice sheet. 
+
+
+
+# Part I
+
+Consider the following two matrices:
+
+$$
+\mathbf{X} = \begin{bmatrix}4 & 2 \\5 & 3 \end{bmatrix}
+\qquad
+\mathbf{Y} = \begin{bmatrix}3 & 2 \\2 & 3 \\1 & 2 \end{bmatrix}
+$$
+
+1. Compute $\mathbf{YX}$. 
+
+2. Show how to compute element $\mathbf{YX}_{3,1}$ (i.e., the element in the 3rd row and 1st column).
+
+3. Show how to compute the trace of $\mathbf{X}$.
+
+4. Compute the $\bigg((3\mathbf{Y})(0.5\mathbf{X})\bigg)^{\intercal}$.
+
+5. Show how to compute the determinant of $\mathbf{X}$.
+
+6. Show how to compute $\mathbf{X}^{-1}$.
+
+\newpage
+
+# Part II
+
+Consider the following column vector $\mathbf{E}$ with $n$ elements:
+
+$$
+\mathbf{E} = \begin{bmatrix}e_1 \\e_2\\ e_3\\ \vdots \\ e_n \end{bmatrix}
+$$
+
+7. Compute $\mathbf{E}^\intercal\mathbf{E}$ and simplify the result using mathematical notation. 
+
+8. In general, if we have a column vector (say $\mathbf{X}$), what is the result of computing $\mathbf{X}^\intercal\mathbf{X}$ in as simplified a form as possible.
+
+9. Use your result from Question \#8 to indicate what the result of computing $\mathbf{X}^\intercal\mathbf{X}$ is, if $\mathbf{X}$ is a column of $n$ ones:
+
+$$
+\mathbf{X} = \begin{bmatrix}1 \\1\\ 1\\ \vdots \\ 1 \end{bmatrix}
+$$
+
+\newpage
+
+# Part III
+
+Consider the following matrix $\mathbf{X}$:
+
+$$
+\mathbf{X} = \begin{bmatrix}1 & x_1 \\1 & x_2\\ 1 & x_3\\ \vdots \\ 1 & x_n \end{bmatrix}
+$$
+
+10. Compute $\mathbf{X}^\intercal\mathbf{X}$ and simplify the result.
+
+11. Compute the determinant of $\mathbf{X}^\intercal\mathbf{X}$.
+
+
+# Part IV
+
+Consider the following system of equations:
+
+$$
+\begin{split}
+4X + 3Y &= -2 \\
+8X - 2Y &= 12
+\end{split}
+$$
+
+12. Write this system of equations using matrices.
+
+13. Explain how to solve this systems of equations for $X$ and $Y$ using matrix algebra.
+
+14. Use matrix algebra to solve the systems of equations for $X$ and $Y$. 
+
+
+# Part V
+
+Consider the following system of equations:
+
+$$
+\begin{split}
+3X + 2Y &= 10 \\
+1.2X + 0.8Y &= 4
+\end{split}
+$$
+
+15. Write this system of equations using matrices.
+
+16. Try to solve this systems of equations for $X$ and $Y$ using matrix algebra. If you were to compute the inverse of the left-side matrix, you get an error indicating that the system is `exactly singular`. Explain why this occurs with this system of equations.
+
+\newpage
+
+# Part VI
+
+Consider the following system of equations:
+
+$$
+\begin{split}
+3X - Y &= -2 \\
+-12X + 4Y &= -4
+\end{split}
+$$
+
+17. Write this system of equations using matrices.
+
+18. Try to solve this systems of equations for $X$ and $Y$ using matrix algebra. If you were to compute the inverse of the left-side matrix, you get an error indicating that the system is `computationally singular`. Explain why this occurs with this system of equations.
+

@@ -1,0 +1,567 @@
+---
+title: "Matrix Computations in R"
+subtitle: "EPsy 8264"
+author: Andrew Zieffler"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: ["default", "metropolis", "metropolis-fonts"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE, servr.daemon = TRUE)
+```
+
+
+# Enter a Matrix
+
+.pull-left[
+$$\mathbf{X} = \begin{bmatrix}
+1 & -2 & 3 \\ 
+4 & -5 & -6 \\ 
+7 & 8 & 9 \\ 
+0 & 0 & 10
+\end{bmatrix}$$
+
+To enter a matrix in R, use the `matrix()` function. The elements of the matrix will be filled-in by columns.
+]
+
+.pull-right[
+
+```{r}
+X = matrix(
+  data = c(1,  4, 7,  0, 
+          -2, -5, 8,  0, 
+           3, -6, 9, 10),
+  nrow = 4,
+  ncol = 3
+  )
+
+X
+```
+]
+
+---
+
+# Fill Elements By Row
+
+.pull-left[
+The `byrow=TRUE` argument will fill the elements by rows rather than columns.
+]
+
+.pull-right[
+```{r}
+# Enter elements by row
+X = matrix(
+  data = c(1, -2,  3,
+           4, -5, -6,
+           7,  8,  9,
+           0,  0, 10),
+  byrow = TRUE, #<<
+  nrow = 4
+  )
+
+X
+```
+]
+
+---
+
+# Your Turn
+
+Enter the matrix **B** into R.
+
+$$\mathbf{B} = \begin{bmatrix}
+-5 & 1 & 3 \\ 
+2 & 2 & 6 \\ 
+7 & 3 & -4
+\end{bmatrix}$$
+
+--
+
+```{r}
+B = matrix(
+  data = c(-5, 1,  3,
+            2, 2,  6,
+            7, 3, -4),
+  byrow = TRUE,
+  nrow = 3
+  )
+```
+
+
+---
+
+# Vectors
+
+.pull-left[
+A matrix with a single column is referred to as a **column vector**. 
+
+$$\mathbf{a} = \begin{bmatrix}
+2 \\ 
+0 \\ 
+1 \\
+3
+\end{bmatrix}$$
+
+]
+
+.pull-right[
+```{r}
+# Enter column vector
+a = matrix(
+  data = c(2, 0, 1, 3),
+  byrow = TRUE,
+  nrow = 4
+  )
+
+a
+```
+]
+
+---
+
+.pull-left[
+A matrix with a single row is referred to as a **row vector**. 
+
+$$\mathbf{b} = \begin{bmatrix}
+-1 & 6 & 0 & 9 \end{bmatrix}$$
+
+]
+
+.pull-right[
+```{r}
+# Enter row vector
+b = matrix(
+  data = c(-1, 6, 0, 9),
+  byrow = TRUE,
+  nrow = 1
+  )
+
+b
+```
+]
+
+
+---
+
+# Dimensions of a Matrix
+
+.pull-left[
+$$\underset{4\times 3}{\mathbf{X}} = \begin{bmatrix}
+1 & -2 & 3 \\ 
+4 & -5 & -6 \\ 
+7 & 8 & 9 \\ 
+0 & 0 & 10
+\end{bmatrix}$$
+
+$$\underset{4\times 1}{\mathbf{a}} = \begin{bmatrix}
+2 \\ 
+0 \\ 
+1 \\
+3
+\end{bmatrix}$$
+$$\underset{1\times 4}{\mathbf{b}} = \begin{bmatrix}
+-1 & 6 & 0 & 9 \end{bmatrix}$$
+]
+
+.pull-right[
+The `dim()` function will return the dimensions of a matrix.
+
+```{r}
+# Dimensions of X
+dim(X)
+
+# Dimensions of column vector a
+dim(a)
+
+# Dimensions of row vector b
+dim(b)
+```
+]
+---
+
+# Your Turn
+
+What are the dimensions of **B**?
+
+$$\mathbf{B} = \begin{bmatrix}
+-5 & 1 & 3 \\ 
+2 & 2 & 6 \\ 
+7 & 3 & -4
+\end{bmatrix}$$
+
+Use R to verify the dimensions.
+
+--
+
+```{r}
+dim(B)
+```
+
+---
+
+# Transpose
+
+.pull-left[
+The `t()` function will produce the transpose of a matrix.
+
+$$\begin{split}\mathbf{b} &= \begin{bmatrix}
+-1 & 6 & 0 & 9 \end{bmatrix}\\[1em]
+\mathbf{b^{\prime}} &= \begin{bmatrix}
+-1 \\ 6 \\ 0 \\ 9 \end{bmatrix}\end{split}$$
+]
+
+.pull-right[
+```{r}
+# Matrix transpose
+t(b)
+
+# Dimensions of transpose
+dim(t(b))
+```
+
+]
+
+---
+
+.pull-left[
+$$\begin{split}\mathbf{X} &= \begin{bmatrix}
+1 & -2 & 3 \\ 
+4 & -5 & -6 \\ 
+7 & 8 & 9 \\ 
+0 & 0 & 10
+\end{bmatrix}\\[3em]
+\mathbf{X^{\prime}} &= \begin{bmatrix}
+1 & 4 & 7 & 0 \\ -2 & -5 & 8 & 0 \\ 3 & -6 & 9 & 0 \end{bmatrix}\end{split}$$
+]
+
+.pull-right[
+```{r}
+# Matrix transpose
+t(X)
+
+# Dimensions of transpose
+dim(t(X))
+```
+
+]
+
+---
+
+# Your Turn
+
+Find the transpose of $\mathbf{B}$ and the dimensions of $\mathbf{B}^{\prime}$.
+
+$$\mathbf{B} = \begin{bmatrix}
+-5 & 1 & 3 \\ 
+2 & 2 & 6 \\ 
+7 & 3 & -4
+\end{bmatrix}$$
+
+Use R to verify.
+
+--
+
+.pull-left[
+```{r}
+# Transpose of B
+t(B)
+```
+]
+
+.pull-right[
+```{r}
+# Dimensions
+dim(t(B))
+```
+]
+
+---
+
+# Adding/Subtracting Matrices
+
+.pull-left[
+Matrices that have the same dimensions can be added/subtracted.
+
+$$\underset{2\times 3}{\mathbf{D}} = \begin{bmatrix}
+1 & 2 & 3 \\ 
+4 & 5 & 6
+\end{bmatrix}$$
+
+$$\underset{2\times 3}{\mathbf{E}} = \begin{bmatrix}
+-5 & 1 & 2 \\ 
+3 & 0 & 4
+\end{bmatrix}$$
+
+The resulting matrix has the same dimensions as the originals.
+]
+
+.pull-right[
+We add/subtract elements in the same position.
+
+$$\begin{split}\mathbf{D}+\mathbf{E} &= \begin{bmatrix}
+1+-5 & 2+1 & 3+2 \\ 
+4+3 & 5+0 & 6+4
+\end{bmatrix} \\[1em]
+&= \begin{bmatrix}
+-4 & 3 & 5 \\ 
+7 & 5 & 10 \end{bmatrix}\end{split}$$
+
+$$\begin{split}\mathbf{D}-\mathbf{E} &= \begin{bmatrix}
+1--5 & 2-1 & 3-2 \\ 
+4-3 & 5-0 & 6-4
+\end{bmatrix} \\[1em]
+&= \begin{bmatrix}
+6 & 1 & 1 \\ 
+1 & 5 & 2 \end{bmatrix}\end{split}$$
+]
+
+---
+
+
+.pull-left[
+```{r}
+# Input D
+D = matrix(
+  data = c(1, 2,  3,
+           4, 5,  6),
+  byrow = TRUE, 
+  nrow = 2
+  )
+
+# Input E
+E = matrix(
+  data = c(-5, 1, 2,
+            3, 0, 4),
+  byrow = TRUE, 
+  nrow = 2
+  )
+```
+]
+
+.pull-right[
+```{r}
+# Add matrices
+D + E
+
+# Subtract matrices
+D - E
+```
+]
+
+
+---
+
+# Multiplication by a Scalar
+
+.pull-left[
+A scalar is a $1\times1$ matrix (a number). A matrix and a scalar can be multiplied together by multiplying each element in the matrix by the scalar.
+
+$$\begin{split} 3 \times \mathbf{D} &= 3\begin{bmatrix}
+1 & 2 & 3 \\ 
+4 & 5 & 6
+\end{bmatrix}\\[1em]
+&= \begin{bmatrix}
+3\times1 & 3\times2 & 3\times3 \\ 
+3\times4 & 3\times5 & 3\times6
+\end{bmatrix} \\[1em]
+&= \begin{bmatrix}
+3 & 6 & 9 \\ 
+12 & 15 & 18
+\end{bmatrix}\end{split}$$
+]
+
+.pull-right[
+```{r}
+# Multiplication by a scalar
+3 * D
+```
+
+]
+
+---
+
+# Diagonal Elements
+
+.pull-left[
+The `diag()` function will return the diagonal elements of a square matrix.
+
+$$\mathbf{B} = \begin{bmatrix}
+-5 & 1 & 3 \\ 
+2 & 2 & 6 \\ 
+7 & 3 & -4
+\end{bmatrix}$$
+]
+
+.pull-right[
+```{r}
+diag(B)
+```
+]
+
+---
+
+# Your Turn
+
+Find the diagonal for $\mathbf{B}^{\prime}$ (the transpose of $\mathbf{B}$).
+
+$$\mathbf{B} = \begin{bmatrix}
+-5 & 1 & 3 \\
+2 & 2 & 6 \\
+7 & 3 & -4
+\end{bmatrix}$$
+
+Use R to verify.
+
+--
+
+```{r}
+# Diagonal of B'
+diag(t(B))
+```
+
+---
+
+# Diagonal of Non-Square Matrices
+
+.pull-left[
+The `diag()` function also works on non-square matrices. However, it returns the elements on the diagonal starting with the element in the $[1,1]$ position.
+
+$$\mathbf{X} = \begin{bmatrix}
+1 & -2 & 3 \\ 
+4 & -5 & -6 \\ 
+7 & 8 & 9 \\ 
+0 & 0 & 10
+\end{bmatrix}$$
+]
+
+.pull-right[
+```{r}
+diag(X)
+```
+]
+
+---
+
+# Matrix Trace
+
+.pull-left[
+The trace of a matrix is the sum of its diagonal elements
+
+$$\mathbf{B} = \begin{bmatrix}
+-5 & 1 & 3 \\ 
+2 & 2 & 6 \\ 
+7 & 3 & -4
+\end{bmatrix}$$
+]
+
+.pull-right[
+```{r}
+# Compute trace of B
+sum(diag(B))
+```
+]
+
+
+You can also use the `tr()` function from the **psych** library to compute the trace.
+
+```{r}
+# Compute trace of B
+psych::tr(B)
+```
+
+---
+
+# Your Turn
+
+Find the trace for $\mathbf{B}^{\prime}$ (the transpose of $\mathbf{B}$).
+
+$$\mathbf{B} = \begin{bmatrix}
+-5 & 1 & 3 \\
+2 & 2 & 6 \\
+7 & 3 & -4
+\end{bmatrix}$$
+
+Use R to verify.
+
+--
+
+```{r}
+# Diagonal of B'
+sum(diag(t(B)))
+```
+
+---
+
+# Identity Matrix
+
+.pull-left[
+The `diag()` function can also be used to create an *identity matrix*. The argument is the number of rows and columns.
+
+$$\underset{3\times 3}{\mathbf{I}} = \begin{bmatrix}
+1 & 0 & 0 \\ 
+0 & 1 & 0 \\ 
+0 & 0 & 1
+\end{bmatrix}$$
+]
+
+.pull-right[
+```{r}
+# Create a 3x3 identity matrix
+diag(3)
+```
+]
+
+---
+
+# Determinant
+
+.pull-left[
+The `det()` function can be used to compute the *determinant* of a square matrix.
+
+$$\underset{2\times 2}{\mathbf{X}} = \begin{bmatrix}
+-5 & 1 \\ 
+2 & 2
+\end{bmatrix}$$
+]
+
+.pull-right[
+```{r}
+# Create X
+X = matrix(
+    data = c(-5, 1,
+             2, 2),
+    byrow = TRUE,
+    nrow = 2
+)
+
+# Compute determinant
+det(X)
+```
+]
+
+---
+
+# Matrix Inverse
+
+.pull-left[
+The `solve()` function can be used to compute the *inverse* of a square matrix (if it exists).
+
+$$\underset{2\times 2}{\mathbf{X}}^{-1} = \begin{bmatrix}
+-5 & 1 \\ 
+2 & 2
+\end{bmatrix}^{-1}$$
+]
+
+.pull-right[
+```{r}
+# Compute inverse
+solve(X)
+```
+]

@@ -1,0 +1,598 @@
+---
+title: "EPSY 8264 Prerequisite Information"
+date: "`r Sys.Date()`"
+header-includes:
+   - \usepackage{amsthm}
+   - \usepackage{xcolor}
+   - \usepackage{xfrac}
+   - \usepackage[framemethod=tikz]{mdframed}
+   - \usepackage{graphicx}
+   - \usepackage{rotating}
+   - \usepackage{booktabs}
+   - \usepackage{caption}
+   - \definecolor{umn}{RGB}{153, 0, 85}
+   - \definecolor{umn2}{rgb}{0.1843137, 0.4509804, 0.5372549}
+   - \definecolor{myorange}{HTML}{EA6153}
+output: 
+  pdf_document:
+    includes:
+      before_body: notes.tex
+    highlight: tango
+    latex_engine: xelatex
+    fig_width: 6
+    fig_height: 6
+mainfont: "Minion Pro"
+sansfont: "ITC Slimbach Std Book"
+monofont: "Source Code Pro"
+urlcolor: "umn2"
+always_allow_html: yes
+bibliography: epsy8264.bib
+csl: apa-single-spaced.csl
+---
+
+\frenchspacing
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(dplyr)
+library(knitr)
+library(kableExtra)
+library(sm)
+```
+
+This handout contains a list of basic results and concepts that should be familiar to each of you prior to taking EPsy 8264. Please review your previous texts/notes for information on these topics.
+
+1. Summation rules. These rules form the basis for many of the earlier proofs that we will do for the class. In the following, $X$ and $Y$ are variables and $a$ is a constant:
+    a) $\sum X$
+    b) $\sum (X+Y)$
+    c) $\sum a$
+    d) $\sum aX$
+    e) $\sum (XY)$
+  
+2. Random Variables
+    a) Expected value (definition/meaning)
+    b) Variance (definition/meaning)
+    b) Probability distribution---You should have a mathematical as well as a conceptual idea of each of the following distributions.
+        i) Joint
+        ii) Marginal
+        iii) Conditional
+    d) Covariance
+    e) Correlation
+    f) Statistical and conceptual idea of what it means for variables to be independent.
+    g) Functions of random variables and the effect of transformations on:
+        i) Expected values
+        ii) Variances
+        iii) Correlations (covariances)
+    h) Distributions of data
+        i) Number of variables (univariate, bivariate, multivariate)
+        ii) Characteristics of distributions (location, spread, shape)
+        iii) Shape (normal, chi-square, uniform)
+    i) Linear interpolation
+
+3. Central Limit Theorem ("general" definition and utility)
+
+4. Normal probability distribution
+    a) Link probabilities to test statistics (e.g., `pnorm()`, `qnorm()`)
+    b) Define and understand implications of equivalent scores
+    c) Understand implications of a standard score (especially one that is normally distributed)
+    d) Perform hypothesis tests and accurately interpret $p$-values.
+
+5.	$t$-distributions
+    a) Link probabilities to test statistics (e.g., `pt()`, `qt()`)
+    b) Define degrees of freedom
+    c) Understand how to find degrees of freedom (*df*) for a host of simple statistical methods
+    d) Perform hypothesis tests using $t$-distributions.
+
+6. $F$-distributions
+    a) Link probabilities to test statistics (e.g., `pf()`, `qf()`)
+    b) Numerator and denominator degrees of freedom
+    c) Perform an overall test of a model using $F = \mathrm{MS}_{\mathrm{Model}} / \mathrm{MS}_{\mathrm{Error}}$
+    d) Test of model comparison (e.g.,  Nested $F$ test)
+
+7. Chi-Square ($\chi^2$) distributions
+    a) Link probabilities to test statistics (e.g., `pchisq()`, `qchisq()`)
+    b) Degrees of freedom
+    c) Tests of independence
+    d) Tests of a given hypothesis
+    e) Test of model comparison (e.g., Deviance test)
+
+8.	Statistical estimation
+    a) Understanding of what it means to be an estimator
+    a) *Biased* versus *unbiased* estimators
+    a) Consistent estimators
+    a) Minimum variance estimators
+    a) Confidence intervals
+
+9.	Least Squares Estimation
+    a) Obtaining estimators from very simple situations via the use of algebra.
+    b) Obtaining standard error estimates for least squares (and other) estimators
+
+10.	Inference
+    a) Empirical versus theoretical distributions.
+    b) Hypothesis testing (very general) 
+    c) Interval estimation (confidence intervals – very general) 
+    d) Type I, Type II errors and their relation to sample size, number of tests, and effect (relationship of the statistic under observation)
+    e) Relationship between hypothesis testing and confidence intervals
+    f) Test for the equality of variances
+    g) Statistical ($p$-value) versus practical (effect size) difference
+
+11.	Mathematics to review
+    a) Algebra 1
+    b) Algebra 2
+    c) Geometry
+    d) Matrix Algebra
+
+\newpage
+
+## Summation Rules
+
+**Rule 1:** When a quantity which is itself a sum or difference is to be summed, the summation sign may be distributed among the separate terms of the sum. That is:
+
+$$
+\sum(X + Y) = \sum X + \sum Y
+$$
+
+This rule can be verified using a numerical example.
+
+```{r tab01, echo=FALSE}
+my_data = tibble(
+  X = c(2, 3, 3, 1, 2, 4, 5, 4),
+  Y = c(4, 5, 4, 2, 3, 6, 6, 2)
+) 
+
+tab_01 = my_data %>%
+  mutate(
+    '$(X+Y)$' = X + Y
+  )
+
+my_sums = colSums(tab_01)
+
+tab_01 = rbind(tab_01, my_sums)
+
+knitr::kable(tab_01, format = "latex", booktabs = TRUE, escape = FALSE, 
+             caption = "Numeric Example of Rule 1. Gray Row is the Sum of Each Column") %>%
+  row_spec(9, bold = TRUE, color = "white", background = "gray") %>%
+  kable_styling(latex_options = "HOLD_position")
+```
+
+Below, we carry out the computation in R.
+
+```{r echo=TRUE}
+X = c(2, 3, 3, 1, 2, 4, 5, 4)
+Y = c(4, 5, 4, 2, 3, 6, 6, 2)
+
+sum(X + Y)
+sum(X) + sum(Y)
+
+# Use a logical statement to check this is TRUE
+sum(X + Y) == sum(X) + sum(Y)
+```
+
+\newpage
+
+The numeric example, which is often used as a sanity check, verifies the result for a specific $X$ and $Y$. A more powerful result can be a  mathematical proof, which allows us to verify that the rule is true more generally (for all variables $X$ and $Y$)
+
+\begin{proof}
+\[
+$$
+\begin{align*}
+\sum(X + Y) &= (X_1 + Y_1) + (X_2 + Y_2) + \ldots + (X_n + Y_n) \\
+&= (X_1 + X_2 + \ldots X_n) + (Y_1 + Y_2 + \ldots Y_n) \\
+&= \sum X + \sum Y
+\end{align*}
+$$
+\]
+
+By extension of the proof, it follows that: 
+
+$$
+\sum(X + Y + Z) = \sum X + \sum Y + \sum Z~,~\mathrm{etc.}
+$$
+\end{proof}
+
+
+**Rule 2:** The sum of a random variable and a constant equals the sum of the variable plus $n$ times the constant, where $n$ is the length of the random variable.
+
+
+$$
+\sum(X + a) = \sum X + na
+$$
+
+First we verify this for a specific case, and then show the mathematical proof.
+
+```{r tab02, echo=FALSE}
+my_data = tibble(
+  X = c(2, 3, 3, 1, 2, 4, 5, 4),
+  a = 3
+) 
+
+tab_02 = my_data %>%
+  mutate(
+    '$(X+3)$' = X + 3
+  )
+
+my_sums = colSums(tab_02)
+
+tab_02 = rbind(tab_02, my_sums)
+
+knitr::kable(tab_02, format = "latex", booktabs = TRUE, escape = FALSE, 
+             caption = "Numeric Example of Rule 2. Gray Row is the Sum of Each Column") %>%
+  row_spec(9, bold = TRUE, color = "white", background = "gray") %>%
+  kable_styling(latex_options = "HOLD_position")
+```
+
+
+```{r echo=TRUE}
+n = length(X)
+
+# Use a logical statement to check this is TRUE
+sum(X + 3) == sum(X) + (n * 3)
+```
+
+\newpage
+
+To construct the mathematical proof, we first define $\sum a$:
+
+$$
+\begin{split}
+\sum a &= n \times a \\
+&= \underbrace{a + a + \ldots + a}_{n} \\
+&= na
+\end{split}
+$$
+
+We now use this definition along with Rule 1 in the proof.
+
+\begin{proof}
+\[
+$$
+\begin{align*}
+\sum(X + a) &= \sum X + \sum a \\
+&= \sum X + n a
+\end{align*}
+$$
+\]
+\end{proof}
+
+
+**Rule 3:** The sum of the product of a constant and a variable is equivalent to the product of the constant and the sum of the variable.
+
+$$
+\sum (aX) = a \sum X
+$$
+
+Again, we first verify this for a specific case, and then show the mathematical proof.
+
+```{r tab03, echo=FALSE}
+my_data = tibble(
+  X = c(2, 3, 3, 1, 2, 4, 5, 4)
+) 
+
+tab_03 = my_data %>%
+  mutate(
+    '$3X$' = X * 3
+  )
+
+my_sums = colSums(tab_03)
+
+tab_03 = rbind(tab_03, my_sums)
+
+knitr::kable(tab_03, format = "latex", booktabs = TRUE, escape = FALSE, 
+             caption = "Numeric Example of Rule 3. Gray Row is the Sum of Each Column") %>%
+  row_spec(9, bold = TRUE, color = "white", background = "gray") %>%
+  kable_styling(latex_options = "HOLD_position")
+```
+
+```{r echo=TRUE}
+# Use a logical statement to check this is TRUE
+sum(3 * X) == 3 * sum(X)
+```
+
+\newpage
+\begin{proof}
+\[
+$$
+\begin{align*}
+\sum(aX) &= a(X_1) + a(X_2) + \ldots + a(X_n) \\
+&= a(X_1 + X_2 + \ldots X_n) \\
+&= a \sum X
+\end{align*}
+$$
+\]
+\end{proof}
+
+The rules can be combined, and extended. Some illustrations are given below and the rules involved are listed. In the illustrations, $a$ and $b$ represent constants, and $X$ and $Y$ are variables. Try to verify a specific case and prove a few of these. 
+
+1. $\sum (X + 2) = \sum X + 2n$ (using Rules 1 and 2)
+2. $\sum (X^2 - 1) = \sum X^2 - n$ (using Rules 1 and 2); [Note: if $X$ is a variable, so is $X^2$]
+3. $\sum 2a = 2 \times a \times n$ (using Rule 2)
+4. $\sum ab^2XY^2 = ab^2\sum X Y^2$ (using Rule 3)
+5. $\sum a(Y+3)^2 = a\sum (Y+3)^2$ (using Rule 3); [Note: if $Y$ is a variable, so is $(Y+3)$]
+6. $\sum (2X-3) = 2\sum X - 3n$ (using Rules 1, 2, and 3)
+7. $\sum (Y -a)^2 = \sum Y^2 - 2a\sum Y + na^2$ (using Rules 1, 2, and 3)
+
+### Computational Formulas
+
+In days of yesteryear, these summations were used to provide computational formulas that formed the basis for calculating sums of squares, variances, and other useful measures (see, http://www.ablongman.com/graziano6e/text_site/MATERIAL/Stats/manvar.htm). When pen-and-paper, not computers, were the way to do statistics, reducing quantities to easy to calculate summaries (e.g., $\sum X^2$) was critical. For example, in computing the sum of squared deviations from the mean, we were interested in
+
+$$
+\sum (X-\bar{X})^2
+$$
+
+Using the Example 7 (above), we could re-write this as
+
+$$
+\sum X^2 - 2\bar{X}\sum X + n\bar{X}^2
+$$
+
+Substituting $\sfrac{\sum X}{n}$ in for $\bar{X}$ and reducing we get:
+
+$$
+\begin{split}
+&= \sum X^2 - 2\bigg(\frac{\sum X}{n}\bigg)\sum X + n\bigg(\frac{\sum X}{n}\bigg)^2 \\
+&= \sum X^2 - \frac{2\big(\sum X\big)^2}{n} + \frac{\big(\sum X\big)^2}{n} \\
+&= \sum X^2 - \frac{\big(\sum X\big)^2}{n}
+\end{split}
+$$
+
+With computers, computational formulas are rarely used in practice; it is easier to calculate quantities directly from the data.
+
+```{r echo=TRUE}
+X = c(2, 3, 3, 1, 2, 4, 5, 4)
+
+# Compute from data
+sum( (X - mean(X)) ^ 2 )
+
+# Use computational formula
+n = length(X)
+sum(X^2) - (sum(X)^2) / n
+```
+
+
+<!-- ### Demonstration of Summation Rules (and Some of Their Implications) -->
+
+<!-- Any summation can be verified using numerical examples. The mathematical proof allows us to verify that the rule is true more generally (for all variables $X$ and $Y$), but the numeric verification can be a sanity check -->
+
+<!-- ```{r echo=TRUE} -->
+<!-- X = c(2, 3, 3, 1, 2, 4, 5, 4) -->
+<!-- Y = c(4, 5, 4, 2, 3, 6, 6, 2) -->
+<!-- n = length(X) -->
+<!-- ``` -->
+
+<!-- For example, to verify *Rule 1*, we can check that $\sum(X + Y) = \sum X + \sum Y$. -->
+
+<!-- ```{r echo=TRUE} -->
+
+<!-- ``` -->
+
+
+
+<!-- ```{r tab0k, echo=FALSE} -->
+<!-- my_data = tibble( -->
+<!--   X = c(2, 3, 3, 1, 2, 4, 5, 4), -->
+<!--   Y = c(4, 5, 4, 2, 3, 6, 6, 2) -->
+<!-- )  -->
+
+<!-- tab_01 = my_data %>% -->
+<!--   mutate( -->
+<!--     '$X^2$' = X^2, -->
+<!--     '$(X+Y)$' = X + Y, -->
+<!--     `four` = 4, -->
+<!--     '$(X-4)$' = X - 4, -->
+<!--     '$3X$' = 3 * X, -->
+<!--     '$(X-\\bar{X})$' = X - mean(my_data$X), -->
+<!--     '$(X-\\bar{X})^2$' = (X - mean(my_data$X))^2, -->
+<!--     '$XY$' = X * Y, -->
+<!--     '$3(X-4)$' = 3*X - 4, -->
+<!--     '$|X-\\bar{X}|$' = abs(X - mean(my_data$X)) -->
+<!--   ) -->
+
+<!-- my_sums = colSums(tab_01) -->
+
+<!-- tab_01 = rbind(tab_01, my_sums) -->
+
+<!-- knitr::kable(tab_01, format = "latex", booktabs = TRUE, escape = FALSE,  -->
+<!--              caption = "Example of Summation Rules Using Data. Gray Row is the Sum of Each Column") %>% -->
+<!--   row_spec(9, bold = TRUE, color = "white", background = "gray") %>% -->
+<!--   kable_styling(latex_options = "HOLD_position") -->
+<!-- ``` -->
+
+<!-- Be sure that you can find the following values---each set of symbols represents ONE numerical value. Pay attention to the order of operations. -->
+
+
+
+<!-- Number | Summation                 | Computation                         | Answer -->
+<!-- ------ | ------------------------- | ----------------------------------- | ------------------------------------------ -->
+<!-- A      | $\sum X$                  | `sum(X)`                            | `r sum(X)` -->
+<!-- B      | $\sum (X^2)$              | `sum(X^2)`                          | `r sum(X^2)`                         -->
+<!-- C      | $(\sum X)^2$              | `( sum(X) )^2`                      | `r ( sum(X) )^2`                     -->
+<!-- D      | $\sum (X + Y)$            | `sum(X + Y)`                        | `r sum(X + Y)` -->
+<!-- E      | $\sum X + \sum Y)$        | `sum(X) + sum(Y)`                   | `r sum(X) + sum(Y)`   -->
+<!-- F      | $\sum 4$                  | `4 * n`                             | `r 4 * n` -->
+<!-- G      | $\sum (X-4)$              | `sum(X - 4)`                        | `r sum(X - 4)`                       -->
+<!-- H      | $\sum (3X)$               | `sum(3 * X)`                        | `r sum(3 * X)`                       -->
+<!-- I      | $\sum (X-\bar{X})$        | `sum(X - mean(X))`                  | `r sum(X - mean(X))`                 -->
+<!-- J      | $\sum (X-\bar{X})^2$      | `sum( (X - mean(X)) ^ 2 )`          | `r sum( (X - mean(X)) ^ 2 )`           -->
+<!-- K      | $\sum (XY)$               | `sum(X * Y)`                        | `r sum(X * Y)`                       -->
+<!-- L      | $(\sum X)(\sum Y)$        | `sum(X) * sum(Y)`                   | `r sum(X) * sum(Y)`                  -->
+<!-- M      | $\sum \bigg(3(X-4)\bigg)$ | `sum(3 * (X - 4))`                  | `r sum(3 * (X - 4))`                 -->
+<!-- N      | $3\sum (X-4)$             | `3 * ( sum(X - 4) )`                | `r 3 * ( sum(X - 4) )`               -->
+<!-- O      | $3(\sum X-\sum 4)$        | `3 * ( sum(X) - (n * 4) )`          | `r 3 * ( sum(X) - (n * 4) )` -->
+<!-- P      | $\sum |X-\bar{X}|$        | `sum( abs(X - mean(X)) )`           | `r sum( abs(X - mean(X)) )`           -->
+
+
+## Basic Proofs
+
+Here are several definitions and basic proofs which should be helpful as you are reading the text and trying to follow some of the mathematical arguments presented there.
+
+
+
+Quantity                  | Notation                | Formula
+------------------------- | ----------------------- | --------------------------------------
+Population size           | $N$                     |
+Mean                      | $\mu$                   | $\frac{\sum x_i}{N}$
+Mean deviation            |                         | $x_i - \mu$
+Sum of squared deviations |                         | $\sum (x_i - \mu)^2$
+Variance (Population)     | $\sigma^2$              | $\frac{\sum (x_i - \mu)^2}{N}$
+
+
+## Biased and Unbiased Estimators
+
+An estimator whose average value over all possible samples is equal to its population value is *unbiased*. An estimator that is consistently too high or too low is biased (high or low).
+
+Consider a population with $N=4$ values: 3, 5, 7, 9. This population has the following parameters:
+
+$$
+\mu = \frac{3 + 5 + 7 + 9}{4} = 6
+$$
+
+$$
+\sigma^2 = \frac{(3-6)^2 + (5-6)^2 + (7-6)^2 + (9-6)^2}{4} = 5
+$$
+Now, consider sampling two observations at random ($n=2$). For example, suppose you randomly chose $\{3,5\}$. Based on this simple random sample (SRS) we can estimate the population mean and variance,
+
+$$
+\hat\mu = \bar{x} = \frac{3+5}{2} = 4
+$$
+
+and
+
+$$
+\hat\sigma^2 = s^2 =  \frac{(3-4)^2 + (5-4)^2}{2} = 1
+$$
+
+The sample mean and variance are referred to as *estimators*. (They are estimates of the population parameters.) When we refer to the biased-ness or unbiased-ness of an estimator, we need to consider the average value across ALL POSSIBLE samples of a particular size; in our case $n=2$. With only four different values in the population, we can actually list all the possible samples of size 2 (we need to sample *with replacement*):
+
+```{r tab_04}
+tab_04 = tibble(
+  SRS = 1:16,
+  Observations = c("{3, 3}", "{3, 5}", "{3, 7}", "{3, 9}", "{5, 3}", "{5, 5}", "{5, 7}", "{5, 9}",
+             "{7, 3}", "{7, 5}", "{7, 7}", "{7, 9}", "{9, 3}", "{9, 5}", "{9, 7}", "{9, 9}"),
+  x1 = c(rep(3, 4), rep(5, 4), rep(7, 4), rep(9, 4)),
+  x2 = rep(c(3, 5, 7, 9), 4)
+) %>%
+  mutate(
+    Mean = (x1 + x2) / 2,
+    Variance  = ((x1 - Mean)^2 + (x2 - Mean)^2)/2
+  )
+
+knitr::kable(tab_04, format = "latex", booktabs = TRUE, escape = TRUE, 
+             caption = "The Estimated Mean and Variance for All Possible SRSs of Size n=2 Drawn from {3, 5, 7, 9}.") %>%
+  kable_styling(latex_options = "HOLD_position")
+```
+
+Below we plot the 16 estimated mean values. 
+
+```{r fig_01, out.width="3.5in", fig.cap="Dotplot of the 16 estimated mean values. The average of these values (black line) and the population variance (darkred line) are also displayed.", fig.pos="H", fig.align='center'}
+sm.density(tab_04$Mean, xlab = "Estimated Mean")
+abline(v = 6, col = "darkred", lty = "dashed", lwd = 2)
+abline(v = mean(tab_04$Mean), col = "black")
+text(expression(E(bar(x))), x = 6, y = 0.03, pos = 2, offset = 0.2)
+text(expression(mu), x = 6, y = 0.03, col = "darkred", pos = 4, offset = 0.2)
+```
+
+The average of the 16 estimated mean values is 6. This is the value of the population parameter. The sample mean is an unbiased estimator of the population mean. Mathematically, we write
+
+$$
+E(\bar{x}) = \mu
+$$
+
+Now let's look at the 16 estimated variances
+
+```{r fig_02, out.width="3.5in", fig.cap="Dotplot of the 16 estimated variance values. The average of these values (black line) and the population variance (darkred line) are also displayed.", fig.pos="H", fig.align='center'}
+sm.density(tab_04$Variance, xlab = "Estimated Variance", ylim = c(0, 0.20))
+abline(v = 5, col = "darkred", lty = "dashed", lwd = 2)
+abline(v = mean(tab_04$Variance), col = "black")
+text(expression(E(s^2)), x = 2.45, y = 0.03, pos = 4, offset = 0.2)
+text(expression(sigma^2), x = 5, y = 0.03, col = "darkred", pos = 4, offset = 0.2)
+```
+
+
+
+The average of the 16 estimated variance values is 2.5. This is NOT the value of the population parameter. The sample variance is a biased estimator of the population variance. Mathematically, we write
+
+$$
+E(s^2) \neq \sigma^2
+$$
+
+Since the average value is LESS than the value of the population variance ($2.5 < 5$), we say that the sample variance UNDERESTIMATES the population variance.
+
+To account for this, when we are estimating the population variance from a sample, we typically divide the sum of squared deviations by $n-1$ rather than $n$.
+
+$$
+s^2 = \frac{\sum (x_i - \hat\mu)^2}{n-1}
+$$
+
+Updating this in the 16 samples,
+
+
+```{r tab_05}
+tab_05 = tab_04 %>%
+  mutate(
+    'Variance (n-1)'  = ((x1 - Mean)^2 + (x2 - Mean)^2)/ (2 -1)
+  )
+
+knitr::kable(tab_05, format = "latex", booktabs = TRUE, escape = TRUE, 
+             caption = "The Estimated Mean and Variance for All Possible SRSs of Size n=2 Drawn from {3, 5, 7, 9}.") %>%
+  kable_styling(latex_options = "HOLD_position")
+```
+
+Now the average of the 16 estimated variance values is 5, the value of the population parameter. The sample variance is a biased estimator of the population variance when we divide by $n$, but is unbiased when we divide by $n-1$.
+
+```{r fig_03, out.width="3.5in", fig.cap="Dotplot of the 16 estimated variance values using a denominator of n-1. The average of these values (black line) and the population variance (darkred line) are also displayed.", fig.pos="H", fig.align='center'}
+sm.density(tab_05$Variance, xlab = "Estimated Variance", ylim = c(0, 0.20))
+abline(v = 5, col = "darkred", lty = "dashed", lwd = 2)
+abline(v = mean(tab_05$'Variance (n-1)'), col = "black")
+text(expression(E(s^2)), x = 5, y = 0.03, pos = 2, offset = 0.2)
+text(expression(sigma^2), x = 5, y = 0.03, col = "darkred", pos = 4, offset = 0.2)
+```
+
+## Standard Deviation
+
+What about the standard deviation? Is it an unbiased estimator? The population standard deviation is $\sqrt{5}=2.24$; this is the square root of the population variance. If we compute the standard deviation for each of the 16 samples, we get:
+
+```{r tab_06}
+tab_06 = tibble(
+  SRS = 1:16,
+  Observations = c("{3, 3}", "{3, 5}", "{3, 7}", "{3, 9}", "{5, 3}", "{5, 5}", "{5, 7}", "{5, 9}",
+             "{7, 3}", "{7, 5}", "{7, 7}", "{7, 9}", "{9, 3}", "{9, 5}", "{9, 7}", "{9, 9}"),
+  x1 = c(rep(3, 4), rep(5, 4), rep(7, 4), rep(9, 4)),
+  x2 = rep(c(3, 5, 7, 9), 4)
+) %>%
+  mutate(
+    Mean = (x1 + x2) / 2,
+    'SD (n)'  = sqrt(((x1 - Mean)^2 + (x2 - Mean)^2)/2),
+    'SD (n-1)'  = sqrt(((x1 - Mean)^2 + (x2 - Mean)^2)/(2-1))
+  )
+
+knitr::kable(tab_06, format = "latex", booktabs = TRUE, escape = TRUE, 
+             caption = "The Estimated Mean and SD (using n and n-1 in the denominator) for All Possible SRSs of Size n=2 Drawn from {3, 5, 7, 9}.") %>%
+  kable_styling(latex_options = "HOLD_position")
+```
+
+The average of the 16 values for the SD based on dividing by $n$ is 1.25. This is a biased estimate (underestimate) of the population standard deviation. The average of the 16 values for the SD based on dividing by $n-1$ is 1.77. This is also a biased (under-) estimate of the population standard deviation.
+
+```{r fig_04, fig.width = 10, fig.height = 5, out.width="5in", fig.cap="Dotplot of the 16 estimated standard deviation values using a denominator of n (left-hand plot) and n-1 (right-hand plot). The average of these values (black line) and the population variance (darkred line) are also displayed in each plot, respectively.", fig.pos="H", fig.align='center'}
+par(mfrow = c(1, 2))
+
+sm.density(tab_06$'SD (n)', xlab = "Estimated Standard Deviation", ylim = c(0, 0.50), xlim = c(-.1, 5))
+abline(v = sqrt(5), col = "darkred", lty = "dashed", lwd = 2)
+abline(v = mean(tab_06$'SD (n)'), col = "black")
+text(expression(E(s^2)), x = 1.25, y = 0.03, pos = 4, offset = 0.2)
+text(expression(sigma^2), x = sqrt(5), y = 0.03, col = "darkred", pos = 4, offset = 0.2)
+
+sm.density(tab_06$'SD (n-1)', xlab = "Estimated Standard Deviation", ylim = c(0, 0.50), xlim = c(-.1, 5))
+abline(v = sqrt(5), col = "darkred", lty = "dashed", lwd = 2)
+abline(v = mean(tab_06$'SD (n-1)'), col = "black")
+text(expression(E(s^2)), x = 1.77, y = 0.03, pos = 4, offset = 0.2)
+text(expression(sigma^2), x = sqrt(5), y = 0.03, col = "darkred", pos = 4, offset = 0.2)
+par(mfrow = c(1, 1))
+```
+
+
+\begin{mdframed}[style=mystyle]
+KEY POINT: It is the variances which are unbiased (not the standard deviations)! This is why statisticians like to estimate variances rather than standard deviations; despite their unwieldy (squared) metric.
+\end{mdframed}
+
+
+## References

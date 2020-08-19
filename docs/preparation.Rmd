@@ -31,7 +31,7 @@ As part of the course, there are several articles, papers and technical reports 
 
 **Required**
 
-- Download and read through the [course syllabus](https://github.com/zief0002/epsy-8251/raw/master/syllabus/f20-8264-syllabus.pdf)
+- Download and read through the [course syllabus](https://github.com/zief0002/epsy-8264/raw/master/syllabus/f20-8264-syllabus.pdf)
 - If you will be using your computer for statistical computing (rather than the RStudio server), install (or update) R and RStudio onto your personal computer. See [R and RStudio Installation and Setp](https://zief0002.github.io/toolkit/r-and-rstudio-installation-and-setup.html#r-and-rstudio-installation-and-setup) for help.
 
 ---

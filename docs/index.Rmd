@@ -66,7 +66,7 @@ Vimal Rao ([rao00013@umn.edu](mailto://rao00013@umn.edu))  <br />
 
 ### Syllabus {-}
 
-- The course syllabus is available  [here](https://github.com/zief0002/epsy-8264/raw/master/syllabus/f20-epsy-8264-syllabus.pdf).
+- The course syllabus is available [here](https://github.com/zief0002/epsy-8264/raw/master/syllabus/f20-epsy-8264-syllabus.pdf).
 
 
 <br />

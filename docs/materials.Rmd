@@ -3,51 +3,17 @@
 
 ### Welcome to EPsy 8264
 
-Prior to class:
+**Prior to class:**
 
-- Download and read through the [course syllabus](https://github.com/zief0002/epsy-8251/raw/master/syllabus/f20-8264-syllabus.pdf)
+- Download and read through the [course syllabus](https://github.com/zief0002/epsy-8251/raw/master/syllabus/f20-epsy-8264-syllabus.pdf)
 
-After class:
+
+**After class:**
 
 - If you will be using your computer for statistical computing (rather than the RStudio server), install (or update) R and RStudio onto your personal computer. See [R and RStudio Installation and Setup](https://zief0002.github.io/toolkit/r-and-rstudio-installation-and-setup.html#r-and-rstudio-installation-and-setup) for help.
 
 ---
 
-### Some Mathematics Relevant to Regression
-
-In this unit we will explore common formulas and rules that will be used to prove and mathematically illustrate ideas in regression. Here are some notes/handouts that cover this material.
-
-- **Notes 01:** Some Mathematics Relevant to Regression [[pdf](https://github.com/zief0002/epsy-8264/raw/master/notes/01-some-mathematics-relevant-to-regression.pdf)] [[rmd](https://github.com/zief0002/epsy-8264/raw/master/notes/01-some-mathematics-relevant-to-regression.Rmd)]
-
-In addition to the notes (and what we cover in class), there many resources online. Google search terms include:
-
-- "Summation rules"
-- "Expectation rules"
-- "Covariance rules"
-- "Variance rules"
-
-
-
-
-
-<br />
-
-We will derive and prove several properties of the OLS simple regression model. We will also examine how violations of the underlying assumptions of the regression model affect these properties. Here are some notes/handouts that cover this material.
-
-- **Notes 02:** Some Theory Underlying Simple Regression [[pdf](https://github.com/zief0002/epsy-8264/raw/master/notes/02-some-theory-underlying-simple-regression.pdf)] [[rmd](https://github.com/zief0002/epsy-8264/raw/master/notes/02-some-theory-underlying-simple-regression.Rmd)]
-- **Notes 03:** Some More Theory Underlying Simple Regression [[pdf](https://github.com/zief0002/epsy-8264/raw/master/notes/03-some-more-theory-underlying-simple-regression.pdf)] [[rmd](https://github.com/zief0002/epsy-8264/raw/master/notes/03-some-more-theory-underlying-simple-regression.Rmd)]
-- **Notes 04:** Some OLS Theory: Proofs [[pdf](https://github.com/zief0002/epsy-8264/raw/master/notes/04-supplementary-proofs.pdf)] [[rmd](https://github.com/zief0002/epsy-8264/raw/master/notes/04-supplementary-proofs.Rmd)]
-
-In addition to the notes (and what we cover in class), there many resources online. Google search terms include:
-
-- "Properties of OLS estimators"
-- "Simple linear regression"
-- "Regression theory"
-
-
-<br />
-
----
 
 ### A Bit of Linear Algebra
 
@@ -56,25 +22,40 @@ In this unit we will learn some of the basic linear/matrix algebra that is usefu
 **Prior to Class:**
 
 - Read Fox (Sections 1.1; 1.4)
-- [Introduction to Matrix Algebra](http://zief0002.github.io/epsy-8264/misc/05-introduction-to-matrix-algebra.html)
+- [Introduction to Matrix Algebra](http://zief0002.github.io/epsy-8264/misc/05-introduction-to-matrix-algebra.html) [Course Notes]
 
 
-The notes for this unit are available as HTML slides at:
-
-
-In addition to the materials in the `notes` folder and what we cover in class, there many other resources for learning linear/matrix algebra. Here are some resources that may be helpful in that endeavor:
+**Additional Resources**
 
 - 3Blue1Brown. (2016). [Essence of linear algebra](https://www.youtube.com/watch?v=kjBOesZCoqc&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab). *(A series of YouTube videos that teaches linear algebra)*
 - Burrill, G., Burrill, J., Landwehr, J. & Witmer, J. (1998). [Advanced modeling and matrices](http://www.amstat.org/asa/files/pdfs/ddmseries/AdvancedModelingandMatrices--TeachersEdition.pdf) Orangeburg, NY: Dale Seymour Publications. *(This is a module from Data-Driven Mathematics written for secondary school students and teachers)*
-- Fox, J. (2009). [A mathematical primer for social statistics](https://primo.lib.umn.edu/primo-explore/fulldisplay?docid=UMN_ALMA21325943720001701&context=L&vid=TWINCITIES&search_scope=mncat_discovery&tab=article_discovery&lang=en_US). Thousand Oaks, CA: Sage. *(Available online via UMN Library)*
 - Irizarry, R., & Love, M. (2018). [Biomedical data science](http://genomicsclass.github.io/book/) PH525x series. *(Chapter 4 addresses matrix algebra)*
 - Namboodiri, N. K. (1984). Matrix algebra: An introduction. Thousand Oaks, CA: Sage.
+- Savov, I. (2017). No bullshit guide to linear algebra. Minireference Co.
 
-For more advanced matrix applications:
-
-- Brownlee, J. (2018). [A gentle introduction to matrix factorization for machine learning](https://machinelearningmastery.com/introduction-to-matrix-decompositions-for-machine-learning/). [Blog Post]. *(Gives an introduction to matrix decomposition methods (e.g., LU, QR); these methods reduce a matrix into constituent parts that make it easier to calculate more complex matrix operations such as finding an inverse.)*
-- Thomas, R., & Howard, J. (2017). [Computational Linear Algebra](http://www.fast.ai/2017/07/17/num-lin-alg/). fast.ai. *(An online course using Jupyter Notebooks and Python focused on the question: How do we do matrix computations with acceptable speed and acceptable accuracy?)*
 
 <br />
 
 ---
+
+
+### Regression using Matrices
+
+In this unit we will learn some of the basic linear/matrix algebra that is useful for regression analyses. 
+
+**Prior to Class:**
+
+- Read Fox (Sections 1.2; 1.3)
+
+
+<!-- **Notes for Class** -->
+
+<!-- - [Introduction to Matrix Algebra](http://zief0002.github.io/epsy-8264/misc/05-introduction-to-matrix-algebra.html) -->
+
+
+**Additional Resources**
+
+- 3Blue1Brown. (2016). [Essence of linear algebra](https://www.youtube.com/watch?v=kjBOesZCoqc&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab). *(These YouTube videos will help explain some of the concepts explained in Fox Sections 1.3; 1.4)*
+- Gruber, M. H. J. (2014). [Matrix algebra for linear models](https://www.mobt3ath.com/uplode/book/book-33745.pdf). Wiley.
+
+

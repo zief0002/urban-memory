@@ -1,0 +1,875 @@
+---
+title: "Introduction to Matrix Algebra"
+description: |
+  A brief introduction to matrix algebra that is useful for regression and some R syntax for carrying out matrix operations.
+author:
+  - name: Andrew Zieffler 
+    url: http://www.datadreaming.org/
+date: "`r Sys.Date()`"
+output: radix::radix_article
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Matrices
+
+A matrix is a rectangular array of elements arranged in rows and columns. We typically denote matrices using a bold-faced font. For example, consider the matrix **A** which has *n* rows and *k* columns.
+
+$$
+\underset{n\times k}{\mathbf{A}} = \begin{bmatrix}
+a_{11} & a_{12} & a_{13} & \ldots & a_{1k} \\ 
+a_{21} & a_{22} & a_{23} & \ldots & a_{2k} \\
+a_{31} & a_{32} & a_{33} & \ldots & a_{3k} \\
+\vdots & \vdots & \vdots & \vdots & \vdots \\
+a_{n1} & a_{n2} & a_{n3} & \ldots & a_{nk}
+\end{bmatrix}
+$$
+
+The subscripts on each element indicate the row and column positions of the element. In general the element $a_{ij}$ is in the $i^{\mathrm{th}}$ row and $j^{\mathrm{th}}$ column.
+
+The *dimensions* or *order* of the matrix is denoted as $n\times k$; the number of rows and columns, respectively. The dimension is often appended to the bottom of the matrix (e.g., $\underset{n\times k}{\mathbf{A}}$). For example,
+
+$$
+\underset{3\times 2}{\mathbf{A}} = \begin{bmatrix}
+5 & 1 \\
+7 & 3 \\
+-2 & -1
+\end{bmatrix}
+$$
+
+#### Matrices in R
+
+To enter a matrix in R, use the `matrix()` function. The elements of the matrix will be filled-in by columns.
+
+```{r}
+# Enter A
+A = matrix(
+  data = c(5, 7, -2, 1, 3, -1),
+  nrow = 3,
+  ncol = 2
+  )
+
+# Display A
+A
+```
+
+
+The `byrow=TRUE` argument will fill the elements by rows rather than columns.
+
+<aside>
+Only one of the arguments `nrow=` or `ncol=` are needed.
+</aside>
+
+```{r}
+# Enter A
+A = matrix(
+  data = c(5, 1, 7, 3, -2, -1),
+  byrow = TRUE,
+  nrow = 3
+  )
+
+# Display A
+A
+```
+
+The `dim()` function can be used to return the dimensions of a matrix.
+
+```{r}
+dim(A)
+```
+
+
+
+## Vectors
+
+Vectors are matrices that have a single row or a single column. They are referred to as *row vectors* or *column vectors*, respectively. Below, **A** is a row vector and **B** is a column vector.
+
+<aside>
+Use the `matrix()` function to create vectors with  `nrow=1` or `ncol=1`.
+</aside>
+
+$$
+\underset{1\times 4}{\mathbf{A}} = \begin{bmatrix}
+4 & 1 & -2 & 5
+\end{bmatrix} \qquad \underset{4\times 1}{\mathbf{B}} = \begin{bmatrix}
+4 \\ 
+1 \\
+-2 \\
+5
+\end{bmatrix}
+$$
+
+
+## Square Matrices
+
+When the number of rows and columns are equal ($n=k$), the matrix is referred to as a *square matrix*. For example, **X** and **Y** are both square matrices.
+
+$$
+\underset{2\times 2}{\mathbf{X}} = \begin{bmatrix}
+4 & 1 \\ 
+0 & 3
+\end{bmatrix} \qquad \underset{3\times 3}{\mathbf{Y}} = \begin{bmatrix}
+0 & 1 & 0 \\ 
+1 & 3 & -8\\
+10 & 4 & -2
+\end{bmatrix}
+$$
+
+### Main Diagonal
+
+In a square matrix, the main diagonal includes the elements that lie along the diagonal from the upper-left element to the lower-right element. For example, the main diagonal in **Y** (highlighted in red) includes the elements $0$, $3$, and $-2$.
+
+$$
+\underset{3\times 3}{\mathbf{Y}} = \begin{bmatrix}
+\color{red}0 & 1 & 0 \\ 
+1 & \color{red}3 & -8\\
+10 & 4 & \color{red}{-2}
+\end{bmatrix}
+$$
+
+#### Find the Main Diagonal Using R
+
+We can use the `diag()` function to return the elements on the main diagonal in a square matrix.
+
+```{r}
+Y = matrix(
+  data = c(0, 1, 10, 1, 3, 4, 0, -8, -2),
+  nrow = 3
+  )
+
+# Display Y
+Y
+
+# Find diagonal elements
+diag(Y)
+```
+
+`r emo::ji("construction")` CAUTION: The `diag()` function also works on non-square matrices. However, it returns the elements on the diagonal starting with the element in the first row and column.
+
+```{r}
+X = matrix(
+  data = c(0, 1, 1, 3, 4, 0),
+  nrow = 3
+  )
+
+# Display X
+X
+
+# Find 'diagonal' elements
+diag(X)
+```
+
+### Matrix Trace
+
+The trace of a matrix is the sum of its diagonal elements. For example, consider the matrix **Y**:  
+$$
+\underset{3\times 3}{\mathbf{Y}} = \begin{bmatrix}
+\color{red}0 & 1 & 0 \\ 
+1 & \color{red}3 & -8\\
+10 & 4 & \color{red}{-2}
+\end{bmatrix}
+$$
+
+The trace of **Y** is $0 + 3 + -2 = 1$.
+
+#### Computing the Trace in R
+
+To compute the trace we use the `sum()` and `diag()` functions.
+
+```{r}
+# Compute trace of Y
+sum(diag(Y))
+```
+
+You can also use the `tr()` function from the **psych** library to compute the trace.
+
+```{r message=FALSE}
+library(psych)
+tr(Y)
+```
+
+
+## Matrix Addition and Subtraction
+
+Addition is defined for two matrices if they both have the exact same dimensions. Consider two $k\times n$ matrices, **A** and **B**. Then $\mathbf{A}+\mathbf{B}$ will result in a matrix **C** that will also have dimension $k\times n$. In **C**, the element $c_{ij} = a_{ij} + b_{ij}$.
+
+As an example, consider the following matrices:
+
+$$
+\underset{3\times 2}{\mathbf{A}} = \begin{bmatrix}
+5 & 1 \\ 
+7 & 3 \\
+-2 & -1
+\end{bmatrix} \qquad \underset{3\times 2}{\mathbf{B}} = \begin{bmatrix}
+-6 & 3 \\ 
+2 & -1\\
+4 & 1
+\end{bmatrix}
+$$
+
+Since **A** and **B** have the exact same dimensions, namely $3\times 2$, they can be added. The resulting sum is:
+
+$$
+\underset{3\times 2}{\mathbf{A}+\mathbf{B}} = \begin{bmatrix}
+5 + -6 & 1 + 3 \\ 
+7 + 2 & 3+ -1 \\
+-2+4 & -1+1
+\end{bmatrix} = \begin{bmatrix}
+-1 & 4 \\ 
+9 & 2\\
+2 & 0
+\end{bmatrix}
+$$
+
+As another example,
+
+$$
+\begin{bmatrix}
+x^2 & 5 \\ 
+3x & 0
+\end{bmatrix} + \begin{bmatrix}
+1 & -6 \\ 
+x & -x
+\end{bmatrix} = \begin{bmatrix}
+x^2+1 & -1 \\ 
+4x & -x
+\end{bmatrix}
+$$
+
+Subtraction is similarly defined.
+
+$$
+\begin{bmatrix}
+5 & 1 \\ 
+7 & 3 \\
+-2 & -1
+\end{bmatrix} - \begin{bmatrix}
+-6 & 3 \\ 
+2 & -1\\
+4 & 1
+\end{bmatrix} = \begin{bmatrix}
+11 & -2 \\ 
+5 & 4\\
+-6 & -2
+\end{bmatrix}
+$$
+
+#### Properties of Matrix Addition
+
+Matrix addition has the following properties:
+
+- $\mathbf{A}+\mathbf{B} = \mathbf{B} + \mathbf{A}$
+- $\mathbf{A}+(\mathbf{B}+\mathbf{C}) = (\mathbf{A}+\mathbf{B})+\mathbf{C}$
+- $\mathbf{A}+\mathbf{0} = \mathbf{A}$, where $\mathbf{0}$ is a matrix the same dimensions as **A** having all zero elements.
+
+#### Matrix Addition/Subtraction in R
+
+The `+` and `-` operators can be used to add or subtract two matrices (so long as they have the same dimensions).
+
+```{r}
+A = matrix(
+  data = c(5, 7, -2, 1, 3, -1),
+  nrow = 3
+) 
+
+B = matrix(
+  data = c(-6, 2, 4, 3, -1, 1),
+  nrow = 3
+)
+
+# Addition
+A + B
+
+# Subtraction
+A - B
+```
+
+
+## Scalar Multiplication
+
+A *scalar* is a number such as $5$ or $-2$. If $\lambda$ is a scalar, then $\lambda \underset{n\times k}{\mathbf{A}}$ will result in a $n\times k$ matrix, **B** with elements $b_{ij}=\lambda a_{ij}$ for all $i$ and $j$. For example,
+
+$$
+5 \begin{bmatrix}
+4 & 1 \\ 
+0 & 3
+\end{bmatrix} = \begin{bmatrix}
+5(4) & 5(1) \\ 
+5(0) & 5(3)
+\end{bmatrix} = \begin{bmatrix}
+20 & 5 \\ 
+0 & 15
+\end{bmatrix}
+$$
+
+#### Properties of Scalar Multiplication
+
+Scalar multiplication has the following properties:
+
+- $\lambda \mathbf{A} = \mathbf{A} \lambda$
+- $\lambda (\mathbf{A} + \mathbf{B}) = \lambda\mathbf{A} + \lambda \mathbf{B}$
+- $(\lambda_1+\lambda_2)\mathbf{A} = \lambda_1\mathbf{A} + \lambda_2\mathbf{A}$
+- $\lambda_1(\lambda_2\mathbf{A}) = (\lambda_1\lambda_2)\mathbf{A}$
+
+#### Scalar Multiplication in R
+
+The `*` operator is used for scalar multiplication.
+
+```{r}
+A = matrix(
+  data = c(4, 0, 1, 3),
+  nrow = 2
+) 
+
+# Scalar multiplication
+5 * A
+```
+
+## Matrix Multiplication
+
+Unlike matrix addition and subtraction, matrices are not multiplied together by multiplying the elements in the same positions (i.e., matrix multiplication is not an elementwise operation). Also unlike matrix addition and subtraction, if two matrices have the same dimensions, they are not always able to be multiplied together. 
+
+Matrix multiplication is defined for two matrices, say $\mathbf{AB}$, if the number of columns in **A** (the first matrix in the product) is equal to the number of rows in **B** (the second matrix in the product). So, matrix multipication would be defined for the following:
+
+$$
+\underset{3\times 2}{\mathbf{A}}\times\underset{2\times 4}{\mathbf{B}}
+$$
+
+But it would not be defined for the matrices,
+
+$$
+\underset{3\times 2}{\mathbf{A}}\times\underset{3\times 2}{\mathbf{B}}
+$$
+
+Nor for,
+
+$$
+\underset{2\times 4}{\mathbf{B}}\times\underset{3\times 2}{\mathbf{A}}
+$$
+
+This result implies that matrix multiplication IS NOT commutative. It is common to use the terms *premultiplied* and *postmultiplied* when we describe a product. For example in the product **AB**, we would say either:
+
+- **B** is premultiplied by **A**; or
+- **A** is postmultiplied by **B**.
+
+The product matrix $\mathbf{C} = \mathbf{AB}$ will have the same number of rows as **A** and the same number of columns as **B**. Thus
+
+$$
+\underset{3\times 2}{\mathbf{A}} \times\underset{2\times 4}{\mathbf{B}} = \underset{3\times 4}{\mathbf{C}}
+$$
+
+
+If matrix multiplication is defined for the two matrices being multiplied, then the elements $c_{ij}$ of the product matrix, $\mathbf{AB}=\mathbf{C}$, are obtained by multiplying the elements in the $i^{\mathrm{th}}$ row of **A** by the elements in the $j^{\mathrm{th}}$ column of **B** and adding them together.
+
+To illustrate this, consider the following two matrices:
+
+$$
+\underset{3\times 2}{\mathbf{A}} = \begin{bmatrix}
+5 & 1 \\ 
+7 & 3 \\
+-2 & -1
+\end{bmatrix} \qquad \underset{2\times 3}{\mathbf{B}} = \begin{bmatrix}
+-6 & 3 & 4 \\ 
+2 & -1 & 1
+\end{bmatrix}
+$$
+
+In this example, matrix multiplication is defined and the resulting product matrix will have the dimensions $3\times 3$:
+
+$$
+\underset{3\times 3}{\mathbf{C}} = \begin{bmatrix}
+c_{11} & c_{12} & c_{13} \\ 
+c_{21} & c_{22} & c_{23} \\
+c_{31} & c_{32} & c_{33}
+\end{bmatrix}
+$$
+
+To obtain the element $c_{11}$, we multiply the elements in the 1st row of **A** by the elements in the 1st column of **B** and add them together, thus
+
+$$
+c_{11} = 5(-6) + 2(1) = -28
+$$
+
+To obtain the element $c_{12}$, we multiply the elements in the 1st row of **A** by the elements in the 2nd column of **B** and add them together:
+
+$$
+c_{12} = 5(3) + 1(-1) = 14
+$$
+
+And, to obtain the element $c_{13}$, we multiply the elements in the 1st row of **A** by the elements in the 3rd column of **B** and add them together:
+
+$$
+c_{13} = 5(4) + 1(1) = 21
+$$
+
+We continue in the same vein for the remainder of the elements:
+
+$$
+\begin{split}
+c_{21} &= 7(-6) + 3(2) = -36 \\
+c_{22} &= 7(3) + 3(-1) = 18 \\
+c_{23} &= 7(4) + 3(1) = 31 \\
+c_{31} &= -2(-6) + -1(2) = 10 \\
+c_{32} &= -2(3) + -1(-1) = -5 \\
+c_{33} &= -2(4) + -1(1) = -9 \\
+\end{split}
+$$
+
+Thus, the product matrix is:
+
+$$
+\underset{3\times 3}{\mathbf{C}} = \begin{bmatrix}
+-28 & 14 & 21 \\ 
+-36 & 18 & 31 \\
+10 & -5 & -9
+\end{bmatrix}
+$$
+
+#### Matrix Multiplication using R
+
+To multiply two matrices together we use the `%*%` operator. 
+
+```{r}
+A = matrix(
+  data = c(5, 7, -2, 1, 3, -1),
+  nrow = 3
+)
+
+B = matrix(
+  data = c(-6, 2, 3, -1, 4, 1),
+  nrow = 2
+)
+
+# Display A and B
+A
+B
+
+# Compute product matrix AB
+A %*% B
+```
+
+
+
+## Matrix Transpose
+
+The transpose of a matrix is denoted as $\mathbf{A}^{\intercal}$ or $\mathbf{A}^{\prime}$, and is obtained by exchanging the rows and columns of $\mathbf{A}$. For example,
+
+$$
+\underset{3\times 2}{\mathbf{A}} = \begin{bmatrix}
+1 & 3 \\ 
+2 & 4 \\
+5 & 9
+\end{bmatrix} \qquad \underset{2\times 3}{\mathbf{A}^{\intercal}} = \begin{bmatrix}
+1 & 2 & 5 \\ 
+3 & 4 & 9
+\end{bmatrix}
+$$
+
+If we compute the product matrix of $\mathbf{A}^{\intercal}\mathbf{A}$, we get
+
+$$
+\underset{2\times 2}{\mathbf{A}^{\intercal}\mathbf{A}} = \begin{bmatrix}
+30 & 56 \\
+56 & 106
+\end{bmatrix}
+$$
+
+In general, $\mathbf{A}^{\intercal}\mathbf{A}$ will be defined and will result in a square matrix.
+
+#### Properties of the Matrix Transpose
+
+Some properties of the matrix transpose are:
+
+- $(\mathbf{A}^{\intercal}) ^{^{\intercal}} = \mathbf{A}$
+- $(\lambda\mathbf{A})^{^{\intercal}} = \lambda \mathbf{A}^{\intercal}$
+- $(\mathbf{A} + \mathbf{B})^{^{\intercal}} = \mathbf{A}^{\intercal} + \mathbf{B}^{\intercal}$
+- $(\mathbf{A}\mathbf{B})^{^{\intercal}} = \mathbf{B}^{\intercal} \mathbf{A}^{\intercal}$
+
+#### Computing a Matrix Transpose in R
+
+The `t()` function will produce the transpose of a matrix.
+
+```{r}
+A = matrix(
+  data = c(1, 2, 5, 3, 4, 9),
+  nrow = 3
+)
+
+# Display A
+A
+
+# Compute transpose
+t(A)
+
+# Compute A'A
+t(A) %*% A
+```
+
+## Symmetric Matrices
+
+A symmetric matrix is one in which $\mathbf{A} = \mathbf{A}^{\intercal}$. For example, the matrix **A** (below) is symmetric.
+
+$$
+\underset{3\times 3}{\mathbf{A}} = \begin{bmatrix}
+1 & 2 & 3 \\
+2 & 4 & 5 \\
+3 & 5 & 6
+\end{bmatrix} \qquad \underset{3\times 3}{\mathbf{A}^{\intercal}} = \begin{bmatrix}
+1 & 2 & 3 \\
+2 & 4 & 5 \\
+3 & 5 & 6
+\end{bmatrix}
+$$
+
+#### Using R to Examine Symmetry
+
+We can check whether a matrix is symmetric by asking whether a matrix is equal to (`==`) its transpose. If this logical statement evaluates as `TRUE` for all the elements the matrix is symmetric. If the logical expression returns an *non-conformable array* error, or evaluates as `FALSE` for any of the elements, then it is not symmetric.
+
+```{r}
+A = matrix(
+  data = c(1, 2, 3, 2, 4, 5, 3, 5, 6),
+  nrow = 3
+)
+
+# Display A
+A
+
+# Test for symmetry
+A == t(A)
+```
+
+
+
+## Diagonal Matrix
+
+A diagonal matrix is a square matrix with non-zero elements along the main diagonal and zero in all the non-diagonal elements. Two examples of diagonal matrices are as follows:
+
+$$
+\underset{2\times 2}{\mathbf{A}} = \begin{bmatrix}
+5 & 0 \\
+0 & -1
+\end{bmatrix} \qquad \underset{3\times 3}{\mathbf{B}} = \begin{bmatrix}
+3 & 0 & 0 \\
+0 & 3 & 0 \\
+0 & 0 & 3
+\end{bmatrix}
+$$
+
+
+## Identity Matrix
+
+An identity matrix, typically denoted **I**, is a diagonal matrix with all diagonal elements of one.
+
+$$
+\underset{3\times 3}{\mathbf{I}} = \begin{bmatrix}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & 1
+\end{bmatrix}
+$$
+
+
+#### Properties of the Identity Matrix
+
+Some properties of the identity matrix are:
+
+- $\mathbf{I} = \mathbf{I}^{\intercal}$ (Symmetric)
+- $\mathbf{AI} = \mathbf{IA} = \mathbf{A}$
+ 
+This last property is what gives the identity matrix its name. In matrix multiplication, multiplying a matrix **A** by the identity (so long as matrix multiplication is defined) will result in **A**. Consider the following matrices,
+
+$$
+\underset{2\times 2}{\mathbf{A}} = \begin{bmatrix}
+5 & 0 \\
+0 & -1
+\end{bmatrix} \qquad \underset{2\times 2}{\mathbf{I}} = \begin{bmatrix}
+1 & 0 \\
+0 & 1
+\end{bmatrix}
+$$
+
+Then
+
+$$
+\underset{2\times 2}{\mathbf{AI}} = \begin{bmatrix}
+5 & 0 \\
+0 & -1
+\end{bmatrix}
+$$
+
+You should try computing **IA** to verify that the product is again equal to **A**.
+
+#### Using R to Create an Identity Matrix
+
+The `diag()` function can be used to create an identity matrix. We give this function an argument which provides the number of rows and columns.
+
+```{r}
+# Create a 3x3 identity matrix
+I = diag(3)
+
+# Display I
+I
+```
+
+## Determinant
+
+Every square matrix is associated with a scalar called the *determinant*. We denote this as $\det(\mathbf{A})$ or $\begin{vmatrix}\mathbf{A}\end{vmatrix}$. As a note of caution, the following two expressions are not the same:
+
+$$
+\begin{bmatrix}
+1 & 2 & 3 \\
+4 & 5 & 6 \\
+7 & 8 & 9
+\end{bmatrix} \qquad \begin{vmatrix}
+1 & 2 & 3 \\
+4 & 5 & 6 \\
+7 & 8 & 9
+\end{vmatrix}
+$$
+
+The left-hand expression is a matrix and the right-hand expression is the determinant of the matrix (a scalar).
+
+To find the determinant of a $2\times 2$ matrix, we multiply the elements on the main diagonal and subtract the product of the elements on the off-diagonal.
+
+$$
+\begin{vmatrix}
+a & b \\
+c & d
+\end{vmatrix} = a(d) - c(b)
+$$
+
+As an example,
+
+$$
+\begin{vmatrix}
+1 & 2 \\
+4 & 3
+\end{vmatrix} = 1(3) - 4(2) = -5
+$$
+
+While it is possible to calculate the determinant of a higher-order square matrix by hand, it is tedious and we will just compute them using R. The `det()` function can be used to compute the determinant of a matrix.
+
+```{r}
+A = matrix(
+    data = c(1, 2, 4, 3),
+    byrow = TRUE,
+    nrow = 2
+)
+
+# Compute determinant
+det(A)
+```
+
+## Matrix Inverse
+
+The inverse of a $n\times n$ matrix **A** is a $n\times n$ matrix denoted $\mathbf{A}^{-1}$ having the property that
+
+$$
+\mathbf{A}\mathbf{A}^{-1} = \mathbf{A}^{-1}\mathbf{A} = \mathbf{I} 
+$$
+
+To find the inverse of a $2\times 2$ matrix **A**, we create a new matrix by: 
+
+- Swapping the positions of the elements on the main diagonal; and
+- Making the off-diagonal elements negative (or positive if they are negative).
+
+Finally, we
+
+- Multiply this new matrix by the scalar $\frac{1}{\det(A)}$.
+
+Thus,
+
+$$
+\underset{2\times 2}{\mathbf{A}} = \begin{bmatrix}
+a & b \\
+c & d
+\end{bmatrix} \qquad \underset{2\times 2}{\mathbf{A}}^{-1} = \frac{1}{\det(\mathbf{A})}\begin{bmatrix}
+d & -b \\
+-c & a
+\end{bmatrix}
+$$
+
+
+When the determinant of a matrix is zero, the computation of the inverse cannot be carried out as the scalar we multiply by in the inverse calculation is based on a fraction in which the denominator includes the determinant. Thus any matrix with a determinant of zero will not have an inverse. 
+
+<aside>
+Matrices without an inverse are referred to as *singular*. Similarly, matrices with inverses are referred to as *non-singular*.
+</aside>
+
+As an example, consider the foloowing matrix:
+
+$$
+\underset{2\times 2}{\mathbf{A}} = \begin{bmatrix} 
+1 & 2 \\ 
+4 & 3 \end{bmatrix}
+$$ 
+
+The inverse of **A** is calculated as:
+
+$$
+\underset{2\times 2}{\mathbf{A}}^{-1} = -\frac{1}{5}\begin{bmatrix}
+3 & -2 \\
+-4 & 1
+\end{bmatrix} = \begin{bmatrix}
+-0.6 & 0.4 \\
+0.8 & -0.2
+\end{bmatrix}
+$$
+
+Like the calculation of determinants, the hand calculation of a matrix inverse for matrices of higher order than $2\times 2$ is tedious. To compute the inverse of a matrix using R, we use the `solve()` function.
+
+```{r}
+solve(A)
+```
+
+## Solving Systems of Equations Using Matrix Algebra
+
+One thing that matrix algebra is really useful for is solving systems of equations. For example, consider the following system of two equations:
+
+
+$$
+\begin{split}
+3x + 4y &= 10 \\
+2x + 3y &= 7
+\end{split}
+$$
+
+Prior to this, we solved these equations using substitution, elimination, or aother algebraic methods. Based on these methods we would find that $x=2$ and $y=1$.
+
+We can also use matrix algebra to solve these equations. To do this, we first have to write this system of equations using matrices. Because there are two equations, we can initially formulate each side of the equality as a $2 \times 1$ matrix:
+
+$$
+\begin{bmatrix}
+3x + 4y \\
+2x + 3y 
+\end{bmatrix} = \begin{bmatrix}
+10 \\
+7
+\end{bmatrix}
+$$
+
+Now, we re-write the left-hand side of the equality as the product of two matrices:
+
+$$
+\begin{bmatrix}
+3 & 4 \\
+2 & 3
+\end{bmatrix}\begin{bmatrix}
+x \\
+y
+\end{bmatrix} = \begin{bmatrix}
+10 \\
+7
+\end{bmatrix}
+$$
+
+Note that the elements of the "left" matrix on the left-hand side of the equality are composed of the four coefficients that make up the system of equations. The "right" matrix on the left-hand side of the equality is a column matrix composed of the unknowns in the original system of equations. The matrix on the right-hand side of the equality is a column matrix made up of the equality values in the original system of equations. 
+
+Note that the matrix multiplication on the left-hand side of the equality is defined and produces the appropriately dimensioned matrix on the right-hand side of the equality.
+
+$$
+\underset{2\times 2}{\begin{bmatrix}
+3 & 4 \\
+2 & 3
+\end{bmatrix}}\underset{2\times 1}{\begin{bmatrix}
+x \\
+y
+\end{bmatrix}} = \underset{2\times 1}{\begin{bmatrix}
+10 \\
+7
+\end{bmatrix}}
+$$
+
+
+If we use a more general notation,
+
+$$
+\underset{n\times n}{\mathbf{A}}~\underset{n\times 1}{\mathbf{X}} = \underset{n\times 1}{\mathbf{C}}
+$$
+
+where *n* is the number of equations (and unknowns) in the system, **A** is a matrix representing the coefficients associated with each of the unknowns in the system equations, and **C** is the matrix reperesenting the scalar equality values.
+
+To solve this general equation, we premultiply both sides ofthe equation by $\mathbf{A}^{-1}$.
+
+$$
+\mathbf{A}^{-1}\mathbf{A}\mathbf{X} = \mathbf{A}^{-1}\mathbf{C}
+$$
+
+This will result in
+
+$$
+\begin{split}
+(\mathbf{A}^{-1}\mathbf{A})\mathbf{X} &= \mathbf{A}^{-1}\mathbf{C} \\
+\mathbf{I}\mathbf{X} &= \mathbf{A}^{-1}\mathbf{C} \\
+\mathbf{X} &= \mathbf{A}^{-1}\mathbf{C}
+\end{split}
+$$
+
+Thus, we can solve for the elements in **X** (*x* and *y*) by premultiplying **C** by the inverse of **A**. In our example,
+
+$$
+\underset{2\times 2}{\mathbf{A}} = \begin{bmatrix}
+3 & 4 \\
+2 & 3
+\end{bmatrix} \qquad \underset{2\times 2}{\mathbf{A}}^{-1} = \begin{bmatrix}
+3 & -4 \\
+-2 & 3
+\end{bmatrix}
+$$
+
+
+$$
+\begin{split}
+\begin{bmatrix}
+x \\
+y
+\end{bmatrix} &= \begin{bmatrix}
+3 & -4 \\
+-2 & 3
+\end{bmatrix}\begin{bmatrix}
+10 \\
+7
+\end{bmatrix} \\[1em]
+\begin{bmatrix}
+x \\
+y
+\end{bmatrix} &= \begin{bmatrix}
+2 \\
+1
+\end{bmatrix}
+\end{split}
+$$
+
+Because the two matrices here are equal, all of the elements in the same position are equal. Thus $x=2$ and $y=1$.
+
+#### Solving this System of Equations Using R
+
+
+```{r}
+A = matrix(
+  data = c(3, 2, 4, 3),
+  nrow = 2
+)
+
+# Display A
+A
+
+C = matrix(
+  data = c(10, 7),
+  nrow = 2
+)
+
+# Display C
+C
+
+# Solve for X
+solve(A) %*% C
+
+```
+
+
+
+
+

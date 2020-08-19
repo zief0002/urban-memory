@@ -19,12 +19,12 @@ Below are the due dates for the assignments, as well as links to the PDF file fo
 <tbody>
 
 <tr>
-<td>Assignment \#1: *Regression and Mathematics* 
+<td>Assignment \#1: *Matrix Algebra for Linear Regression* 
   <!-- <span style="margin-left:20px; color:red;">*[Updated 09-09-2019]*</span> -->
 </td>
 <td>Sept. 24</td>
 <td align="center" style="vertical-align:middle;">
-  <a href="https://github.com/zief0002/epsy-8264/raw/master/assignments/f20-assignment-01-mathematics-and-regression.pdf">
+  <a href="https://github.com/zief0002/epsy-8264/raw/master/assignments/f20-assignment-01-matrix-algebra-for-regression.pdf">
     <span class="fa fa-file-pdf" style="color: #ff2600; font-size: 20px;"></span>
   </a>
 </td>
@@ -33,7 +33,7 @@ Below are the due dates for the assignments, as well as links to the PDF file fo
 
 
 <tr>
-<td>Assignment \#2: *Matrix Algebra for Linear Regression*</td>
+<td>Assignment \#2: *Matrix Decomposition*</td>
 <td>Oct. 06</td>
 <td align="center" style="vertical-align:middle;">
   <!-- <a href="https://github.com/zief0002/epsy-8264/raw/master/assignments/assignment-02-simple-regression-description.pdf"> -->
@@ -63,7 +63,7 @@ Below are the due dates for the assignments, as well as links to the PDF file fo
 </tr>
 
 <tr>
-<td>Assignment \#5: *Principal Components Analysis*</td>
+<td>Assignment \#5: *Variable Reduction*</td>
 <td>Nov. 10</td>
 <td align="center" style="vertical-align:middle;">
   <!-- <a href="https://github.com/zief0002/epsy-8264/raw/master/assignments/assignment-05-introduction-to-multiple-regression.pdf"> -->

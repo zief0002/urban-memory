@@ -36,7 +36,7 @@ Below is the tentative schedule for the class. The dates are subject to change a
 <tr>
 <td align="center" style="vertical-align:middle;">&nbsp;</td>
 <td>Sept. 10</td>
-<td style="vertical-align:middle;" rowspan="2">Some Mathematics Relevant to Regression</td>
+<td style="vertical-align:middle;" rowspan="2">A Bit of Linear Algebra</td>
 </tr>
 
 
@@ -49,7 +49,7 @@ Below is the tentative schedule for the class. The dates are subject to change a
 <tr>
 <td align="center" style="vertical-align:middle;">&nbsp;</td>
 <td>Sept. 17</td>
-<td style="vertical-align:middle;" rowspan="2">A Bit of Linear Algebra</td>
+<td style="vertical-align:middle;" rowspan="2">Regression using Matrices</td>
 </tr>
 
 <tr>
@@ -60,7 +60,7 @@ Below is the tentative schedule for the class. The dates are subject to change a
 <tr>
 <td align="center" style="vertical-align:middle;">&nbsp;</td>
 <td>Sept. 24</td>
-<td style="vertical-align:middle;" rowspan="2">Regression using Matrices</td>
+<td style="vertical-align:middle;" rowspan="2">Matrix Decomposition</td>
 </tr>
 
 <tr>
@@ -125,7 +125,7 @@ Below is the tentative schedule for the class. The dates are subject to change a
 <tr>
 <td align="center" style="vertical-align:middle;">&nbsp;</td>
 <td>Oct. 20</td>
-<td style="vertical-align:middle;" rowspan="2">Principal Components Analysis</td>
+<td style="vertical-align:middle;" rowspan="2">Variable reduction</td>
 </tr>
 
 <tr>

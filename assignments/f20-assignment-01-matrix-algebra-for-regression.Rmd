@@ -1,5 +1,5 @@
 ---
-title: "Assignment 02"
+title: "Assignment 01"
 author: "Matrix Algebra for Linear Regression"
 header-includes:
    - \usepackage{xcolor}

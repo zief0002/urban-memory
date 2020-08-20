@@ -22,7 +22,7 @@ In this unit we will learn some of the basic linear/matrix algebra that is usefu
 **Prior to Class:**
 
 - Read Fox (Sections 1.1; 1.4)
-- [Introduction to Matrix Algebra](http://zief0002.github.io/epsy-8264/misc/05-introduction-to-matrix-algebra.html) [Course Notes]
+- [Introduction to Matrix Algebra](http://zief0002.github.io/epsy-8264/misc/01-introduction-to-matrix-algebra.html) [Course Notes]
 
 
 **Additional Resources**

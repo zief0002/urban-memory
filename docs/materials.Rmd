@@ -22,7 +22,11 @@ In this unit we will learn some of the basic linear/matrix algebra that is usefu
 **Prior to Class:**
 
 - Read Fox (Sections 1.1; 1.4)
-- [Introduction to Matrix Algebra](http://zief0002.github.io/epsy-8264/misc/01-introduction-to-matrix-algebra.html) [Course Notes]
+
+
+**In Class**
+
+- [Introduction to Matrix Algebra](https://zief0002.github.io/epsy-8264/misc/01-introduction-to-matrix-algebra.html) [Course Notes]
 
 
 **Additional Resources**
@@ -30,7 +34,7 @@ In this unit we will learn some of the basic linear/matrix algebra that is usefu
 - 3Blue1Brown. (2016). [Essence of linear algebra](https://www.youtube.com/watch?v=kjBOesZCoqc&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab). *(A series of YouTube videos that teaches linear algebra)*
 - Burrill, G., Burrill, J., Landwehr, J. & Witmer, J. (1998). [Advanced modeling and matrices](http://www.amstat.org/asa/files/pdfs/ddmseries/AdvancedModelingandMatrices--TeachersEdition.pdf) Orangeburg, NY: Dale Seymour Publications. *(This is a module from Data-Driven Mathematics written for secondary school students and teachers)*
 - Irizarry, R., & Love, M. (2018). [Biomedical data science](http://genomicsclass.github.io/book/) PH525x series. *(Chapter 4 addresses matrix algebra)*
-- Namboodiri, N. K. (1984). Matrix algebra: An introduction. Thousand Oaks, CA: Sage.
+- Namboodiri, N. K. (1984). [Matrix algebra: An introduction](https://primo.lib.umn.edu/permalink/f/dkvf4l/TN_cdi_proquest_ebookcentral_EBC3032594). Thousand Oaks, CA: Sage.
 - Savov, I. (2017). No bullshit guide to linear algebra. Minireference Co.
 
 
@@ -48,6 +52,10 @@ In this unit we will learn some of the basic linear/matrix algebra that is usefu
 - Read Fox (Sections 1.2; 1.3)
 
 
+**In Class**
+
+- [Regression Using Matrices](https://zief0002.github.io/epsy-8264/misc/02-regression-using-matrices.html) [Course Notes]
+
 <!-- **Notes for Class** -->
 
 <!-- - [Introduction to Matrix Algebra](http://zief0002.github.io/epsy-8264/misc/05-introduction-to-matrix-algebra.html) -->
@@ -58,4 +66,27 @@ In this unit we will learn some of the basic linear/matrix algebra that is usefu
 - 3Blue1Brown. (2016). [Essence of linear algebra](https://www.youtube.com/watch?v=kjBOesZCoqc&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab). *(These YouTube videos will help explain some of the concepts explained in Fox Sections 1.3; 1.4)*
 - Gruber, M. H. J. (2014). [Matrix algebra for linear models](https://www.mobt3ath.com/uplode/book/book-33745.pdf). Wiley.
 
+<br />
 
+---
+
+### Matrix Decomposition
+
+**Prior to Class:**
+
+- Read Fox (Sections 1.6)
+
+
+**In Class**
+
+- [Introduction to Matrix Decomposition](https://zief0002.github.io/epsy-8264/misc/03-matrix-decomposition.html) [Course Notes]
+- [Eigendecomposition](https://zief0002.github.io/epsy-8264/misc/04-eigen-decomposition.html) [Course Notes]
+
+
+**Additional Resources**
+
+- 3Blue1Brown. (2016). [Essence of linear algebra](https://www.youtube.com/watch?v=kjBOesZCoqc&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab). *(Especially the video on eigenvalues and eigenvectors)*
+
+<br />
+
+---

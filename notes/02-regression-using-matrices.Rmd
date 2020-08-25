@@ -1,44 +1,25 @@
 ---
 title: "Regression Using Matrices"
-author: "EPsy 8264"
+description: |
+  An introduction to using matrix algebra to compute regression estimates (e.g., coefficients, standard errors, fitted values).
+author:
+  - name: Andrew Zieffler 
+    url: http://www.datadreaming.org/
 date: "`r Sys.Date()`"
-header-includes:
-   - \usepackage{amsthm}
-   - \usepackage{xcolor}
-   - \usepackage{xfrac}
-   - \usepackage{mdframed}
-   - \usepackage{graphicx}
-   - \usepackage{rotating}
-   - \usepackage{booktabs}
-   - \usepackage{caption}
-   - \definecolor{umn}{RGB}{153, 0, 85}
-   - \definecolor{umn2}{rgb}{0.1843137, 0.4509804, 0.5372549}
-   - \definecolor{myorange}{HTML}{EA6153}
-output: 
-  pdf_document:
-    highlight: tango
-    latex_engine: xelatex
-    fig_width: 6
-    fig_height: 6
-    includes:
-      before_body: notes.tex
-mainfont: "Minion Pro"
-sansfont: "ITC Slimbach Std Book"
-monofont: "Source Code Pro"
-urlcolor: "umn2"
-always_allow_html: yes
-bibliography: epsy8264.bib
-csl: apa-single-spaced.csl
+output: radix::radix_article
+bibliography: [epsy8264.bib]
+csl: 'style/apa-single-spaced.csl'
 ---
 
-\frenchspacing
-
 ```{r setup, include=FALSE, message=FALSE}
+# Load libraries
 library(broom)
 library(dplyr)
 library(knitr)
 library(kableExtra)
-library(sm)
+
+# Set options
+knitr::opts_chunk$set(echo = TRUE)
 ```
 
 Recall the model equation we use in simple linear regression
@@ -84,6 +65,7 @@ $$
 
 In the equation above, the $\mathbf{X}$ matrix is sometimes referred to the *design matrix*, the *model matrix*, or the *data matrix*.
 
+
 ## Estimating the Beta Matrix
 
 When we fit a regression model to a dataset, one of the goals is to estimate the regression coefficients, $\beta_0$ and $\beta_1$. We can do this by using the regression equation,
@@ -125,6 +107,10 @@ $$
 $$
 
 To find the values for the elements in $\boldsymbol{\beta}$ that minimize the equation, we differentiate with respect to $\boldsymbol{\beta}$.
+
+<aside>
+Section 2.4 in Fox (2009) gives mathematical background on optimization (i.e., minimizing)@Fox:2009. 
+</aside>
 
 $$
 \frac{\delta}{\delta\boldsymbol{\beta}}~\mathbf{Y}^{\prime}\mathbf{Y} - 2\boldsymbol{\beta}^{\prime}\mathbf{X}^{\prime}\mathbf{Y} - \boldsymbol{\beta}^{\prime}\mathbf{X}^{\prime}\mathbf{X}\boldsymbol{\beta}
@@ -196,7 +182,7 @@ lm.1 = lm(Y ~ 1 + X1)
 tidy(lm.1)
 ```
 
-They are identical. The `lm()` function actually uses the exact same matrix algebra to compute the regression coefficients that it outputs.
+They are identical. The `lm()` function actually uses matrix algebra to compute the regression coefficients that it outputs.
 
 # Fitted Values
 
@@ -413,7 +399,7 @@ If we have assigned the variance-covariance matrix to an object, we can use inde
 V_b[1, 2] / sqrt(V_b[1, 1] * V_b[2, 2])
 ```
 
-The correlation indicates that the regression coefficients are highly, negatively correlated. How can one set of regression coefficients have a correlation? You have to remember the thought experiements about repeated sampling from a population that we talked about in EPsy 8251/8252. The estimated correlation gives the *expected correlation* of the regression coefficients across muliple random samples. In our example, it is telling you that if you did the experiment again and it so happened that the intercept was smaller, it is likely that the slope coefficient would be larger.
+The correlation indicates that the regression coefficients are highly, negatively correlated. How can one set of regression coefficients have a correlation? You have to remember the thought experiments about repeated sampling from a population that we talked about in EPsy 8251/8252. The estimated correlation gives the *expected correlation* of the regression coefficients across muliple random samples. In our example, it is telling you that if you did the experiment again and it so happened that the intercept was smaller, it is likely that the slope coefficient would be larger.
 
 In practice, the variance-covariance matrix of the regression coefficients can be obtained directly from R using the `vcov()` function.
 
@@ -477,13 +463,11 @@ In our toy example,
 We can use the matrix expressions of the model equation and assumptions to completely specify the regression model. Namely,
 
 
-\begin{mdframed}[style=mystyle]
 $$
 \mathbf{Y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\epsilon}
 $$
-where $\boldsymbol{\epsilon}$ is a vector of independent random variables with $E(\boldsymbol{\epsilon})=0$ and $\boldsymbol{\sigma^2}(\boldsymbol{\epsilon})= \sigma^2_{\epsilon}\mathbf{I}$.
-\end{mdframed}
 
-# Example 2: 
+where $\boldsymbol{\epsilon}$ is a vector of independent random variables with $E(\boldsymbol{\epsilon})=0$ and $\boldsymbol{\sigma^2}(\boldsymbol{\epsilon})= \sigma^2_{\epsilon}\mathbf{I}$.
+
 
 # References

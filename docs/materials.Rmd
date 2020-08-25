@@ -21,7 +21,7 @@ In this unit we will learn some of the basic linear/matrix algebra that is usefu
 
 **Prior to Class:**
 
-- Read Fox (Sections 1.1; 1.4)
+- Read Fox (Sections 1.1&ndash;1.4)
 
 
 **In Class**
@@ -49,7 +49,7 @@ In this unit we will learn some of the basic linear/matrix algebra that is usefu
 
 **Prior to Class:**
 
-- Read Fox (Sections 1.2; 1.3)
+- Read Fox (Sections 4.1&ndash;4.6)
 
 
 **In Class**

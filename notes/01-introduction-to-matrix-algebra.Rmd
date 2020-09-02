@@ -698,7 +698,7 @@ When the determinant of a matrix is zero, the computation of the inverse cannot 
 Matrices without an inverse are referred to as *singular*. Similarly, matrices with inverses are referred to as *non-singular*.
 </aside>
 
-As an example, consider the foloowing matrix:
+As an example, consider the following matrix:
 
 $$
 \underset{2\times 2}{\mathbf{A}} = \begin{bmatrix} 
@@ -723,6 +723,20 @@ Like the calculation of determinants, the hand calculation of a matrix inverse f
 ```{r}
 solve(A)
 ```
+
+#### Properties of Matrix Inverses
+
+Matrix inverses have the following properties:
+
+- If $\mathbf{A}$ is nonsingular, then $\mathbf{A}^{-1}$ is nonsingular
+- $(\mathbf{A}^{-1})^{-1} = \mathbf{A}$
+- If $\lambda$ is a scalar, then $(\lambda\mathbf{A}^{-1}) = \frac{1}{\lambda}\mathbf{A}^{-1}$
+- $(\mathbf{A}\mathbf{B})^{-1} = \mathbf{B}^{-1}\mathbf{A}^{-1}$
+- $(\mathbf{A}^{\intercal})^{-1} = (\mathbf{A}^{-1})^{\intercal}$
+- If **D** is a diagonal matrix then $\mathbf{D}^{-1}$ is a diagonal matrix with elements that are the reciprocal of the elements of **D**
+
+
+
 
 ## Solving Systems of Equations Using Matrix Algebra
 
@@ -869,7 +883,90 @@ solve(A) %*% C
 
 ```
 
+## Rank of a Matrix
+
+The rank of a matrix is the maximum number of linearly independent rows/columns in the matrix. Consider the following matrix,
+
+$$
+\underset{3\times 3}{\mathbf{A}} = \begin{bmatrix}
+1 & 2 & 4 \\
+2 & 1 & 2 \\
+3 & 2 & 4
+\end{bmatrix}
+$$
+
+The third column is a multiple of the second column, namely
 
 
+$$
+\begin{bmatrix}
+4 \\
+2 \\
+4
+\end{bmatrix} = 2 \begin{bmatrix}
+2 \\
+1 \\
+2
+\end{bmatrix}
+$$
+
+This means that columns 2 and 3 are *linearly dependent*.
+
+The first column is not a multiple of the second column, so there are two linearly independent columns, and thus the column rank of this matrix is two. We can compute the rank of a matrix by using the `rankMatrix()` function from the **Matrix** package.
+
+```{r}
+# Create A
+A = matrix(c(1, 2, 3, 2, 1, 2, 4, 2, 4), nrow = 3)
+
+# View A
+A
+
+# Load Matrix library
+library(Matrix)
+
+# Compute rank
+rankMatrix(A)
+```
+
+Since the column rank is less than the number of columns we say that **A** is not full column rank. We could also show that the rank of **A** is less than the number of rows, so it is also not full row rank---it turns out the column rank is equal to the row rank. Because of this, we just refer to the rank of **A**.
+
+When **A** is not a full rank matrix, the determinant is 0, which means that there is no inverse.
+
+```{r error=TRUE}
+# Compute determinant
+det(A)
+
+# Compute inverse
+solve(A)
+```
+
+This helps explain why we have a hard time solving systems of equations that are linearly dependent. For example, consider solving the following system of equations:
+
+$$
+\begin{split}
+3x_1 + 4x_2 &= 10 \\
+-12x_1 - 16x_2 &= -40
+\end{split}
+$$
+Using matrices, we would represent this as 
+
+$$
+\underset{\mathbf{A}}{\begin{bmatrix}
+3 & 4 \\
+-12 & -16
+\end{bmatrix}}\underset{\mathbf{X}}{\begin{bmatrix}
+x_1 \\
+x_2
+\end{bmatrix}} = \underset{\mathbf{Y}}{\begin{bmatrix}
+10 \\
+-40
+\end{bmatrix}}
+$$
+
+We would need to find the inverse of the **A** in order to solve for the elements of **X**. Unfortunately, the determinant of **A**  is zero and there is no inverse. This means **A** is not of full rank. (The rank of **A** is 1.) This results in an infinite set of values that will satisfy the system of equations; all having the general form:
+
+$$
+x_1 = \frac{10 - 4x_2}{3}
+$$
 
 

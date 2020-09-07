@@ -54,7 +54,7 @@ In this unit we will look at some of the geometric ideas underlying vectors that
 
 **In Class**
 
-- [Some Vector Geometry](https://zief0002.github.io/epsy-8264/misc/01-some-vector-geometry.pdf) [Course Notes]
+- [Some Vector Geometry](https://github.com/zief0002/epsy-8264/raw/master/notes/01-some-vector-geometry.pdf) [Course Notes]
 
 
 **Additional Resources**

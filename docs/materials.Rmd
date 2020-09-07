@@ -1,7 +1,7 @@
 # Materials
 
 
-### Welcome to EPsy 8264
+### Welcome to EPsy 8264 
 
 **Prior to class:**
 
@@ -15,7 +15,7 @@
 ---
 
 
-### A Bit of Linear Algebra
+### A Bit of Linear Algebra (Sept. 10)
 
 In this unit we will learn some of the basic linear/matrix algebra that is useful for regression analyses. 
 
@@ -31,12 +31,35 @@ In this unit we will learn some of the basic linear/matrix algebra that is usefu
 
 **Additional Resources**
 
-- 3Blue1Brown. (2016). [Essence of linear algebra](https://www.youtube.com/watch?v=kjBOesZCoqc&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab). *(A series of YouTube videos that teaches linear algebra)*
+
 - Burrill, G., Burrill, J., Landwehr, J. & Witmer, J. (1998). [Advanced modeling and matrices](http://www.amstat.org/asa/files/pdfs/ddmseries/AdvancedModelingandMatrices--TeachersEdition.pdf) Orangeburg, NY: Dale Seymour Publications. *(This is a module from Data-Driven Mathematics written for secondary school students and teachers)*
 - Irizarry, R., & Love, M. (2018). [Biomedical data science](http://genomicsclass.github.io/book/) PH525x series. *(Chapter 4 addresses matrix algebra)*
 - Namboodiri, N. K. (1984). [Matrix algebra: An introduction](https://primo.lib.umn.edu/permalink/f/dkvf4l/TN_cdi_proquest_ebookcentral_EBC3032594). Thousand Oaks, CA: Sage.
 - Savov, I. (2017). No bullshit guide to linear algebra. Minireference Co.
 
+
+<br />
+
+---
+
+
+### Some Vector Geometry (Sept. 15)
+
+In this unit we will look at some of the geometric ideas underlying vectors that are useful for regression analyses. 
+
+**Prior to Class:**
+
+- Watch 3Blue1Brown. (2016). [Vectors, what even are they?](https://www.youtube.com/watch?v=kjBOesZCoqc&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab). From the series of YouTube videos *Essence of linear algebra.*
+
+
+**In Class**
+
+- [Some Vector Geometry](https://zief0002.github.io/epsy-8264/misc/01-some-vector-geometry.pdf) [Course Notes]
+
+
+**Additional Resources**
+
+- The remainder of the 3Blue1Brown videos (2016). [Essence of linear algebra](https://www.youtube.com/watch?v=kjBOesZCoqc&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab).
 
 <br />
 

@@ -36,7 +36,7 @@ Below is the tentative schedule for the class. The dates are subject to change a
 <tr>
 <td align="center" style="vertical-align:middle;">&nbsp;</td>
 <td>Sept. 10</td>
-<td style="vertical-align:middle;" rowspan="2">A Bit of Linear Algebra</td>
+<td style="vertical-align:middle;">A Bit of Linear Algebra</td>
 </tr>
 
 
@@ -44,6 +44,7 @@ Below is the tentative schedule for the class. The dates are subject to change a
 <tr>
 <td align="center" style="vertical-align:middle;">&nbsp;</td>
 <td>Sept. 15</td>
+<td style="vertical-align:middle;">Some Vector Geometry</td>
 </tr>
 
 <tr>

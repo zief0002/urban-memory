@@ -2,8 +2,10 @@
 .Rhistory
 .RData
 .Ruserdata
+
 # Ignore the following folders
 /answer-keys
 /administrative
 /archive
+
 .httr-oauth

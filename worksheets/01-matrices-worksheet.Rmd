@@ -1,0 +1,67 @@
+---
+title: "Matrices Worksheet"
+author: "Breakout Group"
+date: "`r Sys.Date()`"
+output:
+  prettydoc::html_pretty:
+    theme: lumen
+    highlight: github
+---
+
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+## Directions
+
+Complete the problems on this worksheet with your break out group. You may want to refer to the  [Introduction to Matrix Algebra Course Notes](https://zief0002.github.io/epsy-8264/misc/01-introduction-to-matrix-algebra.html) and the sections you read in the Fox book.
+
+You will likely be learning (or re-encountering) many new mathematical terms. It is a good idea to note and define all the vocabulary/terms that you encounter as you work through Unit 1. You may want to do this individually or create a shared document that you can all contribute to.
+
+## Problems
+
+Consider the following matrices:
+
+$$
+\mathbf{A} = \begin{bmatrix}3 & -2\\5 & 1\end{bmatrix} \quad \mathbf{B} = \begin{bmatrix}3 & -1\\-1 & 2\end{bmatrix}\quad \mathbf{C} = \begin{bmatrix}1 & 2 & 3\\0 & 1 & 2\end{bmatrix}
+$$
+
+Make sure everyone in your group can solve each of these problem by hand and using R. 
+
+1. What are the dimensions of **A**? **C**?
+
+2. Is **C** a square matrix? Explain.
+
+3. Find the trace of **A**.
+
+4. Find the determinant of **A**.
+
+5. Add **A** and **B**
+
+6. Find the transpose of **C**.
+
+7. By referring to the dimensions, can you compute **AC**? How about **CA**?
+
+8. Compute **AC**.
+
+9. Compute **BI**
+
+10. Create a $3\times3$ diagonal matrix whose trace is 10.
+
+11. How do you know that **B** has an inverse? Explain.
+
+12. Compute $\mathbf{B}^{-1}$
+
+13. Create a $3\times3$ matrix that has rank 2. Verify this using R.
+
+14. Create a $3\times3$ matrix that is symmetric and is not **I**.
+
+15. Solve the system of linear equations using algebra (e.g., substitution, elimination) and then solve them using matrix methods (with R).
+
+$$
+\begin{split}
+x + y + z &= 2 \\
+6x - 4y + 5z &= 31 \\
+5x + 2y + 2z &= 13
+\end{split}
+$$

@@ -12,7 +12,7 @@ csl: 'style/apa-single-spaced.csl'
 ---
 
 <script type="text/javascript" async
-  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.1.0/es5/mml-chtml.min.js">
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
 </script>
 
 ```{r setup, include=FALSE, message=FALSE}

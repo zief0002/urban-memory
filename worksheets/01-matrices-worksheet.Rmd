@@ -1,7 +1,7 @@
 ---
 title: "Matrices Worksheet"
 author: "Breakout Group"
-date: "`r Sys.Date()`"
+date: "September 10, 2020"
 output:
   prettydoc::html_pretty:
     theme: lumen

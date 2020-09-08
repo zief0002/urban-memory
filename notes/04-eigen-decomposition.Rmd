@@ -12,6 +12,10 @@ output:
     toc_depth: 2
 ---
 
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.1.0/es5/mml-chtml.min.js">
+</script>
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```

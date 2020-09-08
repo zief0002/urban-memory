@@ -11,6 +11,10 @@ bibliography: [epsy8264.bib]
 csl: 'style/apa-single-spaced.csl'
 ---
 
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.1.0/es5/mml-chtml.min.js">
+</script>
+
 ```{r setup, include=FALSE, message=FALSE}
 # Load libraries
 library(broom)

@@ -60,6 +60,20 @@ Below are the links to the data sets and data codebooks used in the notes, scrip
 </tr>
 
 <tr>
+<td>contraception.csv</td>
+<td align="center" style="vertical-align:middle;">
+  <a href="https://github.com/zief0002/epsy-8264/raw/master/data/contraception.csv">
+    <span class="fas fa-file-csv" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
+</td>
+<td align="center" style="vertical-align:middle;">
+  <a href="codebooks/contraception.html" target="_blank">
+    <span class="fas fa-book-open" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
+</td>
+</tr>
+
+<tr>
 <td>credit.csv</td>
 <td align="center" style="vertical-align:middle;">
   <a href="https://github.com/zief0002/epsy-8264/raw/master/data/credit.csv">

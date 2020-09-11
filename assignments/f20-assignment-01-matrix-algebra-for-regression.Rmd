@@ -156,9 +156,9 @@ Y = matrix(
 
 # Standardized Regression: Part II
 
-Using the standardized infant mortality `z_infant` and per-capita income `z_pci` variables. Fit the model: `lm(0 + z_infant ~ z_pci + region + z_pci:region)`.
+Using the standardized infant mortality `z_infant` and per-capita income `z_pci` variables. Fit the model: `lm(z_infant ~ z_pci + americas + z_pci:americas - 1)`.
 
-12. How is the design matrix for this model different than the design matrix for the model fitted in Question 12? What effect does this have on the vector of coefficient values?
+12. How is the design matrix for this model different than the design matrix for the model fitted in Question 11? What effect does this have on the vector of coefficient values?
 
 ```{r}
 x$z_infant = scale(x$infant)

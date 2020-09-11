@@ -19,8 +19,8 @@ Below are the due dates for the assignments, as well as links to the PDF file fo
 <tbody>
 
 <tr>
-<td>Assignment \#1: *Matrix Algebra for Linear Regression* 
-  <!-- <span style="margin-left:20px; color:red;">*[Updated 09-09-2019]*</span> -->
+<td>Assignment \#1: *Matrix Algebra for Linear Regression*<br />
+  <span style="margin-left:5px; color:#5a067d;font-size:12px;">*[Updated 09-11-2020]*</span>
 </td>
 <td>Sept. 24</td>
 <td align="center" style="vertical-align:middle;">

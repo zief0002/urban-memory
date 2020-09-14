@@ -49,7 +49,7 @@ In this unit we will look at some of the geometric ideas underlying vectors that
 
 **Prior to Class:**
 
-- Watch 3Blue1Brown. (2016). [Vectors, what even are they?](https://www.youtube.com/watch?v=kjBOesZCoqc&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab). From the series of YouTube videos *Essence of linear algebra.*
+- Watch 3Blue1Brown. (2016). [Vectors, what even are they?](https://www.youtube.com/watch?v=fNk_zzaMoSs&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab&index=1&ab_channel=3Blue1Brown). From the series of YouTube videos *Essence of linear algebra.*
 
 
 **In Class**

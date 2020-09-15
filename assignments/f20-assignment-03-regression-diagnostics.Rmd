@@ -89,7 +89,7 @@ In particular, we are going to examine whether income inequality is related to t
 
 12. Based on all of the evidence from the different influence measures you examined, identify and report the country(ies) that are influential. Explain how you decided on this set of observations.
 
-13. Remove the observations you identified in Question \#13 from the data and refit the regression model omitting these observations. Report the fitted equation.
+13. Remove the observations you identified in Question \#12 from the data and refit the regression model omitting these observations. Report the fitted equation.
 
 14. Create and include a set of plots that allow you to examine the assumptions for linear regression. Based on these plots, comment on the tenability of these assumptions.
 

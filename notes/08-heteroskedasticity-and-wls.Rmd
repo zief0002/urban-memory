@@ -1,51 +1,60 @@
 ---
-title: "Heteroskedasticity: Variance Stabilizing Transformations, Weighted Least Squares Estimation, and Sandwich Estimation"
-author: "EPsy 8264"
-date: "October 2018"
-output:
-  tufte::tufte_html:
-     tufte_variant: "envisioned"
-     self_contained: no
-     css: my_style.css
-highlight: tango
-bibliography: epsy8264.bib
-csl: apa-single-spaced.csl
-link-citations: no
+title: "Dealing with Heteroskedasticity"
+description: |
+  A set of methodological tools for dealing with heteroskedasticity including variance stabilizing transformations, weighted least squares (WLS) estimation, and modifying standard errors via sandwich estimation.
+author:
+  - name: Andrew Zieffler 
+    url: http://www.datadreaming.org/
+date: "`r Sys.Date()`"
+output: distill::distill_article
+bibliography: [epsy8264.bib]
+csl: 'style/apa-single-spaced.csl'
 ---
 
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, fig.width = 6, fig.height = 6)
+knitr::opts_chunk$set(echo = TRUE)
 library(knitr)
 library(kableExtra)
 ```
 
 
 
-In this set of notes, we will use data from *slid.csv*. This file include data collected in 1994 from employed citizens living in Ontario between the ages of 16 and 65 for Statistics Canada's *Survey of Labour and Income Dynamics* (SLID). The variables in the datset are:
+In this set of notes, we will use data from Statistics Canada's *Survey of Labour and Income Dynamics* (SLID) to explain variation in the hourly wage rate of employed citizens in Ontario. The file *slid.csv* includes data collected in 1994 from employed citizens living in Ontario between the ages of 16 and 65. The variables in the dataset are:
 
 - **wages:** Composite hourly wage rate based on all the participant's jobs
 - **age:** Age of the participant (in years)
 - **education:** Number of years of schooling
-- **male:** A dummy-coded predictor for sex (0=Female; 1=Male)
+- **male:** A dummy-coded predictor for sex (0=Non-male; 1=Male)
 
-The goal of the analysis will be to model the hourly wage rate using age, education and sex as predictors.
+
+## Data Exploration
 
 ```{r message=FALSE}
 # Load libraries
 library(broom)
 library(car)
 library(corrr)
-library(dplyr)
-library(ggplot2)
-library(readr)
+library(patchwork)
+library(tidyverse)
 
 # Import data
-slid = read_csv("~/Dropbox/epsy-8264/data/slid.csv")
+slid = read_csv("https://raw.githubusercontent.com/zief0002/epsy-8264/master/data/slid.csv")
 head(slid)
 ```
-As with any analysis, we will begin by examining the scatterplots of each predictor with the outcome. These plots suggest that each of the predictors is related to the outcome.
 
-```{r echo=FALSE, fig.fullwidth=TRUE, fig.width=12, fig.height=4}
+<aside>
+Note that the `read_csv()` function can take a URL for a dataset stored on the web.
+</aside>
+
+As with any analysis, we will begin by examining the scatterplot of each predictor with the outcome. These plots suggest that each of the predictors is related to the outcome.
+
+
+```{r echo=FALSE, out.width='100%', fig.width=12, fig.height=4, fig.cap="Scatterplot of hourly wage versus each predictor. The fitted regression line is also displayed in each plot."}
 p1 = ggplot(data = slid, aes(x = age, y = wages)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) +
@@ -67,21 +76,27 @@ p3 = ggplot(data = slid, aes(x = male, y = education)) +
   xlab("Male") +
   ylab("Hourly wage rate")
 
-gridExtra::grid.arrange(p1, p2, p3, nrow = 1)
+p1 | p2 | p3
 ```
 
+Based on what we see in these plots, the relationships seem linear. The plot with the age predictor foreshadows that we might violate the homoskedasticity assumption (the variance of hourly wages seems to grow for higher ages), but we will withhold judgment until after we fit our multi-predictor model.
+
+
+### Fitting a Multi-Predictor Model
+
 Next, we fit a model regressing wages on the three predictors simultaneously and examine the residual plots.
+
 
 ```{r eval=FALSE}
 # Fit model
 lm.1 = lm(wages ~ 1 + age + education + male, data = slid)
 
 # Examine residual plots
-qqPlot(lm.1)
+qqPlot(lm.1, id = FALSE)
 residualPlot(lm.1)
 ```
 
-```{r echo=FALSE, fig.fullwidth=TRUE, fig.width=8, fig.height=4}
+```{r echo=FALSE, out.width='100%', fig.width = 8, fig.height = 4, fig.cap="Residual plots for the model that includes the main effects of age, education level, and sex."}
 # Fit model
 lm.1 = lm(wages ~ 1 + age + education + male, data = slid)
 
@@ -92,21 +107,30 @@ residualPlot(lm.1)
 par(mfrow = c(1, 1))
 ```
 
+<aside>
+For `lm` objects fitted with OLS, the Pearson residuals are equivalent to the raw unstandardized residuals. You can add the argument `type="rstudent"` to use the studentized residuals, but this is only appropriate if you have used OLS to fit the model.
+</aside>
+
 Examining the residual plots:
 
-- The linearity assumption may be violated; the loess line suggests some non-linearity (maybe due to omitted interaction/polynomial terms)
+- The linearity assumption may be violated; the loess line suggests some nonlinearity (maybe due to omitted interaction/polynomial terms)
 - The normality assumption may be violated; the upper end of the distribution deviates from what would be expected from a normal distribution in the QQ-plot.
 - The homoskedasticity assumption is likely violated; the plot of studentized residuals versus the fitted values shows severe fanning; the variation in residuals seems to increase for higher fitted values.
 
-Including the age by education interaction term (`age:education`) seems to alleviate the nonlinearity issue, but the residual plots indicate there still may be violations of the normality and homogeneity of variance assumptions. Violating noramility is less problematic here since the Central Limit Theorem will ensure that the inferences are still approximately valid. Violating homoskedasticity, on the other hand, is more problematic.
+
+Because of the nonlinearity, we might consider including interaction terms. The most obvious interaction is that between age and education level, as it seems like the effect of age on hourly wage might be moderated by education level. (Remember, do NOT include interactions unless they make theoretical sense!) Below we fit this model, still controlling for sex, and examine the residuals.
 
 ```{r eval=FALSE}
 # Fit model
 lm.2 = lm(wages ~ 1 + age + education + male + age:education, data = slid)
+
+# Examine residual plots
+qqPlot(lm.2, id = FALSE)
+residualPlot(lm.2)
 ```
 
 
-```{r echo=FALSE, fig.fullwidth=TRUE, fig.width=8, fig.height=4}
+```{r echo=FALSE, out.width='100%', fig.width = 8, fig.height = 4, fig.cap="Residual plots for the model that includes an interaction effect between age and education level."}
 # Fit model
 lm.2 = lm(wages ~ 1 + age + education + male + age:education, data = slid)
 
@@ -117,15 +141,18 @@ residualPlot(lm.2)
 par(mfrow = c(1, 1))
 ```
 
+Including the age by education interaction term (`age:education`) seems to alleviate the nonlinearity issue, but the residual plots indicate there still may be violations of the normality and homogeneity of variance assumptions. Violating normality is less problematic here since the Central Limit Theorem will ensure that the inferences are still approximately valid. Violating homoskedasticity, on the other hand, is more problematic.
+
 
 ### Violating Homoskedasticity
 
-Recall that violating homoskedasticity results in:
+Violating the distributional assumption of homoskedasticity results in:
 
 - Incorrect computation of the sampling variances and covariances; and because of this
-- The OLS estimates are no longer BLUE.
+- The OLS estimates are no longer BLUE (Best Linear Unbiased Estimator).
 
-This means that the SEs (and resulting $t$- and $p$-values) for the coefficients are incorrect. In addition, the OLS estimators are no longer the most efficient estimators. How bad this is depends on several factors (e.g., how much the variances differ, sample sizes)
+This means that the SEs (and resulting *t*- and *p*-values) for the coefficients are incorrect. In addition, the OLS estimators are no longer the most efficient estimators. How bad this is depends on several factors (e.g., how much the variances differ, sample sizes).
+
 
 ## Heteroskedasticity: What is it and How do we Deal with It?
 
@@ -142,26 +169,29 @@ $$
 $$
 
 
-Heteroskedasticy implies that the residual variances are not constant. We can represnt the variance--covariance of the residuals under heteroskedasticity as:
+Heteroskedasticy implies that the residual variances are not constant. We can represent the variance--covariance matrix of the residuals under heteroskedasticity as:
 
 $$
 \boldsymbol{\sigma^2}(\boldsymbol{\epsilon}) =  \begin{bmatrix}\sigma^2_{1} & 0 & 0 & \ldots & 0 \\ 0 & \sigma^2_{2} & 0 & \ldots & 0\\ 0 & 0 & \sigma^2_{3} & \ldots & 0\\ \vdots & \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & 0 & \ldots & \sigma^2_{n}\end{bmatrix}
 $$
 
-In this matrix, each residual has a potentially different variance. Now, estimating $\sigma^2_{\epsilon}$ becomes more complicated, as does estimating the sampling variances and covariances of the regression coefficients .
+In this matrix, each residual has a potentially different variance. Now, estimating $\sigma^2_{\epsilon}$ becomes more complicated, as does estimating the sampling variances and covariances of the regression coefficients.
 
-There are at least three primary methods for dealing with heteroskedasticity: (1) transform the $Y$-values using a variance stablizing transformation; (2) fit the model using weighted least squares rather than OLS; or (3) adjust the SEs and covariances to account for the non-constant variances. We will examine each of these in turn.
+There are at least three primary methods for dealing with heteroskedasticity: (1) transform the *Y*-values using a variance stablizing transformation; (2) fit the model using weighted least squares rather than OLS; or (3) adjust the SEs and covariances to account for the non-constant variances. We will examine each of these in turn.
 
-### Variance Stabilizing Transformations
 
-The idea behind using a variance stabilizing transformation on $Y$ is that the transformed $Y$-values will be homoskedastic. If so, we can fit the OLS regression model using the transformed $Y$-values; the inferences will be valid; and, if necessary, we can back-transform for better interpretations. There are several transformations that can be applied to $Y$ that might stabilize the variances. Two common transformations are:
+## Variance Stabilizing Transformations
+
+The idea behind using a variance stabilizing transformation on the outcome (*Y*) is that the transformed *Y*-values will be homoskedastic. If so, we can fit the OLS regression model using the transformed *Y*-values; the inferences will be valid; and, if necessary, we can back-transform for better interpretations. There are several transformations that can be applied to *Y* that might stabilize the variances. Two common transformations are:
 
 - Log-transformation; $\ln(Y)_i$
 - Square-root transformation; $\sqrt{Y_i}$
 
-```{marginfigure}
-Prior to applying these transformations, you may need to add a constant value to each $Y$ value so that $Y>0$ (log-transformation) or $Y \get 0$ (square-root transformation).
-```
+
+<aside>
+Prior to applying these transformations, you may need to add a constant value to each *Y* value so that $Y>0$ (log-transformation) or $Y \geq 0$ (square-root transformation).
+</aside>
+
 
 Both of these transformations are power transformations. Power transformations have the mathematical form
 
@@ -186,7 +216,7 @@ $$
 \end{split}
 $$
 
-Powers such that $p<1$ are refrred to as downward transformations, and those with $p>1$ are referred to as upward transformations. Both the log-transformation and square-root transformation are downward transformations of $Y$.
+Powers such that $p<1$ are refrred to as downward transformations, and those with $p>1$ are referred to as upward transformations. Both the log-transformation and square-root transformation are downward transformations of *Y*. Here we will fit the main effects model using each of these transformations on *Y*.
 
 ```{r}
 # Create transformed Ys
@@ -205,8 +235,7 @@ lm_ln = lm(ln_wages ~ 1 + age + education + male, data = slid)
 The plots below show the residuals based on fitting a model with each of these transformations applied to the `wages` data.
 
 
-```{r echo=FALSE, fig.fullwidth=TRUE, fig.width=8, fig.height=4}
-# Fit model
+```{r echo=FALSE, fig.width = 8, fig.height = 4, fig.cap="LEFT: Residual plot for the main effects model that used a square root transformation on *Y*. RIGHT: Residual plot for the main effects model that used a logarithmic transformation on *Y*."}
 # Examine residual plots
 par(mfrow = c(1, 2))
 residualPlot(lm_sqrt, main = expression(sqrt(Y)))
@@ -214,11 +243,12 @@ residualPlot(lm_ln, main = "ln(Y)")
 par(mfrow = c(1, 1))
 ```
 
-Both of these residual plots seem to show less heterogeneity than the residuals fro mthe model with the untransformed wages. However, neither transformation seems to have "fixed" the problem completely.
+Both of these residual plots seem to show less heterogeneity than the residuals from the model with untransformed wages. However, neither transformation seems to have "fixed" the problem completely.
 
-#### Box-Cox Transformation
 
-In their seminal paper, @Box:1964 proposed a series of power transformations that could be applied to data in order to better meet assumptions such as linearity, normality, and homogeneity of variance. The general form of the Box-Cox model is:
+### Box-Cox Transformation
+
+Is there a power transformation that would better "fix" the heteroskedasticity? In their seminal paper, @Box:1964 proposed a series of power transformations that could be applied to data in order to better meet assumptions such as linearity, normality, and homoskedasticity. The general form of the Box-Cox model is:
 
 $$
 Y^{(\lambda)}_i = \beta_0 + \beta_1(X1_{i}) + \beta_2(X2_{i}) + \ldots + \beta_k(Xk_{i}) + \epsilon_i
@@ -227,22 +257,22 @@ $$
 where the errors are independent and $\mathcal{N}(0,\sigma^2_{\epsilon})$, and
 
 $$
-Y^{(\lambda)}_i = \begin{cases} 
+Y^{(\lambda)}_i = \begin{cases}
    \frac{Y_i^{\lambda}-1}{\lambda} & \text{for } \lambda \neq 0 \\[1em]
    \ln(Y_i)       & \text{for } \lambda = 0
   \end{cases}
 $$
 
-This is only defined for positive values of $Y$. 
+This is only defined for positive values of *Y*.
 
 The `powerTransform()` function from the **car** library can be used to determine the optimal value of $\lambda$. The `boxCox()` function from the same library gives a profile plot showing the log-likelohoods for a sequence of $\lambda$ values. If you do not specify the sequence of $\lambda$ values it will use `lambda = seq(from = -2, to = 2, by = 1/10)` by default.
 
 ```{r}
+# Find optimal power transformation using Box-Cox
 powerTransform(lm.1)
-boxCox(lm.1, lambda = seq(from = -2, to = 2, by = 1/10))
 ```
 
-The output from the `powerTransform()` function gives the optimal power for the transformation of $Y$, namely $\lambda = 0.086$. To actually implement this we use the transformation in the Box-Cox algorithm from earlier.
+The output from the `powerTransform()` function gives the optimal power for the transformation of $Y$, namely $\lambda = 0.086$. To actually implement the power transformation we use the transform *Y* based on the Box-Cox algorithm presented earlier. 
 
 ```{r}
 slid = slid %>%
@@ -254,9 +284,9 @@ slid = slid %>%
 lm_bc = lm(bc_wages ~ 1 + age + education + male, data = slid)
 ```
 
-The residual plots show much better behaved residuals, although even this optimal transformation still shows heteroskedasticity.
+The residual plots show much better behaved residuals, although even this optimal transformation still shows some evidence of heteroskedasticity.
 
-```{r echo=FALSE, fig.fullwidth=TRUE, fig.width=8, fig.height=4}
+```{r echo=FALSE, fig.width=8, fig.height=4, fig.cap="Residual plots for the main effects model that used a Box-Cox transformation on *Y* with $\\lambda=0.086$.", out.width='100%'}
 # Examine residual plots
 par(mfrow = c(1, 2))
 qqPlot(lm_bc, id = FALSE)
@@ -264,36 +294,52 @@ residualPlot(lm_bc)
 par(mfrow = c(1, 1))
 ```
 
-One problem with using this transformation is that the regression coefficients do not have a direct interpretation. For example, the age coefficient would be interpreted as: each one-year difference in age is associated with a 0.0227-unit difference in the transformed $Y$ controlling for differences in education and sex. But what does a 0.227-unit difference in transformed $Y$ mean when we translate that back to wages? 
+One problem with using this transformation is that the regression coefficients do not have a direct interpretation. For example, looking at the coefficent-level output:
 
 ```{r}
-tidy(lm_bc)
+tidy(lm_bc, conf.int = TRUE)
 ```
 
+The age coefficient would be interpreted as: each one-year difference in age is associated with a 0.0227-unit difference in the transformed *Y* controlling for differences in education and sex. But what does a 0.227-unit difference in transformed *Y* mean when we translate that back to wages? 
 
-The likelihood profile for the sequence of $\lambda$ values also indicates that $\lambda = 0.086$ is optimal; it produces the maximum likelihood of all the $\lambda$ values. The benefit to also examining the profile plot is that we get a 95\% CI for $\lambda$ as well. This interval offers a range of $\lambda$ values that will give comparable transformations. Since the limits are not outputted by the function, we may need to zoom in to determine these limits by tweaking the sequence of $\lambda$ values in the `boxCox()` function.
 
-```{r}
+### Profile Plot for Different Transformations
+
+Most of the power transformations under Box-Cox would produce coefficients that are difficult to interpret. The exception is when $\lambda=0$. This is the log-transformation which is directly interpretable. Since the optimal $\lambda$ value of 0.086 is quite close to 0, we might wonder whether we could just use the log-transformation ($\lambda=0$). The Box-Cox algorithm optimizes the log-likelihood of a given model, so the statistical question is whether there is a difference in the log-likelihood produced by the optimal transformation and that for the log-transformation.
+
+
+To evaluate this, we can plot of the log-likelihood for a given model using a set of lambda values. This is called a *profile plot* of the log-likelihood. The `boxCox()` function creates a profile plot of the log-likelihood for a defined sequence of $\lambda$ values. Here we will plot the profile of the log-likelihood for $-2 \leq \lambda \leq 2$.
+
+
+```{r out.width='50%', fig.width=6, fig.height=6, fig.cap="Plot of the log-likelihood profile for a given model versus a sequence of lambda values. The lambda that produces the highest log-likelihood is 0.086, the optimal lambda value."}
+# Plot of the log-likelihood for a given model versus a sequence of lambda values
+boxCox(lm.1, lambda = seq(from = -2, to = 2, by = 0.1))
+```
+
+The profile plot shows that the optimal lambda value, 0.86, produces the maximum log-likelihood value for the given model. We also are shown the 95\% confidence limits for lambda based on a test of the curvature of the log-likelihood function. This interval offers a range of $\lambda$ values that will give comparable transformations. Since the values associated with the confidence limits are not outputted by the `boxCox()` function, we may need to zoom in to determine these limits by tweaking the sequence of $\lambda$ values in the `boxCox()` function.
+
+```{r out.width='50%', fig.cap="Plot of the log-likelihood profile for a given model versus a narrower sequence of lambda values."}
 boxCox(lm.1, lambda = seq(from = 0.03, to = 0.2, by = .001))
 ```
 
-It looks as though $.03 \leq \lambda \leq 0.14$ all give comparable transformations. Unfortunately, none of these transformations have straight-forward interpretations. If, for example, the CI had included 0, then we could have used the simple log-transformation which does have a direct interpretation of the coefficients. 
+It looks as though $.03 \leq \lambda \leq 0.14$ all give comparable transformations. Unfortunately, 0 is not included in those limits. This means that the $\lambda$ value of 0.086 will produce a higher log-likelihood than the log-transformation. It is important to remember that even though the log-likelihood will be optimized, the compatibility with the assumptions may or may not be improved when we use $\lambda=0.086$ versus $\lambda=0$. The only way to evaluate this is to fit the models and check the residuals.
 
 
 
-### Weighted Least Squares Estimation
+## Weighted Least Squares Estimation
 
-Another method for dealing with heteroskedasticity is to change the method we use for estiating the coefficients and standard errors. The most common method for doing this is to use weighted least squares estimation (WLS) rather than ordinary least squares (OLS). 
+Another method for dealing with heteroskedasticity is to change the method we use for estimating the coefficients and standard errors. The most common method for doing this is to use weighted least squares (WLS) estimation rather than ordinary least squares (OLS).
 
-Under heteroskedasticity recall that the residual variance of the ith residual is $\sigma^2_i$, and the variance--covariance matrix of the rsiduals is defined as,
+Under heteroskedasticity recall that the residual variance of the *i*th residual is $\sigma^2_i$, and the variance--covariance matrix of the residuals is defined as,
 
 $$
 \boldsymbol{\Sigma} =  \begin{bmatrix}\sigma^2_{1} & 0 & 0 & \ldots & 0 \\ 0 & \sigma^2_{2} & 0 & \ldots & 0\\ 0 & 0 & \sigma^2_{3} & \ldots & 0\\ \vdots & \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & 0 & \ldots & \sigma^2_{n}\end{bmatrix},
 $$
 
-This implies that the $n$ observations no longer have the same reliability. Observations with small variances have more reliability than observations with large variances. The idea behind WLS estimation is that those observations that are less reliable are down-weighted in the estimation of the overall error variance.
+This implies that the $n$ observations no longer have the same reliability (i.e., precision of estimation). Observations with small variances have more reliability than observations with large variances. The idea behind WLS estimation is that those observations that are less reliable are down-weighted in the estimation of the overall error variance.
 
-#### Assume Error Variances are Known
+
+### Assume Error Variances are Known
 
 Let's assume that each of the error variances, $\sigma^2_i$, are known. This is generally not a valid assumption, but it gives us a point to start from. If we know these values, we can modify the likelihood function from OLS by substituting these values in for the OLS error variance, $\sigma^2_{\epsilon}$.
 
@@ -321,7 +367,7 @@ $$
 We can then find the coefficient estimates by maximizing $\mathcal{L}(\boldsymbol{\beta})$ with respect to each of the coefficients; these derivatives will result in $k$ normal equations. Solving this system of normal equations we find that:
 
 $$
-\mathrm{B} = (\mathbf{X}^{\intercal}\mathbf{W}\mathbf{X})^{-1}\mathbf{X}^{\intercal}\mathbf{W}\mathbf{Y}
+\mathbf{B} = (\mathbf{X}^{\intercal}\mathbf{W}\mathbf{X})^{-1}\mathbf{X}^{\intercal}\mathbf{W}\mathbf{Y}
 $$
 
 where **W** is a diagonal matrix of the weights,
@@ -333,7 +379,7 @@ $$
 The variance--covariance matrix for the regression coefficients can be computed using:
 
 $$
-\boldsymbol{\sigma^2}(\mathrm{B}) = \sigma^2_{\epsilon}(\mathbf{X}^{\intercal}\mathbf{W}\mathbf{X})^{-1}
+\boldsymbol{\sigma^2}(\mathbf{B}) = \sigma^2_{\epsilon}(\mathbf{X}^{\intercal}\mathbf{W}\mathbf{X})^{-1}
 $$
 
 where the estimate for $\sigma^2_{\epsilon}$ is:
@@ -342,22 +388,24 @@ $$
 \hat\sigma^2_{\epsilon} = \frac{\sum_{i=1}^n w_i \times \epsilon_i^2}{n - k - 1}
 $$
 
+#### An Example of WLS Estimation
 
-To illustrate WLS, consider the data collected in 1877 by Francis Galton (*galton.csv*). This dataset includes diameter measurements of pea plants (`parent`), and the average (`progeny`) and standard deviation (`sd`) diametere based on 10 pea plants grown from the parent's seeds.
+
+To illustrate WLS, consider the data collected in 1877 by Francis Galton (*galton.csv*). This dataset includes diameter measurements of pea plants (`parent`), and the average (`progeny`) and standard deviation (`sd`) diameter based on 10 pea plants grown from the parent's seeds.
 
 ```{r}
-pea = read_csv("~/Dropbox/epsy-8264/data/galton.csv")
-head(pea, 7)
+pea = read_csv("https://raw.githubusercontent.com/zief0002/epsy-8264/master/data/galton.csv")
+head(pea)
 ```
 
 In his analysis, Galton was trying to predict the diameters for the progeny peas using the parent peas' diameters. Fitting this model using OLS, we find:
 
 ```{r}
 lm_ols = lm(progeny ~ 1 + parent, data = pea)
-tidy(lm_ols)
+tidy(lm_ols, conf.int = TRUE)
 ```
 
-The problem, of course, is that the variation in the residuals is not constant as the reliability for the 10 progeny measurements is not the same for the 7 parent peas. Because of this, we may want to fit a WLS regression model rather than an OLS model.
+The problem, of course, is that the variation in the residuals is not constant as the reliability for the 10 progeny measurements is not the same for the parent peas. Because of this, we may want to fit a WLS regression model rather than an OLS model.
 
 
 ```{r}
@@ -377,7 +425,7 @@ B = solve(t(X) %*% W %*% X) %*% t(X) %*% W %*% Y
 B
 
 # Compute errors from WLS
-e_i = pea$progeny - X %*% B
+e_i = Y - X %*% B
 
 # Compute MSE estimate
 mse = sum( w_i * (e_i ^ 2) ) / 5
@@ -406,22 +454,23 @@ kable(tab_01, row.names=FALSE, col.names = c("Coefficient", "B", "SE", "B", "SE"
 
 #### Fitting the WLS estimation in the lm() Function
 
-The `lm()` function can also be used to fit a model using WLS estimation. To do this we inlcude the `weights=` argument in `lm()`. This takes a vector of weights representing the $w_i$ values for each of the $n$ observations.
+The `lm()` function can also be used to fit a model using WLS estimation. To do this we include the `weights=` argument in `lm()`. This takes a vector of weights representing the $w_i$ values for each of the $n$ observations.
 
 ```{r}
 lm_wls_2 = lm(progeny ~ 1 + parent, data = pea, weights = I(1 / (sd ^ 2)))
-tidy(lm_wls_2)
+tidy(lm_wls_2, conf.int = TRUE)
 ```
 
-Not only can we use `tidy()` and `glance()` to obtain coefficient and model-level summaries, but we can also use `augment()`, `confint()`, or any other function that takes a fitted model as its input.
+Not only can we use `tidy()` and `glance()` to obtain coefficient and model-level summaries, but we can also use `augment()`, `anova()`, or any other function that takes a fitted model as its input.
 
-#### What if Error Variances are Unknown?
+
+### What if Error Variances are Unknown?
 
 The previous example assumed that the variance--covariance matrix of the residuals was known. In practice, this is almost never the case. When we do not know the error variances, we need to estimate them from the data.
 
 To estimate the error variances for each observation, we:
 
-1. Fit an OLS model to the data, and obtain the residuals. 
+1. Fit an OLS model to the data, and obtain the residuals.
 2. Square these residuals and regress them (using OLS) on the same set of predictors.
 3. Obtain the fitted values from Step 2.
 4. Create the weights using $w_i = \frac{1}{\hat{y}_i}$ where $\hat{y}_i$ are the fitted values from Step 3.
@@ -453,11 +502,12 @@ w_i = 1 / (y_hat ^ 2)
 lm_step_5 = lm(wages ~ 1 + age + education + male + age:education, data = slid, weights = w_i)
 ```
 
-Before examining any output from this model, let's examine the residual plots. The residual plots suggest that the homoskedasticity asumption is much more reasonably satisfied; although it is still not perfect. The normality assumption looks untenable here.
+Before examining any output from this model, let's examine the residual plots. The residual plots suggest that the homoskedasticity assumption is much more reasonably satisfied; although it is still not perfect. The normality assumption looks untenable here.
 
-```{marginfigure}
-One way to proceed is to apply a variance stabilizing transformation to $Y$ (e.g., log-transform) and fit a WLS model. To do this you would go through the steps of estimating the weights again based on the transformed $Y$.
-```
+<aside>
+One way to proceed would be to apply a variance stabilizing transformation to *Y* (e.g., log-transform) and then fit a WLS model. To do this you would go through the steps of estimating the weights again based on the transformed *Y*.
+</aside>
+
 
 ```{r eval=FALSE}
 # Examine residual plots
@@ -465,7 +515,7 @@ qqPlot(lm_step_5)
 residualPlot(lm_step_5)
 ```
 
-```{r echo=FALSE, fig.fullwidth=TRUE, fig.width=8, fig.height=4}
+```{r echo=FALSE, out.width='100%', fig.width = 8, fig.height = 4, fig.cap="Residual plots for the model that includes the main effects of age, education level, and sex fitted with WLS estimation."}
 # Examine residual plots
 par(mfrow = c(1, 2))
 qqPlot(lm_step_5, id = FALSE)
@@ -477,12 +527,12 @@ The WLS coefficient estimates, standard errors, and coefficient-level inference 
 
 ```{r}
 # Examine coefficient-level output
-tidy(lm_step_5)
+tidy(lm_step_5, conf.int = TRUE)
 ```
 
 
 
-### Adjusting the Standard Errors
+## Adjusting the Standard Errors: Sandwich Estimation
 
 Since the effect of heteroskedasticity is that the sampling variances and covariances are incorrect, one method of dealing with this is to use the OLS coefficients, but make adjustments to the variance--covariance matrix of the coefficients. Then the adjusted SEs are the square roots of these adjusted sampling variances.
 
@@ -504,13 +554,13 @@ $$
 \boldsymbol{\Sigma} =  \begin{bmatrix}\sigma^2_{1} & 0 & 0 & \ldots & 0 \\ 0 & \sigma^2_{2} & 0 & \ldots & 0\\ 0 & 0 & \sigma^2_{3} & \ldots & 0\\ \vdots & \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & 0 & \ldots & \sigma^2_{n}\end{bmatrix},
 $$
 
-Remember that one of the formulas for variance of a random variable $X$ (in the first set of notes) was 
+One of the computational formulas for variance of a random variable *X*, using the rules of expectation  is:
 
 $$
 \sigma^2_X = \mathbb{E}\bigg(\big[X_i - \mathbb{E}(X)\big]^2\bigg)
 $$
 
-This means for the ith error variance, $\sigma^2_i$, can be computed as
+This means for the *i*th error variance, $\sigma^2_i$, can be computed as
 
 $$
 \sigma^2_{i} = \mathbb{E}\bigg(\big[\epsilon_i - \mathbb{E}(\epsilon)\big]^2\bigg)
@@ -528,7 +578,7 @@ $$
 \hat{\boldsymbol{\Sigma}} =  \begin{bmatrix}\epsilon^2_{1} & 0 & 0 & \ldots & 0 \\ 0 & \epsilon^2_{2} & 0 & \ldots & 0\\ 0 & 0 & \epsilon^2_{3} & \ldots & 0\\ \vdots & \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & 0 & \ldots & \epsilon^2_{n}\end{bmatrix},
 $$
 
-This modification is often referred to as a *sandwich estimator* because the $\mathbf{X}^{\intercal}\boldsymbol{\Sigma}\mathbf{X}$ is "sandwiched" between two occurences of $(\mathbf{X}^{\intercal}\mathbf{X})^{-1}$. 
+This modification is often referred to as a *sandwich estimator* because the $\mathbf{X}^{\intercal}\boldsymbol{\Sigma}\mathbf{X}$ is "sandwiched" between two occurrences of $(\mathbf{X}^{\intercal}\mathbf{X})^{-1}$.
 
 To compute the adjusted variance--covariance matrix of the coefficients we fit the OLS regression and use that to define the design matrix and the $\hat{\boldsymbol{\Sigma}}$ matrix.
 
@@ -540,7 +590,7 @@ lm.1 = lm(wages ~ 1 + age + education + male, data = slid)
 X = model.matrix(lm.1)
 
 # Sigma matrix
-e_squared = augment(lm.1)$.resid ^ 2  
+e_squared = augment(lm.1)$.resid ^ 2
 Sigma = e_squared * diag(3997)
 
 # Variance-covariance matrix for B
@@ -551,7 +601,7 @@ sqrt(diag(V_b_huber_white))
 ```
 
 
-The SEs we produce from this method are typically referred to as *Huber-White standard errors* because they were introduced in a paper by @Huber:1967 and their some of their statistical prperties were proved in a paper by @White:1980. 
+The SEs we produce from this method are typically referred to as *Huber-White standard errors* because they were introduced in a paper by @Huber:1967 and their some of their statistical properties were proved in a paper by @White:1980.
 
 
 Simulation studies by @Long:2000 suggest a slight modification to the Huber-White estimates; using
@@ -564,7 +614,7 @@ We can compute this modification by adjusting the `e_squared` value in the R syn
 
 ```{r}
 # Sigma matrix
-e_squared = augment(lm.1)$.resid ^ 2  / ((1 - augment(lm.1)$.hat) ^ 2)  
+e_squared = augment(lm.1)$.resid ^ 2  / ((1 - augment(lm.1)$.hat) ^ 2)
 Sigma = e_squared * diag(3997)
 
 # Variance-covariance matrix for B
@@ -574,7 +624,7 @@ V_b_huber_white_mod = solve(t(X) %*% X) %*% t(X) %*% Sigma %*% X %*% solve(t(X) 
 sqrt(diag(V_b_huber_white_mod))
 ```
 
-We could use these SEs to compute the $t$-values, associated $p$-values, and confidence intervals for each of the coefficeints.
+We could use these SEs to compute the *t*-values, associated *p*-values, and confidence intervals for each of the coefficients.
 
 The three sets of SEs are:
 
@@ -591,5 +641,3 @@ kable(tab_01, col.names = c("Coefficient", "OLS", "Huber-White", "Modified Huber
 
 In these data, the modified Huber-White adjusted SEs are quite similar to the SEs we obtained from OLS, despite the heteroskedasticity observed in the residuals. One advantage of this method is that we do not have to have a preconceived notion of the underlying pattern of variation like we do to use WLS estimation. If, however, we can identify the pattern of variation, then WLS estimation will produce more efficient (smaller) standard errors than sandwich estimation.
 
-
-## References

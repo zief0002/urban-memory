@@ -101,13 +101,13 @@ $$
 Each term is a $1\times 1$ matrix\footnote{You should verify that the dimension of each term is $1\times 1$.}, which means that each term is equal to its transpose. We will re-write the third term $\mathbf{Y}^{\prime}\mathbf{X}\boldsymbol{\beta}$ as its transpose $\boldsymbol{\beta}^{\prime}\mathbf{X}^{\prime}\mathbf{Y}$.
 
 $$
-\mathbf{Y}^{\prime}\mathbf{Y} - \boldsymbol{\beta}^{\prime}\mathbf{X}^{\prime}\mathbf{Y} - \boldsymbol{\beta}^{\prime}\mathbf{X}^{\prime}\mathbf{Y} - \boldsymbol{\beta}^{\prime}\mathbf{X}^{\prime}\mathbf{X}\boldsymbol{\beta}
+\mathbf{Y}^{\prime}\mathbf{Y} - \boldsymbol{\beta}^{\prime}\mathbf{X}^{\prime}\mathbf{Y} - \boldsymbol{\beta}^{\prime}\mathbf{X}^{\prime}\mathbf{Y} + \boldsymbol{\beta}^{\prime}\mathbf{X}^{\prime}\mathbf{X}\boldsymbol{\beta}
 $$
 
 Combining the two middle terms,
 
 $$
-\mathbf{Y}^{\prime}\mathbf{Y} - 2\boldsymbol{\beta}^{\prime}\mathbf{X}^{\prime}\mathbf{Y} - \boldsymbol{\beta}^{\prime}\mathbf{X}^{\prime}\mathbf{X}\boldsymbol{\beta}
+\mathbf{Y}^{\prime}\mathbf{Y} - 2\boldsymbol{\beta}^{\prime}\mathbf{X}^{\prime}\mathbf{Y} + \boldsymbol{\beta}^{\prime}\mathbf{X}^{\prime}\mathbf{X}\boldsymbol{\beta}
 $$
 
 To find the values for the elements in $\boldsymbol{\beta}$ that minimize the equation, we differentiate with respect to $\boldsymbol{\beta}$.
@@ -117,7 +117,7 @@ Section 2.4 in Fox (2009) gives mathematical background on optimization (i.e., m
 </aside>
 
 $$
-\frac{\delta}{\delta\boldsymbol{\beta}}~\mathbf{Y}^{\prime}\mathbf{Y} - 2\boldsymbol{\beta}^{\prime}\mathbf{X}^{\prime}\mathbf{Y} - \boldsymbol{\beta}^{\prime}\mathbf{X}^{\prime}\mathbf{X}\boldsymbol{\beta}
+\frac{\delta}{\delta\boldsymbol{\beta}}~\mathbf{Y}^{\prime}\mathbf{Y} - 2\boldsymbol{\beta}^{\prime}\mathbf{X}^{\prime}\mathbf{Y} + \boldsymbol{\beta}^{\prime}\mathbf{X}^{\prime}\mathbf{X}\boldsymbol{\beta}
 $$
 
 Differentiating this we get

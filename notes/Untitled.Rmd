@@ -1,0 +1,21 @@
+---
+title: "Example"
+output: distill::distill_article
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Here is a try for a side-by-side plot.
+
+```{r out.width='45%'}
+hist(cars$speed)
+plot(speed ~ dist, data =cars)
+```
+
+
+
+
+

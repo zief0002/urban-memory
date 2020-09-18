@@ -113,3 +113,28 @@ In this unit we will learn some of the basic linear/matrix algebra that is usefu
 <br />
 
 ---
+
+
+
+### Regression Diagnostics
+
+**Prior to Class:**
+
+- Read Fox (Sections 1.6)
+
+
+**In Class**
+
+- [Introduction to Matrix Decomposition](https://zief0002.github.io/epsy-8264/misc/03-matrix-decomposition.html) [Course Notes]
+- [Eigendecomposition](https://zief0002.github.io/epsy-8264/misc/04-eigen-decomposition.html) [Course Notes]
+
+
+**Additional Resources**
+
+- 3Blue1Brown. (2016). [Essence of linear algebra](https://www.youtube.com/watch?v=kjBOesZCoqc&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab). *(Especially the video on eigenvalues and eigenvectors)*
+
+<br />
+
+---
+
+

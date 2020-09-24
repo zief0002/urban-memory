@@ -66,7 +66,7 @@ In this unit we will look at some of the geometric ideas underlying vectors that
 ---
 
 
-### Regression using Matrices
+### Regression using Matrices (Sept. 17; 22)
 
 In this unit we will learn some of the basic linear/matrix algebra that is useful for regression analyses. 
 
@@ -93,7 +93,7 @@ In this unit we will learn some of the basic linear/matrix algebra that is usefu
 
 ---
 
-### Matrix Decomposition
+### Matrix Decomposition (Sept. 24; 29)
 
 **Prior to Class:**
 
@@ -116,23 +116,22 @@ In this unit we will learn some of the basic linear/matrix algebra that is usefu
 
 
 
-### Regression Diagnostics
+### Regression Diagnostics (Oct. 01; 06)
 
 **Prior to Class:**
 
-- Read Fox (Sections 1.6)
+- Read Fox, J. (1991). [Outlying and influential data](https://primo.lib.umn.edu/permalink/f/1q7ssba/UMN_ALMA21512855700001701). In *Regression Diagnostics* (pp. 21--40). Sage. doi: https://dx-doi-org.ezp1.lib.umn.edu/10.4135/9781412985604.n4 [Online Access via UMN Library]
 
 
 **In Class**
 
-- [Introduction to Matrix Decomposition](https://zief0002.github.io/epsy-8264/misc/03-matrix-decomposition.html) [Course Notes]
-- [Eigendecomposition](https://zief0002.github.io/epsy-8264/misc/04-eigen-decomposition.html) [Course Notes]
+- [Regression Diagnostics](https://github.com/zief0002/epsy-8264/raw/master/notes/07-regression-diagnostics.pdf) [Course Notes]
 
 
 **Additional Resources**
 
-- 3Blue1Brown. (2016). [Essence of linear algebra](https://www.youtube.com/watch?v=kjBOesZCoqc&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab). *(Especially the video on eigenvalues and eigenvectors)*
-
+- Kim, B. (2015). [Understanding diagnostic plots for linear regression analysis](https://data.library.virginia.edu/diagnostic-plots/). University of Virginia Library.
+- Cook, R. D. (1998). [Regression graphics: Ideas for studying regressions through graphics](http://www.stat.umn.edu/RegGraph/). Wiley.
 <br />
 
 ---

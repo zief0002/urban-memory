@@ -318,9 +318,10 @@ boxCox(lm.1, lambda = seq(from = -2, to = 2, by = 0.1))
 
 The profile plot shows that the optimal lambda value, 0.86, produces the maximum log-likelihood value for the given model. We also are shown the 95\% confidence limits for lambda based on a test of the curvature of the log-likelihood function. This interval offers a range of $\lambda$ values that will give comparable transformations. Since the values associated with the confidence limits are not outputted by the `boxCox()` function, we may need to zoom in to determine these limits by tweaking the sequence of $\lambda$ values in the `boxCox()` function.
 
-```{r out.width='50%', fig.cap="Plot of the log-likelihood profile for a given model versus a narrower sequence of lambda values."}
+```{r fig.width=6, fig.height=6, fig.cap="Plot of the log-likelihood profile for a given model versus a narrower sequence of lambda values."}
 boxCox(lm.1, lambda = seq(from = 0.03, to = 0.2, by = .001))
 ```
+
 
 It looks as though $.03 \leq \lambda \leq 0.14$ all give comparable transformations. Unfortunately, 0 is not included in those limits. This means that the $\lambda$ value of 0.086 will produce a higher log-likelihood than the log-transformation. It is important to remember that even though the log-likelihood will be optimized, the compatibility with the assumptions may or may not be improved when we use $\lambda=0.086$ versus $\lambda=0$. The only way to evaluate this is to fit the models and check the residuals.
 

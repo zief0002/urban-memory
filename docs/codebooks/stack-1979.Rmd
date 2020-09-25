@@ -1,0 +1,45 @@
+---
+title: "stack-1979.csv"
+output: 
+  rmdformats::html_docco:
+    css: 'codebooks.css'
+bibliography: '../../notes/epsy8264.bib'
+csl: '../../notes/style/apa-single-spaced.csl'
+---
+
+
+```{r knitr_init, echo=FALSE, cache=FALSE}
+library(knitr)
+library(rmdformats)
+#library(fontawesome)
+
+## Global options
+options(max.print="75")
+opts_chunk$set(echo=FALSE,
+               prompt=FALSE,
+               tidy=TRUE,
+               comment=NA,
+               message=FALSE,
+               warning=FALSE)
+opts_knit$set(width=75)
+```
+
+
+@Stack:1979 studied predictors of income inequality in a paper published in the *American Sociological Review*. He posited that more political participation and a strong Socialist party in a country would be associated with less income inequality. To control for variation in economic development, he included a measure of energy consumption, which had been identified as a reasonable economic proxy in previous studies. Stack's data, stored in [stack-1979.csv](https://raw.githubusercontent.com/zief0002/epsy-8264/master/data/stack-1979.csv), include four attributes measured on 18 countries. The attributes are:
+
+- `country`: Country name
+- `inequality`: Ratio of the share of income received by the most wealthy population quintile (richest 20\%) to the share received by the poorest 40\% of the population; Higher values indicate more income inequality
+- `turnout`: Proportion of the adult population voting in the most recent national election prior to 1972
+- `energy`: Energy consumption per capita (expressed in million metric tons of coal equivalents; higher values indicate more economic development
+- `socialist`: Annual average proportion of seats held by socialist parties in the national legislature, over the first twenty postwar years
+
+### Preview
+
+```{r}
+options(dplyr.width = Inf, width = 85)
+stack = readr::read_csv(file = "https://raw.githubusercontent.com/zief0002/epsy-8264/master/data/stack-1979.csv")
+head(stack)
+```
+
+
+### References

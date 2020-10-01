@@ -20,12 +20,22 @@ output:
 
 ## Problems
 
-Compute the eigenvalues and eigenvector of **A** to create the **P** and **D** matrices of the eigendecomposition. Do this by hand and also use R to verify your work.
+1. Compute the eigenvalues and eigenvector of **A** to create the **P** and **D** matrices of the eigendecomposition. Do this by hand and also use R to verify your work.
 
 $$
-\mathbf{A} = \begin{bmatrix}2 & -1\\3 & -2\end{bmatrix} 
+\mathbf{A} = \begin{bmatrix}2 & 3\\3 & 2\end{bmatrix} 
 $$
 
 <br /><br /><br /><br /><br /><br /><br /><br />
 
-Once you have computed **P**, use R to show that: (1) $\mathbf{A} = \mathbf{P}\mathbf{D}\mathbf{P}^{-1}$; and (2) **P** is an orthogonal matrix.
+2. Once you have computed **P**, use R to show that:
+
+    - $\mathbf{A} = \mathbf{P}\mathbf{D}\mathbf{P}^{-1}$
+    - The trace of **A** is equal to the sum of the eigenvalues. 
+    - **P** is an orthogonal matrix. (Note: **P** is only orthogonal when **A** is a symmetric matrix.)
+
+
+
+<br /><br /><br /><br /><br /><br /><br /><br />
+
+3. Carry out LU decomposition on **A** by hand. Check your work using R.

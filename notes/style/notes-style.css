@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata&family=Open+Sans:wght@300&family=Raleway:wght@500&display=swap');
+
+body, p, li {
+  font-family: "Open Sans", Sans-Serifserif;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.MathJax {
+  font-size: 12px !important;
+}
+
+
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Raleway", serif;
+}
+
+
+code, .code, pre, .sourceCode {
+  font-family: "Inconsolata", monospace;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+
+.caption.marginnote.shownote {
+  font-family: "Open Sans", Sans-Serifserif;
+  font-size: 11px;
+  line-height: 1.5;
+}

@@ -8,3 +8,14 @@ D
 eigen(A)
 
 
+t(P)
+solve(P)
+
+
+t(D)
+solve(D)
+
+
+
+A = matrix(c(2, 3, 3, 2), nrow = 2)
+eigen(A)

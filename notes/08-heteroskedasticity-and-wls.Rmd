@@ -120,7 +120,7 @@ Examining the residual plots:
 
 Because of the nonlinearity, we might consider including interaction terms. The most obvious interaction is that between age and education level, as it seems like the effect of age on hourly wage might be moderated by education level. (Remember, do NOT include interactions unless they make theoretical sense!) Below we fit this model, still controlling for sex, and examine the residuals.
 
-```{r eval=FALSE}
+```{r fig.show='hold', out.width='%',}
 # Fit model
 lm.2 = lm(wages ~ 1 + age + education + male + age:education, data = slid)
 
@@ -469,7 +469,7 @@ Not only can we use `tidy()` and `glance()` to obtain coefficient and model-leve
 
 The previous example assumed that the variance--covariance matrix of the residuals was known. In practice, this is almost never the case. When we do not know the error variances, we need to estimate them from the data.
 
-To estimate the error variances for each observation, we:
+One method for estimating the error variances for each observation, is:
 
 1. Fit an OLS model to the data, and obtain the residuals.
 2. Square these residuals and regress them (using OLS) on the same set of predictors.

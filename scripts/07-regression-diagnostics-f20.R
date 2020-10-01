@@ -97,6 +97,13 @@ tidy(lm.2, conf.int = 0.95) # Coefficient-level information
 ### Leverage values
 ##################################################
 
+# Compute via matrices
+X = model.matrix(lm.1)
+
+h_matrix = X %*% solve(t(X) %*% X) %*% t(X)
+diag(h_matrix)
+
+
 # Augment model
 out_1 = augment(lm.1)
 

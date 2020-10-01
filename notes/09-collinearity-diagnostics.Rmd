@@ -1,18 +1,33 @@
 ---
 title: "Collinearity Diagnostics"
-description: |
+description: | 
   A brief introduction to empirical diagnostics to detect collinearity. Example taken from @Chatterjee:2012.
 author:
   - name: Andrew Zieffler 
     url: http://www.datadreaming.org/
 date: "`r Sys.Date()`"
-output: radix::radix_article
-bibliography: epsy8264.bib
-csl: apa-single-spaced.csl
+output:
+  distill::distill_article:
+    highlight: tango
+bibliography: [epsy8264.bib]
+csl: 'style/apa-single-spaced.csl'
 ---
 
+
+
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+
+<!-- A brief introduction to empirical diagnostics to detect collinearity. Example taken from @Chatterjee:2012. -->
+
+
+
+
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, fig.width = 6, fig.height = 6)
 library(knitr)
 library(kableExtra)
 ```
@@ -31,17 +46,16 @@ We will use these data to mimic one of the original regression analyses performe
 library(broom)
 library(car)
 library(corrr)
-library(dplyr)
-library(ggplot2)
-library(readr)
-library(sm)
+library(tidyverse)
 
 # Read in data
-eeo = read_csv("~/Dropbox/epsy-8264/data/equal-education-opportunity.csv")
+eeo = read_csv("~/Documents/github/epsy-8264/data/equal-education-opportunity.csv")
 head(eeo)
 ```
 
-### Regression Analysis
+<br />
+
+# Regression Analysis
 
 To examine the RQ, the following model was posited:
 
@@ -58,32 +72,30 @@ qqPlot(lm.1)
 residualPlot(lm.1)
 ```
 
-
-
-```{r echo=FALSE, fig.width=8, fig.height=4}
+```{r echo=FALSE, fig.cap="Residual plots for the model that includes the main effects of faculty credentials, influence of peer groups, and measure of school facilities to predict variation in student achievement.", fig.show='hold', fig.width=8, fig.height=4}
 # Fit the regression model
 lm.1 = lm(achievement ~ faculty + peer + school, data = eeo)
 
-# Examine assumptions; look for problematic observations
+# Examine assumptions
 par(mfrow = c(1, 2))
-qqPlot(lm.1, id = FALSE)
+qqPlot(lm.1)
 residualPlot(lm.1)
 par(mfrow = c(1, 1))
 ```
 
-```{r fig.width=6, fig.height=6}
+```{r fig.width=8, fig.height=6, fig.cap="Diagnostic plots for the model that includes the main effects of faculty credentials, influence of peer groups, and measure of school facilities to predict variation in student achievement."}
 # Index plots of several regression diagnostics
 influenceIndexPlot(lm.1)
 ```
 
-School 28 may be problematic, but after removing this observation (not shown) it made little improvement in the residual plots. As such, School 28 was retained in the data. As the assumptions seem reasonably met, we next look to the model-level and coefficient-level output:
+School 28 may be problematic, but removing this observation (work not shown) made little improvement in the residual plots. As such, School 28 was retained in the data. As the assumptions seem reasonably met, we next look to the model-level and coefficient-level output:
 
 ```{r}
 # Model-level information
-glance(lm.1)
+print(glance(lm.1), width = Inf)
 
 # Coefficient-level information
-tidy(lm.1)
+tidy(lm.1, conf.int = 0.95)
 ```
 
 Examining this information we find:
@@ -91,192 +103,210 @@ Examining this information we find:
 - 20\% of the variation in student achievement is explained by the model; which is statistically significant $F(3, 66)=5.72$; $p=0.002$.
 - However, none of the individual coefficients are statistically significant!
 
-These results are typical when there is *collinearity* in the model. 
+These results are typical when there is *collinearity* in the model.
 
-## Collinearity
+<br />
 
-Collinearity is defined mathematically as when any of the predictors (*X*) in a regression model is a perfect linear combination of the other predictors:
+
+# Collinearity
+
+Mathematically, collinearity occurs when any of the columns of the design matrix, **X**, is a perfect linear combination of the other columns:
 
 $$
-X_{k+1} = c_0(1) + c_1X_1 + c_2X_2 + c_3X_3 + \ldots + c_kX_k
+\mathbf{X_j} = c_0(\mathbf{1}) + c_1\mathbf{X_1} + c_2\mathbf{X_2} + c_3\mathbf{X_3} + \ldots + c_k\mathbf{X_k}
+$$
+In this situation, **X** is not of full rank, and the $\mathbf{X}^{\intercal}\mathbf{X}$ matrix is singular. In this situation, the OLS normal equations do not have a unique solution. 
+
+In practice, it is unlikely that you will have exact collinearity. When it does happen it is often the result of mis-formulating the model (e.g., including dummy variables in the model for all levels of a categorical variable, as well as the intercept). As an example of this, imagine that you were creating the design matrix for a regression model that included occupational status (employed/not employed) to predict some outcome for 5 cases. 
+
+$$
+\mathbf{X} = \begin{bmatrix}\end{bmatrix}
 $$
 
-When this happens, the matrix $\mathbf{X}^{\intercal}\mathbf{X}$ is singular, and the OLS normal equations do not have a unique solution. Recall that the sampling variance for a predictor, $B_j$ is
+The design matrix below is not of full rank, because any one of the columns is a linear combination of the
+
+It is more likely, in practice, that you will have less-than-perfect collinearity, and that this will have an adverse effect on the computational estimates of the coefficients' sampling variances. To understand why this is the case, 
+
+
+When this happens, the , and 
+
+
+Recall that the sampling variance for a predictor, $B_j$ is
 
 $$
 \mathrm{Var}(B_j) = \frac{1}{1 - R^2_j} \times \frac{\sigma^2_\epsilon}{(n-1)S^2_j}
 $$
 
-The first term in this product is referred to as the *variance inflation factor* (VIF). Recall that $R^2_j$ in this term is the squared multiple correlation between $X_j$ on the other $X$s. 
+The first term in this product is referred to as the *variance inflation factor* (VIF). Recall that $R^2_j$ in this term is the squared multiple correlation between $X_j$ on the other $X$s.
 
 - When the correlation between $X_j$ and the other $X$s is 0 (they are independent; *orthogonal*) then the VIF becomes 1.
 - When the correlation between $X_j$ and the other $X$s is high then the VIF becomes larger than 1; it becomes a multiplier of the variance.
 - When there is perfect correlation between $X_j$ and the other $X$s then the VIF approaches $\infty$; the sampling variances (and SEs) are infinitely large.
 
-In practice it is rare to have perfect collinearity. When it does happen it is often the result of mis-formulating the model (e.g., including dummy variables in the model for all levels of a categorical variable, as well as the intercept).
+In practice it is rare to have exact collinearity. 
 
-It is, however, common to have strong less-than-perfect collinearity in practice. In thes cases the VIF will be less than 1, but can still have an adverse effect on the sampling variances; making them quite large.
+It is, however, common to have strong less-than-perfect collinearity in practice. In these cases the VIF will be less than 1, but can still have an adverse effect on the sampling variances; making them quite large.
 
-## Signs of Potential Collinearity
+<!-- ## Signs of Potential Collinearity -->
 
-In our example we were alerted to the possible collinearity by finding that the predictors jointly were statistically significant, but that each of the individual predictors were not. Other signs that you may have collinearity problems are:
+<!-- In our example we were alerted to the possible collinearity by finding that the predictors jointly were statistically significant, but that each of the individual predictors were not. Other signs that you may have collinearity problems are: -->
 
-- Large changes in the size of the estimated coefficients when variables are added to the model;
-- Large changes in the size of the estimated coefficients when an observation is added or deleted;
-- The signs of the estimated coefficients do not conform to their prior substantively hypothesized directions;
-- Large SEs on variables that are expected to be important predictors.
-
-
-## Collinearity Diagnostics
-
-We can empirically diagnose problematic collinearity in the data [@Belsley:1991; @Belsley:1980]. Before we do, however, it is important that the functional form of the model has been correctly specified. Collinearity produces unstable estimates of the coefficients and sampling variances which result from strong linear relationships between the predictors. In applied work, the model needs to be specified before we can estimate coefficients or their sampling variances; hence, collinearity should only be investigated after the model has been satisfactorily specified. 
-
-### High Correlations among Predictors
-
-Collinearity can sometimes be anticipated by examining the pairwise correlations between the predictors.
-
-```{r}
-eeo %>%
-  select(faculty, peer, school) %>%
-  correlate()
-```
-
-All three of the predictors are highly correlated with one another.
-
-Unfortunately the source of collinearity may be due to more than just the simple relationships among the predictors. As such, just examining the pairwise correlations is not enough to detect collinearity (although it is a good first step). There are three common methods statisticians use to detect collinearity: (1) computing variance inflation factors for the coefficients; (2) examining the eigenvalues of the correlation matrix; and (3) examining the condition indices of the correlation matrix.
+<!-- - Large changes in the size of the estimated coefficients when variables are added to the model; -->
+<!-- - Large changes in the size of the estimated coefficients when an observation is added or deleted; -->
+<!-- - The signs of the estimated coefficients do not conform to their prior substantively hypothesized directions; -->
+<!-- - Large SEs on variables that are expected to be important predictors. -->
 
 
-### Variance Inflation Factor
+<!-- ## Collinearity Diagnostics -->
 
-The variance inflation factor (VIF) is an indicator of the degree of collinearity, where VIF is:
+<!-- We can empirically diagnose problematic collinearity in the data [@Belsley:1991; @Belsley:1980]. Before we do, however, it is important that the functional form of the model has been correctly specified. Collinearity produces unstable estimates of the coefficients and sampling variances which result from strong linear relationships between the predictors. In applied work, the model needs to be specified before we can estimate coefficients or their sampling variances; hence, collinearity should only be investigated after the model has been satisfactorily specified.  -->
 
-$$
-\mathrm{VIF} = \frac{1}{1 - R^2_j}
-$$
+<!-- ### High Correlations among Predictors -->
 
-The VIF impacts the size of the variance estimates for the regression coefficients, and as such, can be used as a diagnostic of collinearity. In practice, since it is more conventional to use the SE to measure uncertainty, it is typical to use the square root of the VIF as a diagnostic of collinearity in practice. The square root of the VIF expresses the proportional change in the CI for the coefficients. 
+<!-- Collinearity can sometimes be anticipated by examining the pairwise correlations between the predictors. -->
 
-The table below shows the and range of correlation values for $R_j$, and their resulting effects on the size of the confidence interval for the coefficient.
+<!-- ```{r} -->
+<!-- eeo %>% -->
+<!--   select(faculty, peer, school) %>% -->
+<!--   correlate() -->
+<!-- ``` -->
 
-```{r echo=FALSE, layout="l-body-outset"}
-tab_01 = data.frame(
-  R = seq(from = 0.5, to = 0.9, by = 0.1)
-) %>%
-  mutate(
-    R2 = R^2,
-    VIF = 1 / (1 - R2),
-    sqrt_vif = sqrt(VIF)
-  )
+<!-- All three of the predictors are highly correlated with one another. -->
 
-kable(tab_01, 
-      digits = 2, 
-      col.names = c("$R_j$", "$R^2_j$", "$\\mathrm{VIF}$", "$\\sqrt{\\mathrm{VIF}}$"), 
-      format = "html"
-      ) %>%
-  kable_styling(position = "center") %>%
-  row_spec(c(1, 3, 5), background = "#dfdfdf")
-```
-
-For example, if the correlation between $X_j$ and the other $X$s is 0.9, then the CIs for the coefficients would increase by a factor of of 2.29. The uncertainty in the estimates would more than double!
-
-We can use the `vif()` function from the **car** package to compute the variance inflation factors for each coefficient.
-
-```{r}
-# VIF
-vif(lm.1)
-
-# Square root of VIF
-sqrt(vif(lm.1))
-```
-
-All three coefficients are impacted by VIF. The SEs for these coefficients are all more than five times as large as they would be if the predictors were independent.
+<!-- Unfortunately the source of collinearity may be due to more than just the simple relationships among the predictors. As such, just examining the pairwise correlations is not enough to detect collinearity (although it is a good first step). There are three common methods statisticians use to detect collinearity: (1) computing variance inflation factors for the coefficients; (2) examining the eigenvalues of the correlation matrix; and (3) examining the condition indices of the correlation matrix. -->
 
 
-### Eigenvalues of the Correlation Matrix
+<!-- ### Variance Inflation Factor -->
 
-Each $k \times k$ matrix has a set of $k$ scalars, called eigenvalues (denoted $\lambda$) associated with it. These eigenvalues can be arranged in descending order such that,
+<!-- The variance inflation factor (VIF) is an indicator of the degree of collinearity, where VIF is: -->
 
-$$
-\lambda_1 \geq \lambda_2 \geq \lambda_3 \geq \ldots \geq \lambda_k
-$$
+<!-- $$ -->
+<!-- \mathrm{VIF} = \frac{1}{1 - R^2_j} -->
+<!-- $$ -->
 
-Because the correlation matrix of the predictors is a square matrix, we can find a corresponding set of eigenvalues for this correlation matrix. It turns out that if any of these eigenvalues is exactly equal to zero, there would be a linear dependence among the predictors. In practice, if one of the eigenvalues is quite a bit smaller than the others (and near zero), there is collinearity.
+<!-- The VIF impacts the size of the variance estimates for the regression coefficients, and as such, can be used as a diagnostic of collinearity. In practice, since it is more conventional to use the SE to measure uncertainty, it is typical to use the square root of the VIF as a diagnostic of collinearity in practice. The square root of the VIF expresses the proportional change in the CI for the coefficients.  -->
 
-Empirically, we compute the sum of the reciprocals of the eigenvalues 
+<!-- The table below shows the and range of correlation values for $R_j$, and their resulting effects on the size of the confidence interval for the coefficient. -->
 
-$$
-\sum_{i=1}^k \frac{1}{\lambda_i}
-$$
+<!-- ```{r echo=FALSE, layout="l-body-outset"} -->
+<!-- tab_01 = data.frame( -->
+<!--   R = seq(from = 0.5, to = 0.9, by = 0.1) -->
+<!-- ) %>% -->
+<!--   mutate( -->
+<!--     R2 = R^2, -->
+<!--     VIF = 1 / (1 - R2), -->
+<!--     sqrt_vif = sqrt(VIF) -->
+<!--   ) -->
 
-If the sum is greater than five times the number of predictors, it is a sign of collinearity.
+<!-- kable(tab_01,  -->
+<!--       digits = 2,  -->
+<!--       col.names = c("$R_j$", "$R^2_j$", "$\\mathrm{VIF}$", "$\\sqrt{\\mathrm{VIF}}$"),  -->
+<!--       format = "html" -->
+<!--       ) %>% -->
+<!--   kable_styling(position = "center") %>% -->
+<!--   row_spec(c(1, 3, 5), background = "#dfdfdf") -->
+<!-- ``` -->
 
-#### Using R to Compute the Eigenvalues of the Correlation Matrix
+<!-- For example, if the correlation between $X_j$ and the other $X$s is 0.9, then the CIs for the coefficients would increase by a factor of of 2.29. The uncertainty in the estimates would more than double! -->
 
-We can use the `eigen()` function to compute the eigenvalues of a square matrix. We provide this function the correlation matrix for the model's predictors. To date, I have been using the `correlate()` function to produce correlation matrices. This function produces a formatted output that is nice for displaying the correlation matrix, but, because of its formatting, is not truely a matrix object. Instead, we will use the `cor()` function, which produces a matrix object, to produce the correlation matrix.
+<!-- We can use the `vif()` function from the **car** package to compute the variance inflation factors for each coefficient. -->
 
-```{r}
-# Correlation matrix of predictors
-x = cor(eeo[c("faculty", "peer", "school")])
-x
-```
+<!-- ```{r} -->
+<!-- # VIF -->
+<!-- vif(lm.1) -->
 
-Once we have the correlation matrix, we can use the `eigen()` function to compute the eigenvalues (and eigenvectors) of the inputted correlation matrix. 
+<!-- # Square root of VIF -->
+<!-- sqrt(vif(lm.1)) -->
+<!-- ``` -->
 
-```{r}
-# Compute eigenvalues and eigenvectors
-eigen(x)
-
-# Sum of reciprocal of eigenvalues
-sum(1 / eigen(x)$values)
-```
-
-We compare the sum of the reciprocal of the eigenvalues to five times the number of predictors; $5 \times 3 =15$. Since this sum is greater than 15, we would conclude that there is a collinearity problem. 
-
-
-### Condition Indices
-
-One related diagnostic measure of collinearity are the *condition indices* of the correlation matrix. The *j*th condition index is defined as
-
-$$
-\kappa_j = \sqrt{\frac{\lambda_1}{\lambda_j}}
-$$
-
-for $j=1,2,3,\ldots,k$, where $\lambda_1$ is the first (largest) eigenvalue and $\lambda_j$ is the *j*th eigenvalue. 
-
-The first condition index, $\kappa_1$, will always be equal to 1, and the other condition indices will be larger than one. The largest condition index, which will be,
-
-$$
-\kappa_k = \sqrt{\frac{\lambda_1}{\lambda_k}}
-$$
-
-where $\lambda_k$ is the smallest eigenvalue, is known as the *condition number* of the correlation matrix. If the condition number is small, it indicates that the predictors are not collinear, whereas large condition numbers are evidence supporting collinearity. 
-
-From empirical work, condition numbers that exceed 15 are typically problematic (this indicates that the maximum eigenvalue is more than 225 times greater than the maximum eigenvalue). When the condition number exceeds 30, corrective action will almost surely need to be taken.
-
-```{r}
-# Compute condition indices
-sqrt(max(eigen(x)$values) / eigen(x)$values)
-```
-
-The condition number of 19.26, suggests strong collinearity among the predictors.
+<!-- All three coefficients are impacted by VIF. The SEs for these coefficients are all more than five times as large as they would be if the predictors were independent. -->
 
 
-## Fixing Collinearity in Practice
+<!-- ### Eigenvalues of the Correlation Matrix -->
 
-Although there are several solutions in practice, none are a magic bullet. Here are three potential fixes:
+<!-- Each $k \times k$ matrix has a set of $k$ scalars, called eigenvalues (denoted $\lambda$) associated with it. These eigenvalues can be arranged in descending order such that, -->
 
-- Re-specify the model
-    - Combine collinear predictors, 
-    - Drop one (or more) of the collinear predictors---This changes what you are controlling for.
-- Biased estimation
-    - Trade small amount of bias for a reduction in coefficient variability
-- Introduce prior information about the coefficients
-    - This can be done formally in the analysis (e.g., Bayesian analysis)
-    - It can be used to give a different model specification
+<!-- $$ -->
+<!-- \lambda_1 \geq \lambda_2 \geq \lambda_3 \geq \ldots \geq \lambda_k -->
+<!-- $$ -->
 
-Note that although collinearity is a data problem, the most common fixes in practice are to change the model. For example, we could alleviate the collinearity by dropping any two of the predictors and re-fitting the model with only one predictor. 
+<!-- Because the correlation matrix of the predictors is a square matrix, we can find a corresponding set of eigenvalues for this correlation matrix. It turns out that if any of these eigenvalues is exactly equal to zero, there would be a linear dependence among the predictors. In practice, if one of the eigenvalues is quite a bit smaller than the others (and near zero), there is collinearity. -->
 
-This would fix the problem, but would be unsatisfactory because the resulting model would not allow us to answer the research question. The highly correlated relationships between the predictors is an inherent characteristic of the data generating process we are studying. This makes it difficult to estimate the individual effects of the predictors. Instead, we could look for underlying causes that would explain the relationships we found among the predictors and perhaps re-formulate the model using these underlying causes.
+<!-- Empirically, we compute the sum of the reciprocals of the eigenvalues  -->
+
+<!-- $$ -->
+<!-- \sum_{i=1}^k \frac{1}{\lambda_i} -->
+<!-- $$ -->
+
+<!-- If the sum is greater than five times the number of predictors, it is a sign of collinearity. -->
+
+<!-- #### Using R to Compute the Eigenvalues of the Correlation Matrix -->
+
+<!-- We can use the `eigen()` function to compute the eigenvalues of a square matrix. We provide this function the correlation matrix for the model's predictors. To date, I have been using the `correlate()` function to produce correlation matrices. This function produces a formatted output that is nice for displaying the correlation matrix, but, because of its formatting, is not truely a matrix object. Instead, we will use the `cor()` function, which produces a matrix object, to produce the correlation matrix. -->
+
+<!-- ```{r} -->
+<!-- # Correlation matrix of predictors -->
+<!-- x = cor(eeo[c("faculty", "peer", "school")]) -->
+<!-- x -->
+<!-- ``` -->
+
+<!-- Once we have the correlation matrix, we can use the `eigen()` function to compute the eigenvalues (and eigenvectors) of the inputted correlation matrix.  -->
+
+<!-- ```{r} -->
+<!-- # Compute eigenvalues and eigenvectors -->
+<!-- eigen(x) -->
+
+<!-- # Sum of reciprocal of eigenvalues -->
+<!-- sum(1 / eigen(x)$values) -->
+<!-- ``` -->
+
+<!-- We compare the sum of the reciprocal of the eigenvalues to five times the number of predictors; $5 \times 3 =15$. Since this sum is greater than 15, we would conclude that there is a collinearity problem.  -->
 
 
+<!-- ### Condition Indices -->
 
+<!-- One related diagnostic measure of collinearity are the *condition indices* of the correlation matrix. The *j*th condition index is defined as -->
+
+<!-- $$ -->
+<!-- \kappa_j = \sqrt{\frac{\lambda_1}{\lambda_j}} -->
+<!-- $$ -->
+
+<!-- for $j=1,2,3,\ldots,k$, where $\lambda_1$ is the first (largest) eigenvalue and $\lambda_j$ is the *j*th eigenvalue.  -->
+
+<!-- The first condition index, $\kappa_1$, will always be equal to 1, and the other condition indices will be larger than one. The largest condition index, which will be, -->
+
+<!-- $$ -->
+<!-- \kappa_k = \sqrt{\frac{\lambda_1}{\lambda_k}} -->
+<!-- $$ -->
+
+<!-- where $\lambda_k$ is the smallest eigenvalue, is known as the *condition number* of the correlation matrix. If the condition number is small, it indicates that the predictors are not collinear, whereas large condition numbers are evidence supporting collinearity.  -->
+
+<!-- From empirical work, condition numbers that exceed 15 are typically problematic (this indicates that the maximum eigenvalue is more than 225 times greater than the maximum eigenvalue). When the condition number exceeds 30, corrective action will almost surely need to be taken. -->
+
+<!-- ```{r} -->
+<!-- # Compute condition indices -->
+<!-- sqrt(max(eigen(x)$values) / eigen(x)$values) -->
+<!-- ``` -->
+
+<!-- The condition number of 19.26, suggests strong collinearity among the predictors. -->
+
+
+<!-- ## Fixing Collinearity in Practice -->
+
+<!-- Although there are several solutions in practice, none are a magic bullet. Here are three potential fixes: -->
+
+<!-- - Re-specify the model -->
+<!--     - Combine collinear predictors,  -->
+<!--     - Drop one (or more) of the collinear predictors---This changes what you are controlling for. -->
+<!-- - Biased estimation -->
+<!--     - Trade small amount of bias for a reduction in coefficient variability -->
+<!-- - Introduce prior information about the coefficients -->
+<!--     - This can be done formally in the analysis (e.g., Bayesian analysis) -->
+<!--     - It can be used to give a different model specification -->
+
+<!-- Note that although collinearity is a data problem, the most common fixes in practice are to change the model. For example, we could alleviate the collinearity by dropping any two of the predictors and re-fitting the model with only one predictor.  -->
+
+<!-- This would fix the problem, but would be unsatisfactory because the resulting model would not allow us to answer the research question. The highly correlated relationships between the predictors is an inherent characteristic of the data generating process we are studying. This makes it difficult to estimate the individual effects of the predictors. Instead, we could look for underlying causes that would explain the relationships we found among the predictors and perhaps re-formulate the model using these underlying causes. -->
+
+
+# References

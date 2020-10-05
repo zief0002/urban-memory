@@ -39,7 +39,7 @@ This assignment is worth 18 points.
 
 ## Data Set
 
-The data set you will use to answer the questions in this assignment contains measurements for 18 countries on: income inequality (`inequality`), democratic experience (`turnout`), economic development (`energy`), and socialist party strength (`socialist`). Specifically, the variables in the data set are:
+The data set you will use to answer the questions in this assignment (*stack-1979.csv*) contains measurements for 18 countries on: income inequality (`inequality`), democratic experience (`turnout`), economic development (`energy`), and socialist party strength (`socialist`). Specifically, the variables in the data set are:
 
 - `country`: Country name
 - `inequality`: Ratio of the share of income received by the most wealthy population quintile (richest 20\%) to the share received by the poorest 40\% of the population; Higher values indicate more income inequality

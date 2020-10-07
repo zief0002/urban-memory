@@ -5,10 +5,7 @@
 library(broom)
 library(car)
 library(corrr)
-library(dplyr)
-library(ggplot2)
-library(readr)
-library(sm)
+library(tidyverse)
 
 
 
@@ -16,7 +13,7 @@ library(sm)
 ### Import and prepare data
 ##################################################
 
-eeo = read_csv("~/Dropbox/epsy-8264/data/equal-education-opportunity.csv")
+eeo = read_csv("~/Documents/github/epsy-8264/data/equal-education-opportunity.csv")
 head(eeo)
 
 
@@ -39,10 +36,25 @@ influenceIndexPlot(lm.1)
 
 
 # Model-level information
-glance(lm.1)
+print(glance(lm.1), width = Inf)
 
 # Coefficient-level information
-tidy(lm.1)
+tidy(lm.1, conf.int = 0.95)
+
+
+
+##################################################
+### Regress each predictor on the other predictors
+##################################################
+
+# Use faculty as outcome; obtain R2
+summary(lm(faculty ~ 1 + peer + school, data = eeo))$r.squared
+
+# Use faculty as outcome; obtain R2
+summary(lm(peer ~ 1 + faculty + school, data = eeo))$r.squared
+
+# Use faculty as outcome; obtain R2
+summary(lm(school ~ 1 + faculty + peer, data = eeo))$r.squared
 
 
 
@@ -73,24 +85,30 @@ sqrt(vif(lm.1))
 ##################################################
 
 # Correlation matrix of predictors
-x = cor(eeo[c("faculty", "peer", "school")])
-x
+r_xx = cor(eeo[c("faculty", "peer", "school")])
+r_xx
 
 
 # Compute eigenvalues and eigenvectors
-eigen(x)
+eigen(r_xx)
 
 
 # Sum of reciprocal of eigenvalues
-sum(1 / eigen(x)$values)
+sum(1 / eigen(r_xx)$values)
 
 
 
 ##################################################
-### Conditional indices
+### Condition indices
 ##################################################
+
+# Sort eigenvalues from largest to smallest
+lambda = sort(eigen(r_xx)$values, decreasing = TRUE)
+
+# View eigenvalues
+lambda
 
 # Compute condition indices
-sqrt(max(eigen(x)$values) / eigen(x)$values)
+sqrt(max(lambda) / lambda)
 
 

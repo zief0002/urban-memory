@@ -1,0 +1,256 @@
+---
+title: "Combing Variables: PCA and SVD"
+description: | 
+  A brief introduction to methods of combining correlated predictors. Example taken from @Chatterjee:2012.
+author:
+  - name: Andrew Zieffler 
+    url: http://www.datadreaming.org/
+date: "`r Sys.Date()`"
+output:
+  distill::distill_article:
+    highlight: tango
+bibliography: [epsy8264.bib]
+csl: 'style/apa-single-spaced.csl'
+---
+
+
+
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+
+<!-- A brief introduction to empirical diagnostics to detect collinearity. Example taken from @Chatterjee:2012. -->
+
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, fig.width = 6, fig.height = 6)
+library(knitr)
+library(kableExtra)
+library(patchwork)
+```
+
+In 1964, the US Congress passed the Civil Rights Act and also ordered a survey of school districts to evaluate the availability of equal educational opportunity in public education. The results of this survey were reported on in @Coleman:1966 and @Mosteller:1972. The data in *equal-educational-opportunity.csv* consist of data taken from a random sample of 70 schools in 1965. The variables, which have all been mean-centered and standardized, include:
+
+- `achievement`: Measurement indicating the student achievement level
+- `faculty`: Measurement indicating the faculty's credentials
+- `peer`: Measurement indicating the influence of peer groups in the school
+- `school`: Measurement indicating the school facilities (e.g., building, teaching materials)
+
+We will use these data to mimic one of the original regression analyses performed; examining whether the level of school facilities was an important predictor of student achievement after accounting for the variation in faculty credentials and peer influence.
+
+```{r}
+# Load libraries
+library(broom)
+library(car)
+library(corrr)
+library(tidyverse)
+
+# Read in data
+eeo = read_csv("~/Documents/github/epsy-8264/data/equal-education-opportunity.csv")
+head(eeo)
+```
+
+The problem we faced from the last set of notes, was that the predictors in the model were collinear, so we encountered computational issues when trying to estimate the effects and standard errors. 
+
+<br />
+
+
+# Idea of Principal Components
+
+If the *X*-matrix of the predictors were orthogonal, there would be no collinearity issues and we could easily estimate the effects and standard errors. This is, of course, not the case since the predictors are highly correlated. The idea of principal components analysis is to change the basis vectors (coordinate system) so that they are orthogonal. This is shown in the figure below in which we consider the predictor space composed of two of the predictors.
+
+```{r fig.width=8, fig.height=4, fig.show="hold", fig.cap="LEFT: Faculty credential and peer influence measures shown in the coordinate system given by the $(1,0)$-$(0,1)$ basis. RIGHT: The coordinate system has been rotated based on the $(0.763,0.647)$-$(0.647,-0.762)$ basis.", echo=FALSE}
+X = as.matrix(eeo[ , c("faculty", "peer")])
+
+rot = eigen(crossprod(X))$vectors
+new_X = data.frame(X %*% -rot)
+names(new_X) = c("faculty", "peer")
+
+# Original basis
+p1 = ggplot(data = eeo, aes(x = faculty, y = peer)) +
+  geom_point() +
+  geom_hline(yintercept = 0, color = "lightgrey") +
+  geom_vline(xintercept = 0, color = "lightgrey") +
+  geom_segment(x = 0, xend = 1, y = 0, yend = 0, arrow = arrow(length = unit(0.15,"cm")), color = "#E71D36", size = 1.25) +
+  geom_segment(x = 0, xend = 0, y = 0, yend = 1, arrow = arrow(length = unit(0.15,"cm")), color = "#E71D36", size = 1.25) +
+  scale_x_continuous(name = "Standardized measure of faculty's credentials", limits = c(-4, 4)) +
+  scale_y_continuous(name = "Standardized measure of peer group influence", limits = c(-4, 4)) +
+  theme_bw() +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank()
+  )
+
+# Rotated space
+p2 = ggplot(data = eeo, aes(x = faculty, y = peer)) +
+  geom_point()  +
+  geom_abline(intercept = 0, slope = 0.8484635, color = "lightgrey") +
+  geom_abline(intercept = 0, slope = -1.178601, color = "lightgrey") +
+  geom_segment(x = 0, xend = 0.7625172, y = 0, yend = 0.6469680, arrow = arrow(length = unit(0.15,"cm")), color = "#E71D36", size = 1.25) +
+  geom_segment(x = 0, xend = 0.6469680, y = 0, yend = -0.7625172, arrow = arrow(length = unit(0.15,"cm")), color = "#E71D36", size = 1.25) +
+  scale_x_continuous(name = "Standardized measure of faculty's credentials", limits = c(-4, 4)) +
+  scale_y_continuous(name = "Standardized measure of peer group influence", limits = c(-4, 4)) +
+  theme_bw()
+
+# Layout plots
+p1 | p2
+```
+
+If we had considered all three predictors, the plot would be in three-dimensional space and we would need to rotate the coordinate system formed by the basis vectors (1, 0, 0)$-(0, 1, 0)-(0, 0, 1). With three dimensions, of course, we can now rotate in multiple directions. This idea can also be extended to *k*-dimensional space. (For now, we will continue to work with the predictor space defined by the `faculty` and `peer` predictors.)
+
+Recall from our notes on vector geometry, that transforming the coordinates for a point to a new basis is a simple matter of pre-multiplying the vector of original coordinates by the matrix composed of the basis vectors. For example, the first observation had a `faculty` value of 0.608, and a `peer` value of 0.0351. 
+
+```{r}
+# Coordinates in original predictor space (row vector)
+old = t(c(0.608, 0.0351))
+
+# Matrix of new basis vectors
+basis = matrix(c(0.7625172, 0.6469680, 0.6469680, -0.7625172), nrow = 2)
+
+# Coordinates in rotated predictor space
+old %*% basis 
+```
+
+Aside from producing an orthogonal basis, we also choose the principal components so that they maximize variance in the predictor space. For example, the direction of the first basis vector (i.e., the first principal component) is chosen to maximize the variation in the predictor space; in our example the direction with the maximum variance is the long diagonal direction through the data. The second principal component is then chosen to maximize variance in an orthogonal direction to the first principal component. (With only two predictors, there is only one possible direction for thesecond principal component.) This continues until we exhaust the number of principal components.
+
+
+## Determining the Principal Components
+
+Looking at the principal components in Figure 1 (RIGHT), it is clear that they lie in the subspace spanned by the original basis vectors. Because of this, we can express each principal component as a linear combination of the original predictor values. (To facilitate interpretations, all the predictors are typically standardized.) As such, we can write the first principal component as:
+
+$$
+\begin{split}
+\begin{bmatrix}w_{1_1} \\ w_{1_2} \\w_{1_3} \\ \vdots \\w_{1_n} \end{bmatrix} &= c_{1_1}\begin{bmatrix}z_{1_1} \\ z_{1_2} \\z_{1_3} \\ \vdots \\z_{1_n} \end{bmatrix} + c_{2_1}\begin{bmatrix}z_{2_1} \\ z_{2_2} \\z_{2_3} \\ \vdots \\z_{2_n} \end{bmatrix} + \ldots + c_{k_1}\begin{bmatrix}z_{k_1} \\ z_{k_2} \\z_{k_3} \\ \vdots \\z_{k_n} \end{bmatrix} \\[1em]
+\underset{n\times1}{\mathbf{W}_1} &= \underset{n\times k}{\mathbf{Z}}~\underset{k\times1}{\mathbf{C}_1}
+\end{split}
+$$
+
+where $\mathbf{W}_1$ is the basis vector defined by the first principal component, **Z** is the matrix of standardized predictor values, and $\mathbf{C}_1$ is a vector of coefficient weights that produce the desired value in $\mathbf{W}_1$. We can also compute the variance of $\mathbf{W}_1$ as:
+
+$$
+\begin{split}
+S^2_{W_1} &= \dfrac{1}{n-1} \mathbf{W}_1^{\intercal} \mathbf{W}_1 \\[0.5em]
+&= \dfrac{1}{n-1} \big(\mathbf{Z}\mathbf{C}_1\big)^{\intercal}\big(\mathbf{Z}\mathbf{C}_1\big) \\[0.5em]
+&= \dfrac{1}{n-1} \mathbf{C}_1^{\intercal} \mathbf{Z}^{\intercal}\mathbf{Z}\mathbf{C}_1 \\[0.5em]
+&= \mathbf{C}_1^{\intercal}\mathbf{R}_{XX}\mathbf{C}_1
+\end{split}
+$$
+
+where $\mathbf{R}_{XX}$ is the correlation matrix of the predictors (since $\mathbf{R}_{XX} = \dfrac{1}{n-1}\mathbf{Z}^{\intercal}\mathbf{Z}$).
+
+
+
+In general, the rotated coordinates (denoted as $X^{\prime}$) can be computed as:
+
+$$
+\begin{split}
+\mathbf{X}^{\prime} &= \mathbf{X}^{\intercal} \mathbf{W} \\[1em]
+\begin{bmatrix}x^{\prime}_{11} \\ x^{\prime}_{21} \\ \vdots \\x^{\prime}_{n1}\end{bmatrix} &= \begin{bmatrix}x_{11} & x_{21}\end{bmatrix}\begin{bmatrix}\mathrm{w}_{11} & \mathrm{w}_{21} \\ \mathrm{w}_{21} & \mathrm{w}_{22}\end{bmatrix}  \\[1em]
+x^{\prime}_{11} &= \mathrm{w}_{11} (x_{11}) + \mathrm{w}_{21} (x_{21}) \\
+x^{\prime}_{21}  &= \mathrm{w}_{21} (x_{11}) + \mathrm{w}_{22} (x_{21})
+\end{split}
+$$
+
+where $\mathbf{X}^{\intercal}$ is the row vector of the original predictor values and **W** is the orthogonal basis matrix for the rotated coordinate system; the vector $(w_{11}, w_{21})$ is the vector of the first principal component and vector $(w_{21}, w_{22})$ is the second principal component.
+
+<aside>
+In other words, the coordinates in the rotated predictor space are just a linear combination of the coordinates in the original predictor space, weighted by the principal component values.
+</aside>
+
+
+
+Mathematically, the variance of the first principal component is,
+
+$$
+S^2_{\mathrm{W_1}} = 
+$$
+
+It is convenient to show the rotated coordinate system in the horizontal and vertical directions. Conceptually it would be like rotating the entire RIGHT plot in the previous figure to re-orient the axes. The figure below, shows the rotated predictor space after re-orienting the rotated coordinate system. 
+
+```{r fig.width=6, fig.height=6, fig.cap="Rotated predictor space after re-orienting the rotated coordinate system to the horizontal and vertical positions. The rotated basis vecors are referred to as prinicpl components.", echo=FALSE}
+ggplot(data = new_X, aes(x = faculty, y = peer)) +
+  geom_point() +
+  geom_hline(yintercept = 0, color = "lightgrey") +
+  geom_vline(xintercept = 0, color = "lightgrey") +
+  geom_segment(x = 0, xend = 1, y = 0, yend = 0, arrow = arrow(length = unit(0.15,"cm")), color = "#E71D36", size = 1.25) +
+  geom_segment(x = 0, xend = 0, y = 0, yend = 1, arrow = arrow(length = unit(0.15,"cm")), color = "#E71D36", size = 1.25) +
+  scale_x_continuous(name = "Principal Component 1", limits = c(-4, 4)) +
+  scale_y_continuous(name = "Principal Component 2", limits = c(-4, 4)) +
+  theme_bw() +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank()
+  )
+```
+
+Since 
+
+
+
+
+To examine the RQ, the following model was posited:
+
+$$
+\mathrm{Achievement}_i = \beta_0 + \beta_1(\mathrm{Faculty}_i) + \beta_2(\mathrm{Peer}_i) + \beta_3(\mathrm{School}_i) + \epsilon_i
+$$
+
+<!-- ```{r fig.width=6, fig.height=6, out.width='50%'} -->
+<!-- X = model.matrix(lm.1)[ , -c(1,4)] -->
+
+<!-- rot = eigen(crossprod(X))$vectors -->
+<!-- new_X = data.frame(X %*% -rot) -->
+<!-- names(new_X) = c("faculty", "peer") -->
+
+<!-- eeo2 = rbind(eeo[ , c("faculty", "peer")], new_X) %>% -->
+<!--   mutate(data_set = c(rep("Orignal", 70), rep("Rotated", 70))) -->
+
+<!-- library(gganimate) -->
+
+
+<!-- ggplot(data = eeo, aes(x = faculty, y = peer)) + -->
+<!--   geom_point() + -->
+<!--   geom_segment(x = 0, xend = 1, y = 0, yend = 0, arrow = arrow(length = unit(0.1,"cm"))) + -->
+<!--   geom_segment(x = 0, xend = 0, y = 0, yend = 1, arrow = arrow(length = unit(0.1,"cm"))) + -->
+<!--   scale_x_continuous(name = "Standardized measure of faculty's credentials", limits = c(-3, 3)) + -->
+<!--   scale_y_continuous(name = "Standardized measure of peer group influence", limits = c(-3, 3)) + -->
+<!--   theme_bw() + -->
+<!--   geom_segment(x = 0, xend = -0.7625172, y = 0, yend = -0.6469680, arrow = arrow(length = unit(0.1,"cm")), col = "red") + -->
+<!--   geom_segment(x = 0, xend = 0.6469680, y = 0, yend = -0.7625172, arrow = arrow(length = unit(0.1,"cm")), col = "red") -->
+
+<!-- # Rotated space -->
+<!-- ggplot(data = eeo2, aes(x = faculty, y = peer)) + -->
+<!--   geom_point() + -->
+<!--   geom_segment(x = 0, xend = 1, y = 0, yend = 0, arrow = arrow(length = unit(0.1,"cm"))) + -->
+<!--   geom_segment(x = 0, xend = 0, y = 0, yend = 1, arrow = arrow(length = unit(0.1,"cm"))) + -->
+<!--   scale_x_continuous(name = "Standardized measure of faculty's credentials", limits = c(-4, 4)) + -->
+<!--   scale_y_continuous(name = "Standardized measure of peer group influence", limits = c(-4, 4)) + -->
+<!--   theme_bw() -->
+
+
+
+<!-- ggplot(data = eeo2, aes(x = faculty, y = peer)) + -->
+<!--   geom_point() + -->
+<!--   #geom_segment(x = 0, xend = 1, y = 0, yend = 0, arrow = arrow(length = unit(0.1,"cm"))) + -->
+<!--   #geom_segment(x = 0, xend = 0, y = 0, yend = 1, arrow = arrow(length = unit(0.1,"cm"))) + -->
+<!--   scale_x_continuous(name = "Standardized measure of faculty's credentials", limits = c(-4, 4)) + -->
+<!--   scale_y_continuous(name = "Standardized measure of peer group influence", limits = c(-4, 4)) + -->
+<!--   theme_bw() + -->
+<!--   transition_states(data_set, -->
+<!--                     transition_length = 2, -->
+<!--                     state_length = 1) -->
+
+<!-- ``` -->
+
+
+
+<br />
+
+
+
+
+
+# References

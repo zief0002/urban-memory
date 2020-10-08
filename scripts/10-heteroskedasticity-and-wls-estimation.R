@@ -5,9 +5,8 @@
 library(broom)
 library(car)
 library(corrr)
-library(dplyr)
-library(ggplot2)
-library(readr)
+library(tidyverse)
+
 
 
 
@@ -15,7 +14,7 @@ library(readr)
 ### Import and prepare data
 ##################################################
 
-slid = read_csv("~/Dropbox/epsy-8264/data/slid.csv")
+slid = read_csv(here::here("data/slid.csv"))
 head(slid)
 
 

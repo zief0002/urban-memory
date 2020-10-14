@@ -44,6 +44,43 @@ tidy(lm.1, conf.int = 0.95)
 
 
 ##################################################
+### Toy example showing model mis-specification
+##################################################
+
+# Create design matrix
+X = data.frame(
+  b_0 = rep(1, 5),
+  employed = c(1, 1, 0, 0, 1),
+  not_employed = c(0, 0, 1, 1, 0)
+)
+
+
+# View design matrix
+X
+
+
+# Check rank of matrix
+Matrix::rankMatrix(X)
+
+
+# Create vector of outcomes
+Y = c(15, 15, 10, 15, 30)
+
+# Create data frame of Y and X
+my_data = cbind(Y, X)
+my_data
+
+
+# Coefficients (including all three terms)
+coef(lm(Y ~ 1 + employed + not_employed, data = my_data))
+
+
+# Coefficients (omitting intercept)
+coef(lm(Y ~ -1 + employed + not_employed, data = my_data))
+
+
+
+##################################################
 ### Regress each predictor on the other predictors
 ##################################################
 

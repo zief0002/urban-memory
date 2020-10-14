@@ -197,6 +197,7 @@ In this unit we will learn some of the basic linear/matrix algebra that is usefu
 **In Class**
 
 - [Collinearity Diagnostics](https://zief0002.github.io/epsy-8264/misc/09-collinearity-diagnostics.html) [Course Notes]
+- [Script File](https://raw.githubusercontent.com/zief0002/epsy-8264/master/scripts/09-collinearity-diagnostics.R) [R script]
 
 
 **Additional Resources**
@@ -222,6 +223,7 @@ In this unit we will learn some of the basic linear/matrix algebra that is usefu
 **In Class**
 
 - First part of [Principal Components Analysis](https://zief0002.github.io/epsy-8264/misc/10-principal-components-analysis.html) [Course Notes]
+- [Script File](https://raw.githubusercontent.com/zief0002/epsy-8264/master/scripts/10-principal-components-analysis.R) [R script]
 
 
 **Additional Resources**
@@ -245,6 +247,7 @@ In this unit we will learn some of the basic linear/matrix algebra that is usefu
 **In Class**
 
 - Second part of [Principal Components Analysis](https://zief0002.github.io/epsy-8264/misc/10-principal-components-analysis.html) [Course Notes]
+- [Script File](https://raw.githubusercontent.com/zief0002/epsy-8264/master/scripts/10-principal-components-analysis.R) [R script]
 
 
 **Additional Resources**

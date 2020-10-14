@@ -91,8 +91,8 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
   
   
   <!--  https://schema.org/Article -->
-  <meta property="article:published" itemprop="datePublished" content="2020-10-12" />
-  <meta property="article:created" itemprop="dateCreated" content="2020-10-12" />
+  <meta property="article:published" itemprop="datePublished" content="2020-10-14" />
+  <meta property="article:created" itemprop="dateCreated" content="2020-10-14" />
   <meta name="article:author" content="Andrew Zieffler" />
   
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
@@ -113,7 +113,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
   <!--radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output","bibliography","csl"]}},"value":[{"type":"character","attributes":{},"value":["Principal Components Analysis: Creating Linear Composites of Predictors"]},{"type":"character","attributes":{},"value":["A brief introduction to methods of combining correlated predictors. Example taken from @Chatterjee:2012.\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Andrew Zieffler"]},{"type":"character","attributes":{},"value":["http://www.datadreaming.org/"]}]}]},{"type":"character","attributes":{},"value":["2020-10-12"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["highlight"]}},"value":[{"type":"character","attributes":{},"value":["tango"]}]}]},{"type":"character","attributes":{},"value":["epsy8264.bib"]},{"type":"character","attributes":{},"value":["style/apa-single-spaced.csl"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output","bibliography","csl"]}},"value":[{"type":"character","attributes":{},"value":["Principal Components Analysis: Creating Linear Composites of Predictors"]},{"type":"character","attributes":{},"value":["A brief introduction to methods of combining correlated predictors. Example taken from @Chatterjee:2012.\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Andrew Zieffler"]},{"type":"character","attributes":{},"value":["http://www.datadreaming.org/"]}]}]},{"type":"character","attributes":{},"value":["2020-10-14"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["highlight"]}},"value":[{"type":"character","attributes":{},"value":["tango"]}]}]},{"type":"character","attributes":{},"value":["epsy8264.bib"]},{"type":"character","attributes":{},"value":["style/apa-single-spaced.csl"]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   
@@ -2180,7 +2180,7 @@ distill-header .nav a {
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Principal Components Analysis: Creating Linear Composites of Predictors","description":"A brief introduction to methods of combining correlated predictors. Example taken from @Chatterjee:2012.","authors":[{"author":"Andrew Zieffler","authorURL":"http://www.datadreaming.org/","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2020-10-12T00:00:00.000-05:00","citationText":"Zieffler, 2020"}
+{"title":"Principal Components Analysis: Creating Linear Composites of Predictors","description":"A brief introduction to methods of combining correlated predictors. Example taken from @Chatterjee:2012.","authors":[{"author":"Andrew Zieffler","authorURL":"http://www.datadreaming.org/","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2020-10-14T00:00:00.000-05:00","citationText":"Zieffler, 2020"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2199,7 +2199,7 @@ distill-header .nav a {
 <div class="d-byline">
   Andrew Zieffler <a href="http://www.datadreaming.org/" class="uri">http://www.datadreaming.org/</a> 
   
-<br />2020-10-12
+<br />2020-10-14
 </div>
 
 <div class="d-article">
@@ -2456,6 +2456,9 @@ peer     0.647 -0.763</code></pre>
 <pre><code>           [,1]      [,2]
 [1,] -0.4187435 0.3699085</code></pre>
 </div>
+<aside>
+Because we want the prinicpal components to be soley functions of the predictors, we mean center them. Otherwise we would have to include a column of ones (intercept) in the <strong>X</strong> matrix. Mean centering the variables makes each variable orthogonal to the intercept, in which case it can be ignored. (This is simlar to how mean centering predictors removes the intercept from the fitted equation.)
+</aside>
 <p>Since we only have two principal components, we can visualize the scores using a scatterplot.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -2961,10 +2964,7 @@ school  -0.5804634  0.05130072  0.8126687</code></pre>
 <aside>
 Here the results from using the correlation matrix are not that different as the variables were already <em>z</em>-scores.
 </aside>
-<!-- To examine the RQ, the following model was posited: -->
-<!-- $$ -->
-<!-- \mathrm{Achievement}_i = \beta_0 + \beta_1(\mathrm{Faculty}_i) + \beta_2(\mathrm{Peer}_i) + \beta_3(\mathrm{School}_i) + \epsilon_i -->
-<!-- $$ -->
+<p>Typically applied researchers will use the correlation matrix rather than the covariance matrix to perform a PCA. Working on the correlation matrix is akin to working with standardized variables. (In fact the correlation matrix is simply the variance–covariance matrix of the standardized predictors.) This protects the PCA from being dominated by variables with numerically large scales. It also is helpful when the predictors are measured using qualitatively different scales (e.g., one is measured in dollars and another in years of education).</p>
 <!-- ```{r fig.width=6, fig.height=6, out.width='50%'} -->
 <!-- X = model.matrix(lm.1)[ , -c(1,4)] -->
 <!-- rot = eigen(crossprod(X))$vectors -->

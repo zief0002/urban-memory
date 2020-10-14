@@ -271,6 +271,10 @@ old = t(c(0.608 - mean(eeo$faculty), 0.0351 - mean(eeo$peer)))
 old %*% basis
 ```
 
+<aside>
+Because we want the prinicpal components to be soley functions of the predictors, we mean center them. Otherwise we would have to include a column of ones (intercept) in the **X** matrix. Mean centering the variables makes each variable orthogonal to the intercept, in which case it can be ignored. (This is simlar to how mean centering predictors removes the intercept from the fitted equation.)
+</aside>
+
 Since we only have two principal components, we can visualize the scores using a scatterplot.
 
 ```{r fig.width=6, fig.height=6, fig.cap="Rotated predictor space using the principal components as the new basis."}
@@ -553,14 +557,9 @@ Here the results from using the correlation matrix are not that different as the
 </aside>
 
 
+Typically applied researchers will use the correlation matrix rather than the covariance matrix to perform a PCA. Working on the correlation matrix is akin to working with standardized variables. (In fact the correlation matrix is simply the variance--covariance matrix of the standardized predictors.) This protects the PCA from being dominated by variables with numerically large scales. It also is helpful when the predictors are measured using qualitatively different scales (e.g., one is measured in dollars and another in years of education).
 
 
-
-<!-- To examine the RQ, the following model was posited: -->
-
-<!-- $$ -->
-<!-- \mathrm{Achievement}_i = \beta_0 + \beta_1(\mathrm{Faculty}_i) + \beta_2(\mathrm{Peer}_i) + \beta_3(\mathrm{School}_i) + \epsilon_i -->
-<!-- $$ -->
 
 <!-- ```{r fig.width=6, fig.height=6, out.width='50%'} -->
 <!-- X = model.matrix(lm.1)[ , -c(1,4)] -->

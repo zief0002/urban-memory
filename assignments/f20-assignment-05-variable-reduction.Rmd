@@ -1,6 +1,6 @@
 ---
 title: "Assignment 05"
-author: "Collinearity and PCA"
+author: "Variable Reduction"
 header-includes:
    - \usepackage{xcolor}
    - \usepackage{mathtools}

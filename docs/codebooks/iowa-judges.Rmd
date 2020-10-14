@@ -3,6 +3,8 @@ title: "iowa-judges.csv"
 output: 
   rmdformats::html_docco:
     css: 'codebooks.css'
+bibliography: '../../notes/epsy8264.bib'
+csl: '../../notes/style/apa-single-spaced.csl'    
 ---
 
 
@@ -12,24 +14,44 @@ library(rmdformats)
 library(fontawesome)
 
 ## Global options
-options(max.print="75")
-opts_chunk$set(echo=FALSE,
-               prompt=FALSE,
-               tidy=TRUE,
-               comment=NA,
-               message=FALSE,
-               warning=FALSE)
-opts_knit$set(width=75)
+options(max.print = "75")
+opts_chunk$set(
+  echo = FALSE,
+  prompt = FALSE,
+  tidy = TRUE,
+  comment = NA,
+  message = FALSE,
+  warning = FALSE
+  )
+opts_knit$set(width = 75)
 ```
 
 
-The data in [contraception.csv](https://github.com/zief0002/epsy-8264/raw/master/data/contraception.csv) were collected from several sources (e.g., World Bank). The variables are:
+The Iowa State Bar Association has conducted the Judicial Performance Review as a way of giving voters information on the Iowa judges up for retention in an election year. Judges are evaluated on their professional competence and demeanor as determined by the attorneys who frequently appeared before them. The attorneys also indicate whether or not they believe the judge should be retained. The data in [iowa-judges.csv](https://github.com/zief0002/epsy-8264/raw/master/data/iowa-judges.csv) were published by the @The-Iowa-State-Bar-Association:2018. The variables are:
 
-- `country`: Country name
-- `region`: Region of the world
-- `contraceptive`: Percentage of women who are practicing, or whose sexual partners are practicing, any form of contraception. It is usually measured for women ages 15&ndash;49 who are married or in union.
-- `educ_female`: Average number of years of formal education (schooling) for females
-- `gni`: Categorical measure of the economy indicating if the country has a low or high gross national income
+- `year`: Year of the judicial performance review
+- `judge`: Name of the judge
+- `district`: Judicial district
+- `respondents`: Number of attorneys who rated the judge
+- `retention`: Percentage of attorneys who indicated the judge should be retained
+
+The following characteristics were rated on the scale: 5 (Excellent; performance is outstanding), 4 (Good; performance is above average), 3 (Satisfactory; performance is adequate), 2 (Deficient; performance is below average), 1 (Very Poor; performance is well below average and unacceptable).
+
+- `knowledge`: Knowledge and application of the law
+- `perception`: Perception of factual issues
+- `punctuality`: Punctuality for court proceedings
+- `attention`: Attentiveness to evidence and arguments
+- `management`: Management and control of the courtroom
+- `demeanor`: Temperament and demeanor 
+- `clarity`: Clarity and quality of written opinions
+- `promptness`: Promptness of rulings and decisions
+
+The following characteristics were rated on the scale: 5 (Strongly Agree), 4 (Agree), 3 (Neither), 2 (Disagree), 1 (Strongly Disagree)
+
+- `criticism`: Avoids undue personal observations or criticisms of litigants, judges and lawyers from bench or in written opinions
+- `decision`: Decides cases on basis of applicable law and fact, not affected by outside influence.
+- `courteous`: Is courteous and patient with litigants, lawyers and court personnel.
+- `equality`: Treats people equally regardless of race, gender, age, national origin, religion, sexual orientation, socio-economic status or disability.
 
 
 
@@ -37,17 +59,12 @@ The data in [contraception.csv](https://github.com/zief0002/epsy-8264/raw/master
 ### Preview
 
 ```{r}
-contraception = readr::read_csv(file = "~/Documents/github/epsy-8264/data/contraception.csv")
-head(contraception)
+judges = readr::read_csv(file = "~/Documents/github/epsy-8264/data/iowa-judges.csv")
+print(head(judges), width = Inf)
 ```
 
 
 ### References
 
 
-Roser, M. (2017). [Fertility rate](https://ourworldindata.org/fertility-rate#empowerment-of-women). *Our world in data*.
-
-UNICEF. (2016). [State of the world's children 2016](https://www.unicef.org/publications/files/UNICEF_SOWC_2016.pdf). *United Nations Population Division's World Contraceptive Use, household surveys including Demographic and Health Surveys and Multiple Indicator Cluster Surveys.*
-
-World Bank (2019). [World Bank open data](https://data.worldbank.org/). 
 

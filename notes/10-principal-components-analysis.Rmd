@@ -496,6 +496,10 @@ lambda
 lambda / sum(lambda)
 ```
 
+<aside>
+If the SVD is carried out on the correlation matrix of the predictors rather than the variance--covariance matrix, the values in **D** are the $\lambda$ values. Note also that the `cov()` function in R produced a variance--covariance matrix that has already been divided by $n-1$, so if that is the input to the SVD, then there is also no need to divide by $n-1$ in the 
+</aside>
+
 The principal component scores can be obtained by postmultiplying the mean centered predictor matrix **X** by the **V** matrix.
 
 ```{r}

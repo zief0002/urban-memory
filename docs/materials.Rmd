@@ -222,7 +222,7 @@ In this unit we will learn some of the basic linear/matrix algebra that is usefu
 
 **In Class**
 
-- First part of [Principal Components Analysis](https://zief0002.github.io/epsy-8264/misc/10-principal-components-analysis.html) [Course Notes]
+- First part of [Principal Components Analysis](https://zief0002.github.io/epsy-8264/misc/10-principal-components-analysis.html) [Course Notes] <span style="margin-left:5px; color:#5a067d;font-size:12px;">*[Updated 10-14-2020]*</span>
 - [Script File](https://raw.githubusercontent.com/zief0002/epsy-8264/master/scripts/10-principal-components-analysis.R) [R script]
 
 

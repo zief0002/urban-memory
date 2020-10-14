@@ -2732,6 +2732,9 @@ $v
 </div>
 <pre><code>[1] 9.998221e-01 1.700926e-04 7.764017e-06</code></pre>
 </div>
+<aside>
+If the SVD is carried out on the correlation matrix of the predictors rather than the variance–covariance matrix, the values in <strong>D</strong> are the <span class="math inline">\(\lambda\)</span> values. Note also that the <code>cov()</code> function in R produced a variance–covariance matrix that has already been divided by <span class="math inline">\(n-1\)</span>, so if that is the input to the SVD, then there is also no need to divide by <span class="math inline">\(n-1\)</span> in the
+</aside>
 <p>The principal component scores can be obtained by postmultiplying the mean centered predictor matrix <strong>X</strong> by the <strong>V</strong> matrix.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">

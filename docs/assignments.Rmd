@@ -63,7 +63,7 @@ Below are the due dates for the assignments, as well as links to the PDF file fo
 </tr>
 
 <tr>
-<td>Assignment \#5: *Variable Reduction*</td>
+<td>Assignment \#5: *Variable Reduction*<br /><span style="margin-left:5px; color:#5a067d;font-size:12px;">*[Updated 10-14-2020]*</span></td>
 <td>Nov. 10</td>
 <td align="center" style="vertical-align:middle;">
   <a href="https://github.com/zief0002/epsy-8264/raw/master/assignments/f20-assignment-05-variable-reduction.pdf">

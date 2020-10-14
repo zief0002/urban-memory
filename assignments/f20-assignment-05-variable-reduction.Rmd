@@ -66,9 +66,9 @@ In 2018, Iowa attorneys rated the 64 judges who were up for election on 12 diffe
 
 In this section you are going to carry out the principal components analysis by using singular value decomposition on the correlation matrix of the predictors.
 
-9. Carry out the singular value decomposition on the variance--covariance matrix of the predictors. Report the **D** matrix. 
+9. Carry out the singular value decomposition on the correlation matrix of the predictors. Report the **D** matrix. 
 
-10. Calculate and report the variance for the first principal component based on the values from the **D** matrix. Show your work.
+10. Report the standard deviation for the first principal component based on the values from the **D** matrix. Show your work.
 
 11. Compute and interpret the proportion of variance accounted for by the first principal component. Show your work.
 

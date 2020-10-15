@@ -148,7 +148,7 @@ In this unit we will learn some of the basic linear/matrix algebra that is usefu
 **In Class**
 
 - First part of [Dealing with Heteroskedasticity](https://zief0002.github.io/epsy-8264/misc/08-heteroskedasticity-and-wls.html) [Course Notes]
-- [Script File](https://raw.githubusercontent.com/zief0002/epsy-8264/master/scripts/08-heteroskedasticity.R) [R script]
+- [Script File](https://raw.githubusercontent.com/zief0002/epsy-8264/master/scripts/08-heteroskedasticity-and-wls-estimation.R) [R script]
 
 
 **Additional Resources**

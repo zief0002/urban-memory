@@ -73,12 +73,12 @@ Below are the due dates for the assignments, as well as links to the PDF file fo
 </tr>
 
 <tr>
-<td>Assignment \#6: *Shrinkage*</td>
+<td>Assignment \#6: *Shrinkage Methods*</td>
 <td>Nov. 24</td>
 <td align="center" style="vertical-align:middle;">
-  <!-- <a href="https://github.com/zief0002/epsy-8264/raw/master/assignments/assignment-06-regression-assumptions.pdf"> -->
-  <!--   <span class="fa fa-file-pdf" style="color: #ff2600; font-size: 20px;"></span> -->
-  <!-- </a> -->
+  <a href="https://github.com/zief0002/epsy-8264/raw/master/assignments/f20-assignment-06-shrinkage-methods.pdf">
+    <span class="fa fa-file-pdf" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
 </td>
 </tr>
 

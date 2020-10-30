@@ -1,0 +1,57 @@
+---
+title: "states-2019.csv"
+output: 
+  rmdformats::html_docco:
+    css: 'codebooks.css'
+bibliography: '../../notes/epsy8264.bib'
+csl: '../../notes/style/apa-single-spaced.csl'  
+---
+
+
+```{r knitr_init, echo=FALSE, cache=FALSE}
+library(knitr)
+library(rmdformats)
+library(fontawesome)
+
+## Global options
+options(max.print = "75")
+opts_chunk$set(
+  echo = FALSE,
+  prompt = FALSE,
+  tidy = TRUE,
+  comment = NA,
+  message = FALSE,
+  warning = FALSE
+  )
+opts_knit$set(width = 75)
+```
+
+
+The data in [states-2019.csv](https://github.com/zief0002/epsy-8264/raw/master/data/states-2019.csv) include statistics collected from Wikipedia, the 2019 American Community Survey, and the National Centers for Environmental Information. The attributes in the data are:
+
+- `state`: State/territory name
+- `life_expectancy`: Life expectancy (in years)
+- `population`: Population estimate (in millions)
+- `income`: Per capita income (in thousands of dollars)
+- `illiteracy`: Illiteracy rate (in percent)
+- `murder`: Murder and non-negligent manslaughter rate (per 100,000 population)
+- `hs_grad`: Percentage of high school graduates
+- `frost`: Mean number of days with minimum temperature below freezing
+- `area`: Land area (in square miles)
+
+
+
+
+### Preview
+
+```{r}
+usa = readr::read_csv(file = "~/Documents/github/epsy-8264/data/states-2019.csv")
+print(head(usa), width = Inf)
+```
+
+
+### References
+
+
+
+

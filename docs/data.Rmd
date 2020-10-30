@@ -355,6 +355,20 @@ Below are the links to the data sets and data codebooks used in the notes, scrip
 </tr>
 
 <tr>
+<td>states-2019.csv</td>
+<td align="center" style="vertical-align:middle;">
+  <a href="https://github.com/zief0002/epsy-8264/raw/master/data/states-2019.csv">
+    <span class="fas fa-file-csv" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
+</td>
+<td align="center" style="vertical-align:middle;">
+  <a href="codebooks/states-2019.html" target="_blank">
+    <span class="fas fa-book-open" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
+</td>
+</tr>
+
+<tr>
 <td>tokyo-water-use.csv</td>
 <td align="center" style="vertical-align:middle;">
   <a href="https://github.com/zief0002/epsy-8264/raw/master/data/tokyo-water-use.csv">

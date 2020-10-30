@@ -271,13 +271,39 @@ In this unit we will learn some of the basic linear/matrix algebra that is usefu
 **In Class**
 
 - [Shrinkage Methods: Ridge Regression](https://zief0002.github.io/epsy-8264/misc/11-shrinkage-methods-ridge-regression.html) [Course Notes]
-- [Script File](https://raw.githubusercontent.com/zief0002/epsy-8264/master/scripts/11-shrinkage-methods-ridge-regression.R) [R script]
+- [Script File 1](https://raw.githubusercontent.com/zief0002/epsy-8264/master/scripts/11-shrinkage-methods-ridge-regression.R) [R script]
+- [Script File 2](https://raw.githubusercontent.com/zief0002/epsy-8264/master/scripts/11-shrinkage-methods-ridge-regression-02.R) [R script]
 
 
 **Additional Resources**
 
 - James, G., Witten, D., Hastie, T., &amp; Tibshirani, R. (2013). [An introduction to statistical learning: with applications in R](https://www-bcf.usc.edu/~gareth/ISL/). New York: Springer.
 - [Statistical Learning MOOC](https://lagunita.stanford.edu/courses/HumanitiesSciences/StatLearning/Winter2016/about) taught by Hastie and Tibshirani
+
+
+<br />
+
+---
+
+
+### Model Selection (Nov. 05--17)
+
+**Prior to Class:**
+
+- Heinze, G., Wallisch, C., &amp; Dunkler, D. (2018). [Variable selection --- A review and recommendations for the practicing statistician.](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5969114/) *Biometrical Journal. Biometrische Zeitschrift, 60*(3), 431--449. https://doi.org/10.1002/bimj.201700067
+
+
+**In Class**
+
+<!-- - [Shrinkage Methods: Ridge Regression](https://zief0002.github.io/epsy-8264/misc/11-shrinkage-methods-ridge-regression.html) [Course Notes] -->
+<!-- - [Script File 1](https://raw.githubusercontent.com/zief0002/epsy-8264/master/scripts/11-shrinkage-methods-ridge-regression.R) [R script] -->
+<!-- - [Script File 2](https://raw.githubusercontent.com/zief0002/epsy-8264/master/scripts/11-shrinkage-methods-ridge-regression-02.R) [R script] -->
+
+
+**Additional Resources**
+
+<!-- - James, G., Witten, D., Hastie, T., &amp; Tibshirani, R. (2013). [An introduction to statistical learning: with applications in R](https://www-bcf.usc.edu/~gareth/ISL/). New York: Springer. -->
+<!-- - [Statistical Learning MOOC](https://lagunita.stanford.edu/courses/HumanitiesSciences/StatLearning/Winter2016/about) taught by Hastie and Tibshirani -->
 
 
 <br />

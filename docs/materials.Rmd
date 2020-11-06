@@ -202,7 +202,7 @@ In this unit we will learn some of the basic linear/matrix algebra that is usefu
 
 **Additional Resources**
 
-- N/A
+- Cook, D. (2019). [How to use a tour to check if your model suffers from multicollinearity.](http://dicook.org/2019/09/13/touring-to-check-for-multicollinearity/) Personal blog.
 
 
 <br />
@@ -228,7 +228,7 @@ In this unit we will learn some of the basic linear/matrix algebra that is usefu
 
 **Additional Resources**
 
-- Many. Google "PCA" and "eigendecomposition".
+- Wilke, C. O. (2020). [PCA tidyverse style.](https://clauswilke.com/blog/2020/09/07/pca-tidyverse-style/) Personal blog.
 
 
 <br />
@@ -277,6 +277,7 @@ In this unit we will learn some of the basic linear/matrix algebra that is usefu
 
 **Additional Resources**
 
+- Cross-Validated. (2014). [Why is ridge regression called "ridge", why is it needed, and what happens when $\lambda$ goes to infinity?](https://stats.stackexchange.com/questions/151304/why-is-ridge-regression-called-ridge-why-is-it-needed-and-what-happens-when).
 - James, G., Witten, D., Hastie, T., &amp; Tibshirani, R. (2013). [An introduction to statistical learning: with applications in R](https://www-bcf.usc.edu/~gareth/ISL/). New York: Springer.
 - [Statistical Learning MOOC](https://lagunita.stanford.edu/courses/HumanitiesSciences/StatLearning/Winter2016/about) taught by Hastie and Tibshirani
 
@@ -286,7 +287,7 @@ In this unit we will learn some of the basic linear/matrix algebra that is usefu
 ---
 
 
-### Model Selection (Nov. 05--17)
+### Model Selection (Nov. 05--10)
 
 **Prior to Class:**
 
@@ -295,15 +296,45 @@ In this unit we will learn some of the basic linear/matrix algebra that is usefu
 
 **In Class**
 
-<!-- - [Shrinkage Methods: Ridge Regression](https://zief0002.github.io/epsy-8264/misc/11-shrinkage-methods-ridge-regression.html) [Course Notes] -->
-<!-- - [Script File 1](https://raw.githubusercontent.com/zief0002/epsy-8264/master/scripts/11-shrinkage-methods-ridge-regression.R) [R script] -->
-<!-- - [Script File 2](https://raw.githubusercontent.com/zief0002/epsy-8264/master/scripts/11-shrinkage-methods-ridge-regression-02.R) [R script] -->
+- [Model Selection](https://github.com/zief0002/epsy-8264/raw/master/notes/12-model-selection.pdf) [Course Notes]
+- [Script File 1](https://raw.githubusercontent.com/zief0002/epsy-8264/master/scripts/12-model-selection.R) [R script]
 
 
 **Additional Resources**
 
-<!-- - James, G., Witten, D., Hastie, T., &amp; Tibshirani, R. (2013). [An introduction to statistical learning: with applications in R](https://www-bcf.usc.edu/~gareth/ISL/). New York: Springer. -->
-<!-- - [Statistical Learning MOOC](https://lagunita.stanford.edu/courses/HumanitiesSciences/StatLearning/Winter2016/about) taught by Hastie and Tibshirani -->
+- [olsrr Vignette](https://cran.r-project.org/web/packages/olsrr/vignettes/intro.html)
+- Williams, B., Hansen, G., Baraban, A., &amp; Santoni, A. (2015). [A practical approach to variable selection---A comparison of various techniques.](https://www.casact.org/pubs/forum/15sumforum/Williams-Hansen-Baraban-Santoni.pdf) *Casualty Actuarial Society E-Forum, Summer*, 1--20.
+
+
+<br />
+
+---
+
+
+### Cross-Validation (Nov. 12--17)
+
+**Prior to Class:**
+
+- Feick, L. (2019). [Evaluating model performance by building cross-validation from scratch.](https://www.statworx.com/de/blog/evaluating-model-performance-by-building-cross-validation-from-scratch/) STATWORX Blog.
+
+
+**In Class**
+
+- [Cross-Validation](https://zief0002.github.io/epsy-8264/misc/13-cross-validation.html) [Course Notes]
+- [Script File](https://raw.githubusercontent.com/zief0002/epsy-8264/master/scripts/13-cross-validation.R) [R script]
+- [Shrinkage Methods: LASSO and Elastic Net](https://zief0002.github.io/epsy-8264/misc/14-shrinkage-methods-lasso-and-elastic-net.html) [Course Notes]
+- [Script File](https://raw.githubusercontent.com/zief0002/epsy-8264/master/scripts/14-shrinkage-methods-lasso-and-elastic-net.R) [R script]
+
+
+**Additional Resources**
+
+- Brownlee, J. (2018). [A gentle introduction to k-fold cross-validation.](https://machinelearningmastery.com/k-fold-cross-validation/) Machine Learning Mastery.
+- Bryan, J. (n.d.). [purrr tutorial.](https://jennybc.github.io/purrr-tutorial/)
+- Hastie, T., &amp; Qian, J. (2014). [Glmnet vignette.](https://web.stanford.edu/~hastie/glmnet/glmnet_alpha.html)
+- log0. (2018). [Differences between L1 and L2 as loss function and regularization.](http://www.chioka.in/differences-between-l1-and-l2-as-loss-function-and-regularization/)
+- McCammon, J. (2014). [Lasso and ridge regression in R.](https://jamesmccammon.com/2014/04/20/lasso-and-ridge-regression-in-r/)
+- Zou, H., &amp; Hastie, T. (2005). [Regularization and variable selection via the elastic net.](https://web.stanford.edu/~hastie/Papers/B67.2%20(2005)%20301-320%20Zou%20&%20Hastie.pdf) *Journal of the Royal Statistical Society (Series B), 67*, Part 2, 301–-320.
+
 
 
 <br />

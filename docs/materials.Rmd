@@ -339,5 +339,29 @@ In this unit we will learn some of the basic linear/matrix algebra that is usefu
 
 <br />
 
+
+### Piecewise Regression (Nov. 19-- Dec. 03)
+
+**Prior to Class:**
+
+- Nothing.
+
+
+**In Class**
+
+- [Piecewise Regression](https://zief0002.github.io/epsy-8264/misc/15-piecewise-regression.html) [Course Notes]
+- [Script File](https://raw.githubusercontent.com/zief0002/epsy-8264/master/scripts/15-piecewise-regression.R) [R script]
+
+
+**Additional Resources**
+
+- Berk, R. (2016). Splines, smoothers, and kernels.  *Statistical learning from a regression perspective* (2nd ed., pp. 55&ndash;127). Springer.
+- Fox, J. (2016). Nonlinear regression. *Applied regression analysis and generalized linear models* (3rd ed., pp.502&ndash;527). Thosand Oaks, CA: Sage.
+- James, G., Witten, D., Hastie, T., & Tibshirani, R. (2013). Moving beyond linearity. *[An introduction to statistical learning: with applications in R](https://www-bcf.usc.edu/~gareth/ISL/)* (pp. 265&ndash;301). New York: Springer.
+- [Statistical Learning MOOC](https://lagunita.stanford.edu/courses/HumanitiesSciences/StatLearning/Winter2016/about) taught by Hastie and Tibshirani
+
+
+<br />
+
 ---
 

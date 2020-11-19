@@ -17,7 +17,7 @@ library(tidymodels) # Loads broom, rsample, parsnip, recipes, workflow, tune, ya
 ### Import and prepare data
 ##################################################
 
-usa = read_csv("../data/states-2019.csv")
+usa = read_csv("data/states-2019.csv")
 head(usa)
 
 

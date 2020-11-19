@@ -205,9 +205,10 @@ While the linear step function seemed to model the data well, it is less mathema
 
 The steps to fitting a continuous piecewise function are:
 
-- Identify where the knots (i.e., breakpoints) will be.
-- Create a set of indicator variables that define the *K* regions. These are created as dummy variables (one for each knot) such that it takes a value of 1 if *x* is greater than the knot value and 0 otherwise.
-- Fit a mean function that allows changes in both the intercept and slope (interaction) for each of the *K* regions.
+- Identify the *x*-values where the knots (i.e., breakpoints) will be. Call these $k_1,k_2,k_3,\ldots,k_k$.
+- Create a set of indicator variables that define the *K* regions. These are created as dummy variables (one for each knot) such that it takes a value of 1 if *x* is greater than the knot value and 0 otherwise. 
+- Use each indicator variable to create a *spline adjustment variable*, $s_j$, by multiplying the respective indicator by $x_i-k_j$ (e.g., $s_1=I_1(x_i - k_1)$, where $I_1$ is 0 if $x_i\leq k_1$ and 1 if $x_i>k_1$).
+- Fit a regression model that includes an intercept, a main effect of $X$, and the main effects of all the $s_k$ spline adjustment variables.
 
 Below we illustrate these steps for the Tokyo data.
 
@@ -226,23 +227,36 @@ $$
 
 <br />
 
-### Step 2: Create a Set of Indicator Variables
+### Step 2: Create a Set of Indicator and Associated Spline Adjustment Variables
 
 After identifying the knots, we want to create a set of indicator variables based on those knots, call them $I_1, I_2, I_3, \ldots, I_{K-1}$. Each of these indicators will be coded so that it takes a value of $x-k_i$ if *x* is greater than $k_i$ and 0 otherwise. In our example,
 
 $$
 I_1 = \begin{cases}
      0 & x \leq 1980 \\
-     x-1980 & x > 1980
+     1 & x > 1980
+\end{cases}
+$$
+We can then create the spline adjustment variable as
+
+$$
+s_{1_i} = I_{1_i} (\mathrm{x_i} - 1980)
+$$
+Notice that for observations that have an *x*-value less than or equal to 1980, the value of the spline adjustment variable is 0, and for observations with an *x*-value greater than 1980, the spline adjustment variable is $x_i - 1980$. That implies that we could have immediately set up an indicator variable that mimics the spline adjustment variable as:
+
+$$
+s_{1_i} = \begin{cases}
+     0 & x_i \leq 1980 \\
+     x_i-1980 & x_i > 1980
 \end{cases}
 $$
 
 and
 
 $$
-I_2 = \begin{cases}
-    0 & x \leq 1992 \\
-    x-1992 & x > 1992
+s_{2_i} = \begin{cases}
+     0 & x_i \leq 1992 \\
+     x_i-1992 & x_i > 1992
 \end{cases}
 $$
 
@@ -251,8 +265,8 @@ Using R, we can create these indicator variables using the `if_else()` function.
 ```{r}
 tokyo = tokyo %>%
   mutate(
-    I_1 = if_else(year <= 1980, 0, year - 1980),
-    I_2 = if_else(year <= 1992, 0, year - 1992)
+    s_1 = if_else(year <= 1980, 0, year - 1980),
+    s_2 = if_else(year <= 1992, 0, year - 1992)
   )
 
 tokyo
@@ -262,23 +276,23 @@ tokyo
 
 ### Step 3: Fit the Piecewise Model
 
-Lastly, we want to fit a model for the mean function that allows changes in both the intercept and slope (interaction model) for each of the *K* regions. And, since we want this to be a continuous function, each adjoining set of lines need to intersect at the knots. To meet these conditions, we fit the following model:
+Lastly, we want to fit a regression model that includes an intercept, a main effect of year, and the main effects of all the $s_k$ spline adjustment variables. We fit the following model:
 
 $$
-Y_i = \beta_0 + \beta_1(x_i) + \beta_2(I_{1i}) + \beta_3(I_{2i}) + \ldots + \beta_{p+1}(I_{pi}) + \epsilon_i
+Y_i = \beta_0 + \beta_1(\mathrm{Year}_i) + \beta_2(s_{1i}) + \beta_3(s_{2i}) + \epsilon_i
 $$
 
-Note that by substituting the indicator values for each of the three regions into this model, we end up with three equations that also intersect at the knots. For example, the fitted linear piecewise model for our Tokyo example with two knots at 1980 and 1992 is:
+Note that by substituting the spline adjustment values for each of the three regions into this model, we end up with three equations that also intersect at the knots. For example, the fitted linear piecewise model for our Tokyo example with two knots at 1980 and 1992 is:
 
 $$
-\hat{\mathrm{Water~Use}}_i = \hat{\beta}_0 + \hat\beta_1(\mathrm{Year}_i) + \hat\beta_2(I_{1i}) + \hat\beta_3(I_{2i})
+\hat{\mathrm{Water~Use}}_i = \hat{\beta}_0 + \hat\beta_1(\mathrm{Year}_i) + \hat\beta_2(s_{1i}) + \hat\beta_3(s_{2i})
 $$
 
 <br />
 
 #### Year <= 1980
 
-In this region, $I_1 = 0$, and $I_2 = 0$. The fitted equation here (dropping the *i* subscripts) would be,
+In this region, $s_{1_i} = 0$, and $s_{2_i} = 0$. The fitted equation here would be,
 
 $$
 \hat{\mathrm{Water~Use}_i} = \hat\beta_0 + \hat\beta_1(\mathrm{Year}_i)
@@ -288,7 +302,7 @@ $$
 
 #### 1980 < Year <= 1992
 
-In this region, $I_1 = \mathrm{Year_i - 1980}$, and $I_2 = 0$. The fitted equation here would be,
+In this region, $s_{1_i} = \mathrm{Year_i - 1980}$, and $s_{2_i} = 0$. The fitted equation here would be,
 
 $$
 \begin{split}
@@ -312,7 +326,7 @@ $$
 
 #### Year > 1992
 
-In this region, $I_1 = \mathrm{Year_i - 1980}$, and $I_1 = \mathrm{Year_i - 1992}$. The fitted equation here would be,
+In this region, $s_{1_i} = \mathrm{Year_i - 1980}$, and $s_{2_i} = \mathrm{Year_i - 1992}$. The fitted equation here would be,
 
 $$
 \begin{split}
@@ -332,7 +346,7 @@ To fit the model
 
 ```{r}
 # Fit model
-lm.pw = lm(water_use ~ 1 + year + I_1 + I_2, data = tokyo)
+lm.pw = lm(water_use ~ 1 + year + s_1 + s_2, data = tokyo)
 
 # Obtain coefficients
 tidy(lm.pw)
@@ -341,7 +355,7 @@ tidy(lm.pw)
 The fitted model here is
 
 $$
-\hat{\mathrm{Water~Use}}_i = 731,101 - 53(\mathrm{Year}_i) + 8247(I_{1i}) - 8607(I_{2i})
+\hat{\mathrm{Water~Use}}_i = 731,101 - 53(\mathrm{Year}_i) + 8247(s_{1_i}) - 8607(s_{2_i})
 $$
 
 We do not interpret the coefficients, but rather use the fitted model to create a plot of the fitted model. Both of these help to interpret the relationships in the data. As @Berk:2016 writes about interpretation of piecewise results,
@@ -355,8 +369,8 @@ plot_data = data.frame(
   year = seq(from = 1973, to = 1999, by = 0.1)
 ) %>%
   mutate(
-    I_1 = if_else(year <= 1980, 0, year - 1980),
-    I_2 = if_else(year <= 1992, 0, year - 1992),
+    s_1 = if_else(year <= 1980, 0, year - 1980),
+    s_2 = if_else(year <= 1992, 0, year - 1992),
   )
 
 # Add in fitted values

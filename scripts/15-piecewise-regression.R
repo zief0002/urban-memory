@@ -4,9 +4,9 @@
 
 library(broom)
 library(dplyr)
+library(educate)
 library(ggplot2)
 library(readr)
-library(sm)
 
 
 
@@ -14,7 +14,7 @@ library(sm)
 ### Import and prepare data
 ##################################################
 
-tokyo = read_csv("~/Dropbox/epsy-8264/data/tokyo-water-use.csv")
+tokyo = read_csv("data/tokyo-water-use.csv")
 head(tokyo)
 
 
@@ -78,8 +78,8 @@ augment(lm.cubic) %>%
 
 tokyo = tokyo %>%
   mutate(
-    I_1 = if_else(year <= 1980, 0, year - 1980),
-    I_2 = if_else(year <= 1992, 0, year - 1992)
+    s_1 = if_else(year <= 1980, 0, year - 1980),
+    s_2 = if_else(year <= 1992, 0, year - 1992)
   )
 
 tokyo
@@ -89,7 +89,7 @@ tokyo
 ### Fit continuous piecewise model
 ##################################################
 
-lm.pw = lm(water_use ~ 1 + year + I_1 + I_2, data = tokyo)
+lm.pw = lm(water_use ~ 1 + year + s_1 + s_2, data = tokyo)
 tidy(lm.pw)
 
 
@@ -103,8 +103,8 @@ plot_data = data.frame(
   year = seq(from = 1973, to = 1999, by = 0.1)
   ) %>%
   mutate(
-    I_1 = if_else(year <= 1980, 0, year - 1980),
-    I_2 = if_else(year <= 1992, 0, year - 1992)
+    s_1 = if_else(year <= 1980, 0, year - 1980),
+    s_2 = if_else(year <= 1992, 0, year - 1992)
   )
 
 
@@ -185,7 +185,12 @@ out_pw = augment(lm.pw)
 
 
 # Check normality
-sm.density(out_pw$.std.resid, model = "normal")
+ggplot(data = out_pw, aes(x = .std.resid)) +
+  stat_density_confidence(model = "normal")  +
+  stat_density(geom = "line") +
+  theme_bw() +
+  xlab("Standardized residuals") +
+  ylab("Density")
 
 
 # Check other assumptions

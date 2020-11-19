@@ -4,7 +4,7 @@
 
 library(car)
 library(ggrepel)
-library(leaps)
+library(olsrr)
 library(tidyverse)
 
 
@@ -213,7 +213,8 @@ head(all_output)
 # Add AICc value to output
 all_output = all_output %>%
   mutate(
-    aic_c = aic + (2 * (n + 2) * (n + 3)) / (nrow(z_usa) - n - 3)
+    deviance = aic - 2*(n+1),
+    aic_c = deviance + 2 * (n+1) * (52 / (52 - (n+1) - 1))
     )
 
 

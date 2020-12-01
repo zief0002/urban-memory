@@ -101,9 +101,9 @@ Below are the due dates for the assignments, as well as links to the PDF file fo
   </td>
 <td>Dec. 15</td>
 <td align="center" style="vertical-align:middle;">
-  <!-- <a href="https://github.com/zief0002/epsy-8264/raw/master/assignments/assignment-08-polychotomous-categorical-predictors.pdf"> -->
-  <!--   <span class="fa fa-file-pdf" style="color: #ff2600; font-size: 20px;"></span> -->
-  <!-- </a> -->
+  <a href="https://github.com/zief0002/epsy-8264/raw/master/assignments/f20-assignment-08-regression-splines.pdf">
+    <span class="fa fa-file-pdf" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
 </td>
 </tr>
 

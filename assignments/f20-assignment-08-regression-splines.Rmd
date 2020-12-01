@@ -1,0 +1,91 @@
+---
+title: "Assignment 08"
+author: "Regression Splines"
+header-includes:
+   - \usepackage{xcolor}
+   - \usepackage{mathtools}
+   - \definecolor{umn}{RGB}{153, 0, 85}
+   - \definecolor{umn2}{rgb}{0.1843137, 0.4509804, 0.5372549}
+output: 
+  pdf_document:
+    highlight: tango
+    latex_engine: xelatex
+    fig_width: 6
+    fig_height: 6
+mainfont: "Sabon"
+sansfont: "Helvetica Neue UltraLight"
+monofont: Inconsolata
+urlcolor: "umn"
+always_allow_html: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, eval = FALSE)
+```
+
+
+This goal of this assignment is to give you experience using regression splines to model non-linear relationships. Turn in a printed version of your responses to each of the questions on this assignment. In addition, please adhere to the following guidelines for further formatting your assignment: 
+
+- All graphics should be set to an appropriate aspect ratio and sized so that they do not take up more room than necessary. They should also have an appropriate caption.
+- Any typed mathematics (equations, matrices, vectors, etc.) should be appropriately typeset within the document.
+- Syntax or computer output should not be included in your assignment unless it is specifically asked for.
+
+This assignment is worth 15 points. 
+
+# Motorcycle Accidents
+
+For the first part of this assignment, you will use the file *mcycle.csv* (see the [data codebook](http://zief0002.github.io/epsy-8264/codebooks/mcycle.html)) to model how well helmets actually perform during a crash. It is of substantive interest to both discern the general shape of the underlying acceleration curve and to draw inferences about its minimum and maximum values.
+
+
+
+## Part I: Description
+
+1. Create a scatterplot showing head acceleration as a function of time after impact.  
+
+2. An analyst has suggested fitting a 10th-degree polynomial model to the data. Add the fitted 10th-degree polynomial model to the scatterplot. Describe whether or not this model provides a good fit to these data. Is it a good fit in some regions of the data and not in others? Explain.
+
+\newpage
+
+## Part II: B-Spline: Specified Knots
+
+Based on some prior information, an executive has suggested that the acceleration curve changes every ten seconds. Fit a B-spline with knots specified at every 10 seconds (up to 50 seconds). Use this fitted model to answer the questions in this section.
+
+3. Create a scatterplot showing head acceleration as a function of time after impact (make these points somewhat transparent). Add the fitted spline model and the confidence envelope for the model to the scatterplot.
+
+4. Based on the plot you created in Question \#4, describe whether or not this model provides a good fit to these data. Is it a good fit in some regions of the data and not in others? Explain.
+
+## Part III: B-Spline Models: Uniform Knots
+
+Rather than identify the knot locations, in this section, you will fit cubic B-spline models with a specified number of knots.
+
+5. Explore the number of interior knots needed to model these data. To do this fit eight candidate models with 3--10 knots, respectively, using cubic B-splines. Report the AICc value for each of the eight models in a table.
+
+Based on the results from the AICc evaluation, adopt the "best" candidate model. Use this model to answer the remaining questions in this section.
+
+6. Report the knot locations for the adopted model.
+
+7. Create a plot showing head acceleration as a function of time after impact (make these points somewhat transparent). Add the fitted spline model and the confidence envelope for the model to the scatterplot.
+
+## Part IV: Natural Spline Models: Uniform Knots
+
+8. Explore the number of interior knots needed to model these data. To do this fit eight candidate models with 3--10 knots, respectively, but his time fitting a natural cubic spline. Report the AICc value for each of the eight models in a table.
+
+9. Create a plot showing head acceleration as a function of time after impact (make these points somewhat transparent). Add the fitted natural spline model and the confidence envelope for the model to the scatterplot.
+
+\newpage
+
+## Model Adoption and Answering the Research Questions
+
+10. Report the AICc for the B-spline model you adopted in Part III and the natural spline model you fitted in Part IV. 
+
+11. Based on the AICc values adopt a "final" model. Explain.
+
+12. Evaluate the assumptions for the adopted "final" model. Include any plots you use to make this evaluation.
+
+13. Use the plot of your fitted "final" model to describe the general shape of the underlying acceleration curve.
+
+14. Identify and report the minimum and maximum values in the acceleration curve. Also report the 95\% confidence limits for these values. **(2pts.)**
+
+
+
+

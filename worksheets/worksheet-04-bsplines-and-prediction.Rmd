@@ -1,0 +1,31 @@
+---
+title: "B-Splines Worksheet"
+author: "Breakout Group"
+date: "December 10, 2020"
+output:
+  prettydoc::html_pretty:
+    theme: lumen
+    highlight: github
+---
+
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+## Directions
+
+Fit a B-spline model to the Tokyo water use data. Specify knots at 1980 and 1992.
+
+## Problems
+
+1. Create a new data set that includes the years and then use the `predict()` function to obtain the predicted values from the B-spline model. Use these data to create a plot of the fitted B-spline model. 
+
+2. Create a second plot of the fitted B-spline model. This time use the original Tokyo data and the `geom_smooth()` layer to create the plot. Hint: Specify the method and the formula in the smoother.
+
+4. Create a new data set that includes the years 1970 to 2010. Use the `predict()` function to obtain the predicted values and the standard errors from the B-spline model.
+
+5. Use the dataset you created in Question 4 to create a plot of the fitted values (solid line) and the confidence enevelope based on two standard errors for the B-spline models.
+
+6. What do you notice about the uncertainty outside the boundary knots?
+
+

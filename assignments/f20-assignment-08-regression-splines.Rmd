@@ -3,9 +3,19 @@ title: "Assignment 08"
 author: "Regression Splines"
 header-includes:
    - \usepackage{xcolor}
-   - \usepackage{mathtools}
-   - \definecolor{umn}{RGB}{153, 0, 85}
-   - \definecolor{umn2}{rgb}{0.1843137, 0.4509804, 0.5372549}
+   - \definecolor{umn}{HTML}{FF2D21}
+   - \usepackage{caption}
+   - \captionsetup[table]{textfont={it}, labelfont={bf}, singlelinecheck=false, labelsep=period}
+   - \captionsetup[figure]{textfont={it}, labelfont={bf}, singlelinecheck=false, labelsep=period}
+   - \usepackage{floatrow}
+   - \floatsetup[figure]{capposition=top}
+   - \usepackage{xfrac}
+   - \usepackage{booktabs}
+   - \usepackage{float}
+   - \floatstyle{plaintop}
+   - \restylefloat{table}
+   - \usepackage{siunitx}
+   - \newcolumntype{d}{S[table-format=3.2]}
 output: 
   pdf_document:
     highlight: tango

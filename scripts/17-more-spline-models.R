@@ -12,7 +12,7 @@ library(splines)
 ### Import and prepare data
 ##################################################
 
-tokyo = read_csv("~/Dropbox/epsy-8264/data/tokyo-water-use.csv")
+tokyo = read_csv("data/tokyo-water-use.csv")
 head(tokyo)
 
 

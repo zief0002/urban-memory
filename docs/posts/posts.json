@@ -1,0 +1,57 @@
+[
+  {
+    "path": "posts/2021-08-09-assignment-01/",
+    "title": "Assignment 01",
+    "description": "Matrix Algebra for Linear Regression",
+    "author": [
+      {
+        "name": "andy",
+        "url": {}
+      }
+    ],
+    "date": "2021-08-09",
+    "categories": [
+      "Assignments"
+    ],
+    "contents": "\nThe goal of this assignment is to give you experience using matrix algebra to compute various analytic output for regression. In this assignment, you will use the data given below that includes measurements for 10 countries on: infant mortality rate per 1000 live births (infant), the per-capita income (pci) and world region (region) of the country.\n\ncountry\ninfant\npci\nregion\nAlgeria\n86.3\n400\nAfrica\nBolivia\n60.4\n200\nAmericas\nBurundi\n150.0\n68\nAfrica\nDominican Republic\n48.8\n406\nAmericas\nKenya\n55.0\n169\nAfrica\nMalawi\n148.3\n130\nAfrica\nNicaragua\n46.0\n507\nAmericas\nParaguay\n38.6\n347\nAmericas\nRwanda\n132.9\n61\nAfrica\nTrinidad & Tobago\n26.2\n732\nAmericas\n\n\n\n\n\n\nInstructions\nSubmit a printed document of your responses to the following questions. Please adhere to the following guidelines for further formatting your assignment:\nAll plots should be resized so that they do not take up more room than necessary.\nAll figures and tables should have a name (e.g., Figure 1) and an appropriate caption.\nIn questions that ask you to “use matrix algebra” to solve the problem, you can either show your syntax and output from carrying out the matrix operations, or you can use Equation Editor to input the matrices involved in your calculations.\nThis assignment is worth 20 points.\n\nUnstandardized Regression\nYou will be fitting the model lm(infant ~ 1 + pci + region + pci:region). Within this model, use dummy coding to encode the region predictor and make Americas the reference group.\nWrite out the elements of the matrix \\(\\mathbf{X}^{\\intercal}\\mathbf{X}\\), where \\(\\mathbf{X}\\) is the design matrix.\nDoes \\(\\mathbf{X}^{\\intercal}\\mathbf{X}\\) have an inverse? Explain.\nCompute (using matrix algebra) and report the vector of coefficients, b for the OLS regression.\nCompute (using matrix algebra) and report the variance–covariance matrix of the coefficients.\nUse the values from b (Question 3) and from the variance–covariance matrix you reported in the previous question to find the 95% CI for the coefficient associated with the main-effect of PCI. (Hint: If you need to refresh yourself on how CIs are computed, see here.)\nCompute (using matrix algebra) and report the hat-matrix, H. Also show how you would use the values in the hat-matrix to find \\(\\hat{y}_1\\) (the predicted value for Algeria).\nCompute (using matrix algebra) and report the vector of residuals, e.\nCompute (using matrix algebra) and report the estimated value for the RMSE.\nGiven the assumptions of the OLS model and the RMSE estimate you computed in the previous question, compute and report the variance–covariance matrix of the residuals.\n\nANOVA Decomposition\nIn this section you will be re-creating the output from the ANOVA decomposition for the model fitted in the previous section.\nCompute (using matrix algebra) and report the model, residual, and total sum of squares terms in the ANOVA decomposition table. (2pts)\nCompute (using matrix algebra) and report the model, residual, and total degrees of freedom terms in the ANOVA decomposition table. (2pts)\nUse the values you obtained in Questions 11 and 12 to compute the model and residual mean square terms.\nUse the mean square terms you found in Question 13 to compute the F-value for the model (i.e., to test \\(H_0:\\rho^2=0\\)). Also compute the p-value associated with this F-value. (Hint: If you need to refresh yourself on how F-values or p-values are computed, see here.)\n\nRegression: Effects-Coding\nNow consider fitting the model to the data to examine whether there is an effect of region (no other predictors) on infant mortality. In this model, we will use effects-coding to encode the region variable (see here). This model is often expressed as:\n\\[\n\\mathrm{Infant~Mortality}_i = \\mu + \\alpha_{\\mathrm{Region}} + \\epsilon_i \n\\]\nWrite out the design matrix that would be used to fit this model.\nCompute (using matrix algebra) and report the vector of coefficients, b, from the OLS regression.\nCompute (using matrix algebra) and report the variance–covariance matrix for the coefficients.\nExplain why the sampling variances for the coefficients are the same and why the sampling covariance is zero by referring to computations produced in the matrix algebra. (2pts)\n\n\n\n",
+    "preview": {},
+    "last_modified": "2021-08-10T11:12:29-05:00",
+    "input_file": {}
+  },
+  {
+    "path": "posts/2021-08-09-message-to-students/",
+    "title": "A Message to Students",
+    "description": "A message to students.",
+    "author": [
+      {
+        "name": "andy",
+        "url": {}
+      }
+    ],
+    "date": "2021-08-09",
+    "categories": [],
+    "contents": "\nIn this class, we will work together to develop a learning community that is inclusive and respectful, and where every student is supported in the learning process. As a class full of diverse individuals (reflected by differences in race, culture, age, religion, gender identity, sexual orientation, socioeconomic background, abilities, professional goals, and other social identities and life experiences) I expect that different students may need different things to support and promote their learning.\nThe TAs and I will do everything we can to help with this, but, as we only know what we know, we need you to communicate with us if things are not working for you or you need something we are not providing. I hope you all feel comfortable in helping to promote an inclusive classroom through respecting one another’s individual differences, speaking up, and challenging oppressive/problematic ideas. Finally, I look forward to learning from each of you and the experiences you bring to the class.\n\n\n\n",
+    "preview": {},
+    "last_modified": "2021-08-09T16:10:51-05:00",
+    "input_file": {}
+  },
+  {
+    "path": "posts/2021-08-09-prerequisites-and-resources/",
+    "title": "Prerequisites and Resources",
+    "description": "Prerequisite knowledge and resources for brushing up on that knowledge.",
+    "author": [
+      {
+        "name": "andy",
+        "url": {}
+      }
+    ],
+    "date": "2021-08-09",
+    "categories": [
+      "Resources"
+    ],
+    "contents": "\nPrerequisites\nThe pre-requisites for this course are EPsy 8251 and EPsy 8252. Prerequisite knowledge include topics from a basic statistics course:\nFoundational topics in data analysis;\nDesign (e.g., random assignment and random sampling)\nDescriptive statistics and plots\nOne- and two-sample tests\n\nAnd, topics from EPsy 8251: Methods in Data Analysis for Educational Research I:\nStatistical Computation\nUsing R\nData wrangling/manipulation\nPlotting\n\nCorrelation;\nSimple regression analysis;\nModel-level and coefficient-level interpretation\nOrdinary least squares estimation\nStandardized regression\nPartitioning sums of squares\nModel-level and coefficient-level inference\nAssumption checking/residual analysis\n\nMultiple linear regression\nModel-level and coefficient-level interpretation and inference\nAssumption checking/residual analysis\nWorking with categorical predictors (including adjusting p-values for multiple tests)\nInteraction effects\n\nAnd topics from EPsy 8252: Methods in Data Analysis for Educational Research II:\nDealing with nonlinearity;\nQuadratic effects\nLog-transformations\n\nProbability distributions;\nProbability density\n\nMaximum likelihood estimation;\nModel selection;\nInformation criteria\n\nLinear mixed-effects models (cross-sectional/longitudinal)\nBasic ideas of mixed-effects models\nFitting models with random-intercepts and random-slopes\nAssumptions\nLikelihood ratio tests\n\nGeneralized linear models\nLogistic models\n\n\nResources\nFor the topics listed, students would be expected to be able to carry out an appropriate data analysis and properly interpret the results. It is also assumed that everyone enrolled in the course has some familiarity with using R. If you need a refresher on any of these topics, see:\nComputational Toolkit for Educational Scientists\nStatistical Modeling and Computation for Educational Scientists [EPsy 8251 material]\nEPsy 8252 website\n\n\n\n",
+    "preview": {},
+    "last_modified": "2021-08-10T11:14:10-05:00",
+    "input_file": {}
+  }
+]

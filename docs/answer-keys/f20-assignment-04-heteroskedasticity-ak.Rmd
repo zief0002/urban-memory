@@ -1,0 +1,386 @@
+---
+title: "Assignment 07"
+author: "WLS for Addressing Outliers"
+date: "Answer Key"
+header-includes:
+   - \usepackage{xcolor}
+   - \usepackage{float}
+   - \usepackage{mathtools}
+   - \usepackage{tikz}
+   - \usepackage{tkz-euclide}
+   - \usetkzobj{all}
+   - \definecolor{umn}{RGB}{153, 0, 85}
+   - \definecolor{umn2}{rgb}{0.1843137, 0.4509804, 0.5372549}
+output: 
+  pdf_document:
+    highlight: tango
+urlcolor: "umn2"
+---
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = FALSE, eval = TRUE)
+
+library(broom)
+library(car)
+library(ggplot2)
+library(gridExtra)
+library(dplyr)
+library(sm)
+
+stack = readr::read_csv("~/Dropbox/epsy-8264/data/stack-1979.csv")
+```
+
+This assignment is worth 18pts.
+
+
+## Exploratory Analysis
+
+**1. Start by creating a scatterplot to examine the relationship between socialist party strength and income inequality (outcome).**
+
+```{r, message=FALSE, fig.height=6, fig.width=6, out.width='3.5in', fig.align='center', fig.pos="H"}
+ggplot(data = stack, aes(x = socialist, y = inequality)) +
+  geom_text(aes(label = country), size = 3) +
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_bw() +
+  ylab("Income inequality") +
+  xlab("Socialist party strength")
+```
+
+\vspace{3em}
+
+**2. Are there observations that look problematic in this plot? If so, identify the country(ies).**
+
+Based on the plot, South Africa seems to have an exceptionally large residual. France and the United States also seem to have large residuals, but not as big as South Africa's.
+
+\newpage
+
+**3. Fit a linear model regressing income inequality on socialist party strength. Examine and report a set of regression diagnostics that allow you to identify any observations that are regression outliers.**
+
+```{r echo=FALSE}
+lm.1 = lm(inequality ~ 1 + socialist, data = stack)
+
+augment(lm.1) %>%
+  mutate(country = stack$country, studentized = rstudent(lm.1)) %>%
+  select(country, studentized, .std.resid) %>%
+  filter(abs(studentized) >= 2 | abs(.std.resid) >= 2)
+
+```
+
+South Africa is the only country whose absolute studentized residual is greater than 2, suggesting that it is a regression outlier. The Bonferroni-adjusted outlier test also indicates that South Africa is a regression outlier ($p=.0006$).
+
+
+\vspace{3em}
+
+
+
+<!-- \newpage -->
+
+<!-- **3. Create and include a set of plots that allow you to examine the assumptions for linear regression. Based on these plots, comment on the tenability of these assumptions.** -->
+
+<!-- ```{r fig.height=5, fig.width=10, out.width='5in', fig.align='center', message=FALSE} -->
+<!-- par(mfrow = c(1, 2)) -->
+<!-- residualPlot(lm.1) -->
+<!-- qqPlot(lm.1, id = FALSE) -->
+<!-- par(mfrow = c(1, 1)) -->
+<!-- ``` -->
+
+<!-- Based on the QQ-plot, the assumption of normality seems tenable. The assumption that the conditional mean is zero (linearity) seems generally tenable; although the observation with a fited value near 8 may be problematic. Similarly the homoskedasticity assumption also seems tenable apart from that same observation. -->
+
+<!-- \vspace{3em} -->
+
+## Weighted Least Squares Estimation
+
+**4. Compute the empirical weights that you will use in the WLS estimation. Report the weight for the United States. (Hint: We do not know the true variances in the population.)**
+
+```{r echo=FALSE}
+out_1 = augment(lm.1) %>%
+  mutate(
+    e_sq = .resid ^ 2
+  )
+
+lm_1 = lm(e_sq ~ 1 + socialist, data = out_1)
+y_hat = fitted(lm_1)
+w_i = 1 / (y_hat ^ 2)
+
+stack %>%
+  mutate(w_i = 1 / (y_hat ^ 2)) %>%
+  filter(country == "United States") %>%
+  select(country, w_i)
+```
+
+
+\vspace{3em}
+
+**5. Fit the WLS model. Report the fitted equation.**
+
+```{r echo=FALSE}
+wls_1 = lm(inequality ~ 1 + socialist, data = stack, weights = w_i)
+#tidy(wls_1)
+```
+
+$$
+\hat{\mathrm{Inequality}}_i = 5.22 - 0.060(\mathrm{Socialist}_i)
+$$
+
+\vspace{3em}
+
+**6. Based on the model results, what is suggested about the research hypothesis that countries with more socialist tendencies have less income inequality?**
+
+The coefficient associated with Socialist party strength is negative and statistically significant ($p=.008$). This indicates support for the hypothesis that countries with more socialist tendencies tend to have less income inequality.
+
+\newpage
+
+**7. Create a scatterplot that shows the relationship between socialist party strength and income inequality. Include the country names as labels (or instead of the points). Include both the OLS and WLS regression lines on this plot.**
+
+```{r fig.width=6, fig.height=6, out.width='3.5in', fig.cap='Scatterplot showing income inequality versus Socialist party strength for 18 countries. The OLS (blue) and WLS (red) lines are also presented.', fig.pos = "H"}
+ggplot(data = stack, aes(x = socialist, y = inequality)) +
+  geom_text(aes(label = country), size = 3) +
+  geom_smooth(method = "lm", se = FALSE) +
+  geom_abline(intercept = 5.22, slope = -0.0596, color = "red") +
+  theme_bw() +
+  ylab("Income inequality") +
+  xlab("Socialist party strength")
+```
+
+\vspace{3em}
+
+**8. Based on the plot, comment on how the residuals from the WLS model compare to the residuals from the OLS model.**
+
+The residuals based on the WLS model are very similar to the residuals from the OLS model; the WLS line is not that different from the OLS line. The biggest difference is that the residual for the regression outlier (South Africa) is smaller in the WLS model.
+
+\vspace{3em}
+
+**9. Based on your response to Question \#8, how will the model-level $R^2$ value from the WLS model compare to the model-level $R^2$ from the OLS model. Explain.**
+
+Since the residuals are comparable, the $R^2$ values should also be quite similar.
+
+\newpage
+
+**10. The mathematical formulaa for computing the studentized residuals for both the OLS and WLS models is given below. Compute and report the studentized residuals, using this formula, from both the OLS and WLS models for any regression outliers you identified in Question \#2. (Hint: Remember that in an OLS regression the weight is 1 for each observation.)**
+
+$$
+e^{\prime}_i = \frac{e_i}{s_{e(-i)}\sqrt{1-h_{ii}}} \times \sqrt{w_i}
+$$
+
+```{r echo=TRUE}
+# OLS studentized residual for South Africa (Observation 13)
+e = augment(lm.1)$.resid[13]
+s = augment(lm.1)$.sigma[13]
+h = augment(lm.1)$.hat[13]
+w = 1
+e / (s * sqrt(1 - h)) * sqrt(w)
+
+# WLS studentized residual for South Africa (Observation 13)
+e = augment(wls_1)$.resid[13]
+s = augment(wls_1)$.sigma[13]
+h = augment(wls_1)$.hat[13]
+w = w_i[13]
+e / (s * sqrt(1 - h)) * sqrt(w)
+```
+
+
+\vspace{3em}
+
+**11. Based on the values of the studentized residuals in the WLS model, are the observations you identified as regression outliers from the OLS model still regression outliers in the WLS model? Why or why not?**
+
+No. In the WLS model, South Africa's studentized residual is only 0.160. This is smaller than the cutoff of two.
+
+\vspace{3em}
+
+
+**12. Explain why the is the case by referring to the formula.**
+
+The residual values, deleted residual error term, and the leverage values for South Africa are slightly different across the two models, but the differences aren't that great. The big difference is the weight computation. This reduces the OLS studentized residual value by approximately 83\%.
+
+\newpage
+
+**13. Create and report residual plots of the studentized residuals versus the fitted values for the OLS and WLS models. Comment on which model better fits the assumptions.**
+
+```{r fig.width=10, fig.height=5, out.width='6in', message=FALSE, warning=FALSE, fig.pos='H'}
+p1 = augment(lm.1) %>%
+  mutate(
+    country = stack$country,
+    studentized = rstudent(lm.1)
+    ) %>%
+  ggplot(aes(x = .fitted, y = studentized)) +
+    geom_text(aes(label = country), size = 3) +
+    #geom_point() +
+    geom_hline(yintercept = 0) +
+    geom_smooth(se = FALSE) +
+    ggtitle("OLS Model") +
+    theme_bw() +
+    xlab("Fitted values") +
+    ylab("Studentized residuals")
+    
+
+p2 = augment(wls_1) %>%
+  mutate(
+    country = stack$country,
+    studentized = rstudent(wls_1)
+    ) %>%
+  ggplot(aes(x = .fitted, y = studentized)) +
+  geom_text(aes(label = country), size = 3) +
+  #geom_point() +
+  geom_hline(yintercept = 0) +
+  geom_smooth(se = FALSE) +
+    ggtitle("WLS Model")  +
+  theme_bw() +
+    xlab("Fitted values") +
+    ylab("Studentized residuals")
+
+gridExtra::grid.arrange(p1, p2, nrow = 1)
+```
+
+The WLS model seems to better meet the assumptions.  Linearity seems tenable; while in the OLS model the loess line trends up for higher fitted values potentially indicating some violation of the linearity assumption. Homoskedasticity also seems more tenable in the WLS model than in the OLS model. While Australia looks to have a large residual, it isn't beyond extreme (like South Africa was in the OLS model). Furthermore, the OLS model looks to exhibit a higher variance for the highest fitted values, in general.
+
+\newpage
+
+## Including Covariates
+
+**14. Use matrix algebra to compute the empirical weights based on the two-predictor model and report the weight for the United States.**
+
+```{r echo=TRUE}
+# Obtain weights
+X = stack %>% mutate(b0 = 1) %>% select(b0, energy, socialist) %>% data.matrix()
+Y = stack$inequality
+
+# Obtain weights
+B = solve(t(X) %*% X) %*% t(X) %*% Y
+e_sq = (Y - X %*% B) ^ 2
+b = solve(t(X) %*% X) %*% t(X) %*% e_sq
+w_i = 1 / ( (X %*% b) ^ 2)
+
+# Get weight for United States
+w_i[17]
+```
+
+
+\vspace{3em}
+
+** Fit the two-predictor WLS model using matrix algebra. Report the fitted equation.**
+
+```{r echo=TRUE}
+# Matrix algebra
+W = as.numeric(w_i) * diag(18)
+
+B = solve(t(X) %*% W %*% X) %*% t(X) %*% W %*% Y
+B
+```
+
+$$
+\hat{\mathrm{Inequality}}_i = 5.27 - 0.00007(\mathrm{Energy}_i) - 0.057(\mathrm{Socialist}_i)
+$$
+
+\vspace{3em}
+
+**16. Compute and report the standard errors of the two-predictor WLS model using matrix algebra.**
+
+```{r echo=TRUE}
+e_i = Y - X %*% B 
+mse = sum( w_i * (e_i ^ 2) ) / 15 
+SE = sqrt(diag(mse * solve(t(X) %*% W %*% X)))
+SE
+```
+
+\vspace{3em}
+
+**17. Using your results from Questions \#14 and \#15, compute and report the $t$-values and $p$-values. Show your work or syntax. While you can use the output of the `tidy()`, `summary()`, or other functions that automatically compute $p$-values to check your work, you can not use them to answer this question. (Hint: Use the `pt()` function.)**
+
+```{r echo=TRUE, eval= FALSE}
+data.frame(
+  Term = c("Intercept", "Energy", "Socialist"),
+  B = B,
+  SE = SE,
+  t = B / SE
+) %>%
+  mutate( p = 2 * pt(-abs(t), 15) )
+```
+
+```{r echo=FALSE}
+data.frame(
+  Term = c("Intercept", "Energy", "Socialist"),
+  B = B,
+  SE = SE,
+  t = B / SE
+) %>%
+  mutate(
+    p = 2 * pt(-abs(t), 15)
+  ) %>%
+  mutate(
+    B = round(B, 2),
+    SE = round(SE, 4),
+    t = round(t, 3),
+    p = round(p, 5)
+  )
+```
+
+\vspace{3em}
+
+**18. Based on the two-predictor WLS model results, what is suggested about the research hypothesis that countries with more socialist tendencies have less income inequality?**
+
+The coefficient associated with Socialist party strength is negative and statistically significant ($p=.009$), even after controlling for differences in economic development. This indicates support for the hypothesis that countries with more socialist tendencies tend to have less income inequality.
+
+\vspace{3em}
+
+**19. Based on the two-predictor OLS model results, what is suggested about the research hypothesis that countries with more socialist tendencies have less income inequality?**
+
+```{r}
+lm.2 = lm(inequality ~ 1 + energy + socialist, data = stack)
+tidy(lm.2)
+```
+
+The coefficient associated with Socialist party strength is negative, however it is not  statistically significant ($p=.069$), after controlling for differences in economic development. This is evidence against the hypothesis that countries with more socialist tendencies tend to have less income inequality.
+
+\newpage
+
+**20. Which set of the model results should we trust. Explain by referring to the tenability of the assumptions.**
+
+```{r fig.width=10, fig.height=5, fig.pos='H', message=FALSE}
+wls_2 = lm(inequality ~ 1 + energy + socialist, data = stack, weights = as.numeric(w_i))
+
+p1 = augment(lm.2) %>%
+  mutate(
+    country = stack$country,
+    studentized = rstudent(lm.1)
+    ) %>%
+  ggplot(aes(x = .fitted, y = studentized)) +
+    geom_text(aes(label = country), size = 3) +
+    #geom_point() +
+    geom_hline(yintercept = 0) +
+    geom_smooth(se = FALSE) +
+    ggtitle("OLS Model") +
+    theme_bw() +
+    xlab("Fitted values") +
+    ylab("Studentized residuals")
+    
+
+p2 = augment(wls_2) %>%
+  mutate(
+    country = stack$country,
+    studentized = rstudent(wls_1)
+    ) %>%
+  ggplot(aes(x = .fitted, y = studentized)) +
+  geom_text(aes(label = country), size = 3) +
+  #geom_point() +
+  geom_hline(yintercept = 0) +
+  geom_smooth(se = FALSE) +
+    ggtitle("WLS Model")  +
+  theme_bw() +
+    xlab("Fitted values") +
+    ylab("Studentized residuals")
+
+gridExtra::grid.arrange(p1, p2, nrow = 1)
+par(mfrow = c(1, 2))
+sm::sm.density(rstudent(lm.2), model = "normal")
+sm::sm.density(rstudent(wls_2), model = "normal")
+par(mfrow = c(1, 1))
+```
+
+
+
+
+Since the WLS model better meets the assumptions, we should base our interpretations around those results.
+
+
+
+

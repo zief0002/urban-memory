@@ -1,0 +1,125 @@
+---
+title: "Summation Rules"
+date: "`r Sys.Date()`"
+header-includes:
+   - \usepackage{amsthm}
+   - \usepackage{xcolor}
+   - \usepackage{xfrac}
+   - \usepackage[framemethod=tikz]{mdframed}
+   - \usepackage{graphicx}
+   - \usepackage{rotating}
+   - \usepackage{booktabs}
+   - \usepackage{caption}
+   - \definecolor{umn}{RGB}{153, 0, 85}
+   - \definecolor{umn2}{rgb}{0.1843137, 0.4509804, 0.5372549}
+   - \definecolor{myorange}{HTML}{EA6153}
+output: 
+  pdf_document:
+    includes:
+      before_body: notes.tex
+    highlight: tango
+    latex_engine: xelatex
+    fig_width: 6
+    fig_height: 6
+mainfont: "Minion Pro"
+sansfont: "ITC Slimbach Std Book"
+monofont: "Source Code Pro"
+urlcolor: "umn2"
+always_allow_html: yes
+bibliography: epsy8264.bib
+csl: apa-single-spaced.csl
+---
+
+\frenchspacing
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(dplyr)
+library(knitr)
+library(kableExtra)
+library(sm)
+```
+
+Assume the $X$ is a random variable such that
+
+$$
+X = \{x_1, x_2, x_3, \ldots, x_n\}
+$$
+
+Then,
+
+$$
+\sum_{i=1}^n X_i = x_1 + x_2 + x_3 + \ldots + x_n
+$$
+
+To keep the notation simpler, we will just denote this as $\sum X$.
+
+## Summation Rules
+
+**Rule 1:** When a summation is itself a sum or difference, the summation sign may be distributed among the separate terms of the sum. That is:
+
+$$
+\sum(X + Y) = \sum X + \sum Y
+$$
+
+\begin{proof}
+\[
+$$
+\begin{align*}
+\sum(X + Y) &= (x_1 + y_1) + (x_2 + y_2) + \ldots + (x_n + y_n) \\
+&= (x_1 + x_2 + \ldots x_n) + (y_1 + y_2 + \ldots y_n) \\
+&= \sum X + \sum Y
+\end{align*}
+$$
+\]
+\end{proof}
+
+**Rule 2:** The sum of a constant, $a$, is $n$ times the value of the constant.
+
+$$
+\sum(a) = na
+$$
+
+\begin{proof}
+\[
+$$
+\begin{align*}
+\sum a &= \underbrace{a + a + \ldots + a}_{n} \\
+&= na
+\end{align*}
+$$
+\]
+\end{proof}
+
+## Examples
+
+In the following examples $X$ and $Y$ are random variables and $a$ is a constant.
+
+1. $\sum(X + 2)$
+
+$$
+\begin{split}
+\sum(X + 2) &= \sum X + \sum 2\\
+&= \sum X + 2n \\
+\end{split}
+$$
+
+2. $\sum(2X + 3)$
+
+$$
+\begin{split}
+\sum(2X + 3) &=\sum (2X) + \sum 3 \\
+&= 2\sum X + 3n \\
+\end{split}
+$$
+
+3. $\sum(X - Y)^2$
+
+$$
+\begin{split}
+\sum(X - Y)^2 &= \sum(X^2 - 2XY + Y^2)\\
+&= \sum (X^2) - \sum(2XY) + \sum (Y^2) \\
+&= \sum (X^2) - 2\sum(XY) + \sum (Y^2) \\
+\end{split}
+$$
+

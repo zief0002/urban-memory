@@ -1,0 +1,328 @@
+---
+title: "Assignment 08"
+author: "Regression Splines"
+date: "Answer Key"
+header-includes:
+   - \usepackage{xcolor}
+   - \definecolor{umn}{HTML}{FF2D21}
+   - \usepackage{caption}
+   - \captionsetup[table]{textfont={it}, labelfont={bf}, singlelinecheck=false, labelsep=period}
+   - \captionsetup[figure]{textfont={it}, labelfont={bf}, singlelinecheck=false, labelsep=period}
+   - \usepackage{floatrow}
+   - \floatsetup[figure]{capposition=top}
+   - \usepackage{xfrac}
+   - \usepackage{booktabs}
+   - \usepackage{float}
+   - \floatstyle{plaintop}
+   - \restylefloat{table}
+   - \usepackage{siunitx}
+   - \newcolumntype{d}{S[table-format=3.2]}
+output: 
+  pdf_document:
+    highlight: tango
+    latex_engine: xelatex
+    fig_width: 6
+    fig_height: 6
+mainfont: "Sabon"
+sansfont: "Helvetica Neue UltraLight"
+monofont: "Inconsolata"
+urlcolor: "umn"
+always_allow_html: yes
+---
+
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = FALSE, fig.width=6, fig.height=6, out.width='3in', fig.pos='H', warning=FALSE, message=FALSE)
+
+# Load libraries
+library(AICcmodavg)
+library(broom)
+#library(modelr)
+library(patchwork)
+library(tidyverse)
+library(splines)
+
+# Import data
+mcycle = readr::read_csv("../data/mcycle.csv")
+```
+
+
+
+This assignment is worth 15 points. 
+
+
+## Part I: Description
+
+**1. Create a scatterplot showing head acceleration as a function of time after impact.**
+
+```{r fig.cap='Acceleration as a function of time.'}
+ggplot(data = mcycle, aes(x = times, y = accel)) +
+  geom_point() +
+  theme_bw() +
+  xlab("Time (in ms)") +
+  ylab("Acceleration (in g)")
+```
+
+\newpage
+
+
+**2. An analyst has suggested fitting a 10th-degree polynomial model to the data. Add the fitted 10th-degree polynomial model to the scatterplot. Describe whether or not this model provides a good fit to these data. Is it a good fit in some regions of the data and not in others? Explain.**
+
+```{r fig.cap='Acceleration as a function of time. The 10th-degree polynomial model fitted to the data is also displayed.'}
+ggplot(data = mcycle, aes(x = times, y = accel)) +
+  geom_point(alpha = 0.5) +
+  theme_bw() +
+  xlab("Time (in ms)") +
+  ylab("Acceleration (in g)") +
+  geom_smooth(method = "lm", se = FALSE, formula = y ~ poly(x, 10))
+```
+
+The global fit seems somewhat reasonable, but in a few regions the fit seems to flexible (bumpy). For example, at less than 15ms the data suggests an almost flat relationship, but the polynomial does not reflect this. This is also true at times greater than 40ms. The polynomial model also seems to overpredict for times near 20ms.
+
+\newpage
+
+
+## Part II: B-Spline: Specified Knots
+
+```{r}
+bs.1 = lm(accel ~ 1 + bs(times, knots = c(10, 20, 30, 40, 50)), data = mcycle)
+```
+
+
+**3. Create a scatterplot showing head acceleration as a function of time after impact (make these points somewhat transparent). Add the fitted spline model and the confidence envelope for the model to the scatterplot.**
+
+```{r fig.cap='Acceleration as a function of time. The spline model (with knots at 10, 20, 30, 40, and 50) and uncertainty for this model are also displayed.'}
+plot_data = data.frame(
+  times = seq(from = 2, to = 60, by = 0.1)
+  ) %>%
+  mutate(
+    yhat = predict(bs.1, newdata = ., se.fit = TRUE)$fit,
+    se = predict(bs.1, newdata = ., se.fit = TRUE)$se.fit,
+    lower_limit = yhat - 2*se,
+    upper_limit = yhat + 2*se
+  )
+
+
+
+ggplot(data = plot_data, aes(x = times, y = yhat)) +
+  geom_point(data = mcycle, aes(x = times, y = accel), alpha = 0.5) +
+  geom_line(color = "blue") +
+  geom_line(aes(y = lower_limit), color = "blue", linetype = "dashed") +
+  geom_line(aes(y = upper_limit), color = "blue", linetype = "dashed") +
+  theme_bw() +
+  xlab("Time (in ms)") +
+  ylab("Acceleration (in g)")
+```
+
+
+\vspace{2em}
+
+**4. Based on the plot you created in Question \#4, describe whether or not this model provides a good fit to these data. Is it a good fit in some regions of the data and not in others? Explain.**
+
+The global fit, again, seems somewhat reasonable, but in a few regions the fit seems to flexible at times less than 15ms and times greater thean 40ms.
+
+
+\vspace{2em}
+
+
+## Part III: B-Spline Models: Uniform Knots
+
+**5. Explore the number of interior knots needed to model these data. To do this fit eight candidate models with 3--10 knots, respectively. Report the AICc value for each of the eight models in a table.**
+
+```{r}
+bs.03 = lm(accel ~ 1 + bs(times, df =   6), data = mcycle)
+bs.04 = lm(accel ~ 1 + bs(times, df =   7), data = mcycle)
+bs.05 = lm(accel ~ 1 + bs(times, df =   8), data = mcycle)
+bs.06 = lm(accel ~ 1 + bs(times, df =   9), data = mcycle)
+bs.07 = lm(accel ~ 1 + bs(times, df =  10), data = mcycle)
+bs.08 = lm(accel ~ 1 + bs(times, df =  11), data = mcycle)
+bs.09 = lm(accel ~ 1 + bs(times, df =  12), data = mcycle)
+bs.10 = lm(accel ~ 1 + bs(times, df =  13), data = mcycle)
+
+data.frame(aictab(
+  cand.set = list(bs.03, bs.04, bs.05, bs.06, bs.07, bs.08, bs.09, bs.10),
+  modnames = paste0(3:10," knots")
+)) %>%
+  select(Knots = Modnames, AICc) %>%
+  knitr::kable(digits = 2, row.names = FALSE)
+```
+
+
+\vspace{2em}
+
+**6. Report the knot locations (interior and boundary) for the adopted model.**
+
+```{r}
+bs.2 = lm(accel ~ 1 + bs(times, df = 11), data = mcycle)
+#attr(bs.2$terms, "predvar")
+```
+
+The eight interior knots are at:
+
+- 10.47 ms,
+- 15.4 ms,
+- 16.8 ms,
+- 20.0 ms,
+- 25.4 ms,
+- 28.6 ms,
+- 35.53 ms, and
+- 42.87 ms,
+
+The two boundary knots are at:
+
+- 2.4 ms, and
+- 57.6 ms
+
+\vspace{2em}
+
+**7. Create a plot showing head acceleration as a function of time after impact (make these points somewhat transparent). Add the fitted spline model and the confidence envelope for the model to the scatterplot.**
+
+```{r fig.cap='Acceleration as a function of time. The cubic B-spline model (with 8 interior knots) and uncertainty for this model are also displayed.'}
+plot_data = data.frame(
+  times = seq(from = 2, to = 60, by = 0.1)
+  ) %>%
+  mutate(
+    yhat = predict(bs.2, newdata = ., se.fit = TRUE)$fit,
+    se = predict(bs.2, newdata = ., se.fit = TRUE)$se.fit,
+    lower_limit = yhat - 2*se,
+    upper_limit = yhat + 2*se
+  )
+
+
+
+ggplot(data = plot_data, aes(x = times, y = yhat)) +
+  geom_point(data = mcycle, aes(x = times, y = accel), alpha = 0.5) +
+  geom_line(color = "blue") +
+  geom_line(aes(y = lower_limit), color = "blue", linetype = "dashed") +
+  geom_line(aes(y = upper_limit), color = "blue", linetype = "dashed") +
+  theme_bw() +
+  xlab("Time (in ms)") +
+  ylab("Acceleration (in g)")
+```
+
+\newpage
+
+
+## Part IV: Natural Spline Models: Uniform Knots
+
+**8. Explore the number of interior knots needed to model these data. To do this fit eight candidate models with 3--10 knots, respectively, but his time fitting a natural cubic spline. Report the AICc value for each of the eight models in a table.**
+
+```{r}
+
+ns.03 = lm(accel ~ 1 + ns(times, df =   4), data = mcycle)
+ns.04 = lm(accel ~ 1 + ns(times, df =   5), data = mcycle)
+ns.05 = lm(accel ~ 1 + ns(times, df =   6), data = mcycle)
+ns.06 = lm(accel ~ 1 + ns(times, df =   7), data = mcycle)
+ns.07 = lm(accel ~ 1 + ns(times, df =   8), data = mcycle)
+ns.08 = lm(accel ~ 1 + ns(times, df =   9), data = mcycle)
+ns.09 = lm(accel ~ 1 + ns(times, df =  10), data = mcycle)
+ns.10 = lm(accel ~ 1 + ns(times, df =  11), data = mcycle)
+
+data.frame(aictab(
+  cand.set = list(ns.03, ns.04, ns.05, ns.06, ns.07, ns.08, ns.09, ns.10),
+  modnames = paste0(3:10," knots")
+)) %>%
+  select(Knots = Modnames, AICc) %>%
+  knitr::kable(digits = 2, row.names = FALSE)
+
+
+ns.2 = lm(accel ~ 1 + ns(times, df = 9), data = mcycle)
+#attr(ns.2$terms, "predvar")
+```
+
+
+**9. Create a plot showing head acceleration as a function of time after impact (make these points somewhat transparent). Add the fitted natural spline model and the confidence envelope for the model to the scatterplot.**
+
+```{r fig.cap='Acceleration as a function of time. The cubic natural spline model (with 8 interior knots) and uncertainty for this model are also displayed.'}
+plot_data = data.frame(
+  times = seq(from = 2, to = 60, by = 0.1)
+  ) %>%
+  mutate(
+    yhat = predict(ns.2, newdata = ., se.fit = TRUE)$fit,
+    se = predict(ns.2, newdata = ., se.fit = TRUE)$se.fit,
+    lower_limit = yhat - 2*se,
+    upper_limit = yhat + 2*se
+  )
+
+# Create plot
+ggplot(data = plot_data, aes(x = times, y = yhat)) +
+  geom_point(data = mcycle, aes(x = times, y = accel), alpha = 0.5) +
+  geom_line(color = "blue") +
+  geom_line(aes(y = lower_limit), color = "blue", linetype = "dashed") +
+  geom_line(aes(y = upper_limit), color = "blue", linetype = "dashed") +
+  theme_bw() +
+  xlab("Time (in ms)") +
+  ylab("Acceleration (in g)")
+```
+
+\newpage
+
+
+
+## Model Adoption and Answering the Research Questions
+
+**10. Report the AICc for the B-spline model you adopted in Part III and the natural spline model you fitted in Part IV.**
+
+```{r}
+data.frame(
+  Model = c("B-spline", "Natural spline"),
+  AICc = c(AICc(bs.2), AICc(ns.2))
+  ) %>%
+  knitr::kable()
+```
+
+
+\vspace{2em}
+
+**11. Based on the AICc values adopt a "final" model. Explain.**
+
+We will adopt the natural spline model as it has a lower AICc value.
+
+\vspace{2em}
+
+**12. Evaluate the assumptions for the adopted "final" model. Include any plots you use to make this evaluation.**
+
+```{r fig.show='hold'}
+out_3 = data.frame(
+  .fitted = fitted(ns.2),
+  .std.resid = rstandard(ns.2)
+)
+
+ggplot(data = out_3, aes(x = .std.resid)) +
+  educate::stat_density_confidence(model = "normal") +
+  stat_density(geom = "line") +
+  theme_bw() +
+  ylab("Probability density") +
+  xlab("Standardized residuals")
+
+ggplot(data = out_3, aes(x = .fitted, y = .std.resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0) +
+  theme_bw() +
+  xlab("Fitted values") +
+  ylab("Standardized residuals")
+```
+
+Based on the density plot, the assumption of normality may be violated. The marginal distribution of the residuals has more density near zero than would be expected in a normal distribution. The plot of the residuals versus the fitted values shows random scatter around $y=0$ indicating that the assumption that the conditional mean residual is zero  is satisfied. This plot shows very minor indication of heterogeneity of variance (although this may be attributable to a few outlying observations).
+
+\vspace{2em}
+
+**13. Use the plot of your fitted "final" model to describe the general shape of the underlying acceleration curve.**
+
+The trend is non-linear. After a short duration, there is rapid negative acceleration followed by rapid positive acceleration and then deceleration to zero gs.
+
+
+\newpage
+
+**14. Identify and report the minimum and maximum values in the acceleration curve. Also report the 95\% confidence limits for these values.**
+
+```{r}
+plot_data %>%
+  filter(yhat == max(yhat) | yhat == min(yhat)) %>%
+  mutate(Minmax = c("Minimum", "Maximum")) %>%
+  select(Minmax, Times = times, Fitted = yhat, LL = lower_limit, UL = upper_limit) %>%
+  knitr::kable(col.names = c("", "Time", "Fitted", "LL", "UL"), digits = 2, format = "latex", booktabs = TRUE) %>%
+  kableExtra::kable_styling() %>%
+  kableExtra::add_header_above(c(" " = 3, "95% CI" = 2))
+```
+

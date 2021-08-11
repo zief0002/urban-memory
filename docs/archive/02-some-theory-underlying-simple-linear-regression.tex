@@ -1,0 +1,251 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+    \setmainfont[]{Minion Pro}
+    \setsansfont[]{ITC Slimbach Std Book}
+    \setmonofont[Mapping=tex-ansi]{Source Code Pro}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\PassOptionsToPackage{usenames,dvipsnames}{color} % color is loaded by hyperref
+\hypersetup{unicode=true,
+            pdftitle={Some Theory Underlying Simple Linear Regression},
+            colorlinks=true,
+            linkcolor=Maroon,
+            citecolor=Blue,
+            urlcolor=umn2,
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{Some Theory Underlying Simple Linear Regression}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{}
+    \preauthor{}\postauthor{}
+      \predate{\centering\large\emph}
+  \postdate{\par}
+    \date{2018-09-03}
+
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage[table]{xcolor}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+
+\usepackage{amsthm}
+\usepackage{xcolor}
+\usepackage{xfrac}
+\usepackage[framemethod=tikz]{mdframed}
+\usepackage{graphicx}
+\usepackage{rotating}
+\usepackage{booktabs}
+\usepackage{caption}
+\definecolor{umn}{RGB}{153, 0, 85}
+\definecolor{umn2}{rgb}{0.1843137, 0.4509804, 0.5372549}
+\definecolor{myorange}{HTML}{EA6153}
+
+\begin{document}
+\maketitle
+
+\captionsetup[figure]{labelfont=bf, textfont=it, width=.75\textwidth, justification=raggedright}
+\captionsetup[table]{labelfont=bf, textfont=it, justification=raggedright, width=.75\textwidth}
+
+
+% \mdfdefinestyle{proof}{
+%    skipabove         = .5\baselineskip ,
+%    skipbelow         = .5\baselineskip ,
+%    leftmargin        = 20pt ,
+%    rightmargin       = 10pt ,
+%    innermargin       = 0pt ,
+%    innerleftmargin   = 10pt ,
+%    innerrightmargin  = 0pt ,
+%    innerbottommargin = 0pt ,
+%    linewidth         = 1pt,
+%    linecolor         = gray,
+%    topline           = true,
+%    bottomline        = true,
+%    rightline         = true
+% }
+
+% closed box instead of open box for the qed symbol:
+% \newcommand*\closedbox{%
+%    \leavevmode\hbox to.77778em{\hfil\rule{.675em}{.675em}\hfil}}
+% \let\qedsymbol\closedbox
+
+\let\qedsymbol\relax
+
+\mdfdefinestyle{proof}{
+   skipabove         = .5\baselineskip ,
+   skipbelow         = .5\baselineskip ,
+   leftmargin        = 0pt ,
+   rightmargin       = 0pt ,
+   skipabove         = 3em ,
+   skipbelow         = 3em ,
+   innermargin       = 0pt ,
+   innertopmargin    = .5em ,
+   innerleftmargin   = .5em ,
+   innerrightmargin  = 0pt ,
+   innerbottommargin = 0pt ,
+   linecolor         = black,
+   outerlinewidth    = 1pt,
+%   hidealllines      = true ,
+   % singleextra       = {
+   %   \draw (O) -- ++(0,.675em) (O) -- ++(.675em,0) ;
+   %   \draw (P-|O) -- ++(0,-.675em) (P-|O) -- ++(.675em,0) ;
+   % },
+   % firstextra        = {
+   %   \draw (P-|O) -- ++(0,-.675em) (P-|O) -- ++(.675em,0) ;
+   % },
+   % secondextra       = {
+   %   \draw (O) -- ++(0,.675em) (O) -- ++(.675em,0) ;
+   % },
+}
+
+% put the new mdframed style around the proof environment:
+\surroundwithmdframed[style=proof]{proof}
+
+
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+
+\mdfdefinestyle{mystyle}{
+  userdefinedwidth=5in, 
+  align=center, 
+  backgroundcolor=yellow, 
+  roundcorner=10pt, 
+  skipabove=2em
+  }
+
+\mdfdefinestyle{mystyle2}{
+  userdefinedwidth=5.5in, 
+  align=center, 
+  skipabove=10pt, 
+  topline=false, 
+  bottomline=false, 
+  linecolor=myorange, 
+  linewidth=5pt
+  }
+
+\frenchspacing
+
+To show that the slope estimator is unbiased, we need to show that
+\(\mathbb{E}(B_1) = \beta\). We can express the slope estimator \(B_1\)
+as a linear function of the observations, namely,
+
+\[
+B_1 = \sum m_iY_i \qquad \mathrm{where~} m_i = \frac{x_i-\bar{x}}{\sum(x_i-\bar{x})^2}
+\]
+
+We also make use of the fact that,
+
+\[
+\begin{split}
+\sum(x_i-\bar{x})^2 &= \sum(x_i-\bar{x})(x_i-\bar{x})\\
+&= \sum(x_i^2 -2x_i\bar{x} + \bar{x}^2) \\
+&= \sum x_i^2 -2\bar{x} \sum x_i + \sum \bar{x}^2 \\
+&= \sum x_i^2 -2\bar{x}(n\bar{x}) + n \bar{x}^2 \\
+&= \sum x_i^2 -2n\bar{x}^2 + n \bar{x}^2 \\
+&= \sum x_i^2 - n \bar{x}^2
+\end{split}
+\]
+
+and the assumption of linearity in the population, namely that,
+
+\[
+\mathbb{E}(Y_i) = \beta_0 + \beta_1(x_i)
+\]
+
+Since \(B_1 = \sum \frac{(x_i-\bar{x})Y_i}{\sum x_i^2 - n \bar{x}^2}\),
+then
+
+\[
+\begin{align*}
+\mathbb{E}(B_1) &= \mathbb{E}\bigg(\sum \frac{(x_i-\bar{x})Y_i}{\sum x_i^2 - n \bar{x}^2}\bigg) \\
+&= \mathbb{E}\bigg(\frac{1}{\sum x_i^2 - n \bar{x}^2} \times \sum \bigg[(x_i-\bar{x})Y_i\bigg] \bigg) \\
+&= \frac{1}{\sum x_i^2 - n \bar{x}^2} \times \mathbb{E}\bigg(\sum \bigg[(x_i-\bar{x})Y_i\bigg] \bigg) \\
+&= \frac{1}{\sum x_i^2 - n \bar{x}^2} \times \sum\bigg(\mathbb{E} \bigg[(x_i-\bar{x})Y_i\bigg] \bigg) \tag*{Expected value of a sum is the sum of an expected value.} \\
+&= \frac{1}{\sum x_i^2 - n \bar{x}^2} \times \sum\bigg((x_i-\bar{x})\mathbb{E} \big[Y_i\big] \bigg) \\
+&= \frac{1}{\sum x_i^2 - n \bar{x}^2} \times \sum\bigg((x_i-\bar{x})\big[\beta_0 + \beta_1(x_i)\big] \bigg) \tag*{Use definition of linearity assumption.} \\
+&= \frac{1}{\sum x_i^2 - n \bar{x}^2} \times \sum\bigg(x_i\beta_0-\bar{x}\beta_0 + \beta_1x_i^2 - \beta_1x_i\bar{x} \bigg) \\
+&= \frac{1}{\sum x_i^2 - n \bar{x}^2} \times \beta_0\sum x_i - n\bar{x}\beta_0 + \beta_1 \sum x_i^2 - \beta_1\bar{x}\sum x_i \bigg) \tag*{Distribute sum and pull out constants} \\
+&= \frac{1}{\sum x_i^2 - n \bar{x}^2} \times \beta_0n\bar{x} - n\bar{x}\beta_0 + \beta_1 \bigg( \sum x_i^2 - \bar{x}n\bar{x} \bigg) \\
+&= \frac{1}{\sum x_i^2 - n \bar{x}^2} \times \beta_1 \bigg( \sum x_i^2 - n\bar{x}^2 \bigg) \\
+&= \beta_1
+\end{align*}
+\]
+
+
+\end{document}

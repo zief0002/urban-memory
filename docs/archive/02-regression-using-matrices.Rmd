@@ -1,0 +1,488 @@
+---
+title: "Regression Using Matrices"
+author: "EPsy 8264"
+date: "`r Sys.Date()`"
+header-includes:
+   - \usepackage{amsthm}
+   - \usepackage{xcolor}
+   - \usepackage{xfrac}
+   - \usepackage{mdframed}
+   - \usepackage{graphicx}
+   - \usepackage{rotating}
+   - \usepackage{booktabs}
+   - \usepackage{caption}
+   - \definecolor{umn}{RGB}{153, 0, 85}
+   - \definecolor{umn2}{rgb}{0.1843137, 0.4509804, 0.5372549}
+   - \definecolor{myorange}{HTML}{EA6153}
+output: 
+  pdf_document:
+    highlight: tango
+    latex_engine: xelatex
+    fig_width: 6
+    fig_height: 6
+    includes:
+      before_body: notes.tex
+mainfont: "Minion Pro"
+sansfont: "ITC Slimbach Std Book"
+monofont: "Source Code Pro"
+urlcolor: "umn2"
+always_allow_html: yes
+bibliography: epsy8264.bib
+csl: apa-single-spaced.csl
+---
+
+\frenchspacing
+
+```{r setup, include=FALSE, message=FALSE}
+library(broom)
+library(dplyr)
+library(knitr)
+library(kableExtra)
+library(sm)
+```
+
+Recall the model equation we use in simple linear regression
+
+$$
+Y_i = \beta_0 + \beta_1(X_i) + \epsilon_i
+$$
+
+where the response variable ($Y$) is represented as a linear function of the predictor ($X$) and a residual ($\epsilon$). Equation terms with an $i$ subscript vary across subjects. Terms without an $i$ subscript are the same (fixed) across subjects. 
+
+# Model Equation Using Matrix Algebra
+
+Using the subject-specific subscripts ($1, 2, 3, \ldots, n$), we can write out each subject's equation:
+
+$$
+\begin{split}
+Y_1 &= \beta_0 + \beta_1(X_1) + \epsilon_1 \\
+Y_2 &= \beta_0 + \beta_1(X_2) + \epsilon_2 \\
+Y_3 &= \beta_0 + \beta_1(X_3) + \epsilon_3 \\
+\vdots &~ ~~~~~\vdots ~~~~~~~~~~\vdots~~~~~~~~~~~~~\vdots  \\
+Y_n &= \beta_0 + \beta_1(X_n) + \epsilon_n
+\end{split}
+$$
+
+These can be arranged into a set of vectors and matrices,
+
+
+$$
+\begin{bmatrix}Y_1 \\ Y_2 \\ Y_3 \\ \vdots \\ Y_n\end{bmatrix} = \begin{bmatrix}\beta_0(1) + \beta_1(X_1) \\ \beta_0(1) + \beta_1(X_2) \\ \beta_0(1) + \beta_1(X_3) \\ \vdots \\ \beta_0(1) + \beta_1(X_n)\end{bmatrix} + \begin{bmatrix}\epsilon_1 \\ \epsilon_2 \\ \epsilon_3 \\ \vdots \\ \epsilon_n\end{bmatrix}
+$$
+
+We can re-write this as,
+
+$$
+\begin{bmatrix}Y_1 \\ Y_2 \\ Y_3 \\ \vdots \\ Y_n\end{bmatrix} = \begin{bmatrix}1 & X_1 \\ 1 & X_2 \\ 1 & X_3 \\ \vdots \\ 1 & X_n\end{bmatrix} \begin{bmatrix}\beta_0 \\ \beta_1\end{bmatrix}+ \begin{bmatrix}\epsilon_1 \\ \epsilon_2 \\ \epsilon_3 \\ \vdots \\ \epsilon_n\end{bmatrix}
+$$
+
+Naming these vectors and matrices, we can write the regression model compactly as,
+\footnote{Typically the dimensions are dropped when we write the regression model. They are included here for completeness.}
+$$
+\underset{n \times 1}{\mathbf{Y}} = \underset{n \times 2}{\mathbf{X}}\underset{2 \times 1}{\boldsymbol{\beta}} + \underset{n \times 1}{\boldsymbol{\epsilon}}
+$$
+
+In the equation above, the $\mathbf{X}$ matrix is sometimes referred to the *design matrix*, the *model matrix*, or the *data matrix*.
+
+## Estimating the Beta Matrix
+
+When we fit a regression model to a dataset, one of the goals is to estimate the regression coefficients, $\beta_0$ and $\beta_1$. We can do this by using the regression equation,
+
+$$
+\mathbf{Y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\epsilon}
+$$
+
+Re-writing the equation to isolate the error vector, we get
+
+$$
+\boldsymbol{\epsilon} = \mathbf{Y} - \mathbf{X}\boldsymbol{\beta}
+$$
+
+In OLS estimation, we are interested in finding the coefficients that minimize the sum of squared error. The sum of squared error can be expressed in matrix notation as $\boldsymbol{\epsilon}^{\prime}\boldsymbol{\epsilon}$.
+
+$$
+\boldsymbol{\epsilon}^{\prime}\boldsymbol{\epsilon} = (\mathbf{Y} - \mathbf{X}\boldsymbol{\beta})^{\prime} (\mathbf{Y} - \mathbf{X}\boldsymbol{\beta})
+$$
+
+Using the rules of transposes and expanding this, we get,
+
+$$
+\underbrace{\mathbf{Y}^{\prime}\mathbf{Y}}_{1 \times 1} - \underbrace{\boldsymbol{\beta}^{\prime}\mathbf{X}^{\prime}\mathbf{Y}}_{1 \times 1} - \underbrace{\mathbf{Y}^{\prime}\mathbf{X}\boldsymbol{\beta}}_{1 \times 1} + \underbrace{\boldsymbol{\beta}^{\prime}\mathbf{X}^{\prime}\mathbf{X}\boldsymbol{\beta}}_{1\times 1}
+$$
+
+
+
+Each term is a $1\times 1$ matrix\footnote{You should verify that the dimension of each term is $1\times 1$.}, which means that each term is equal to its transpose. We will re-write the third term $\mathbf{Y}^{\prime}\mathbf{X}\boldsymbol{\beta}$ as its transpose $\boldsymbol{\beta}^{\prime}\mathbf{X}^{\prime}\mathbf{Y}$.
+
+$$
+\mathbf{Y}^{\prime}\mathbf{Y} - \boldsymbol{\beta}^{\prime}\mathbf{X}^{\prime}\mathbf{Y} - \boldsymbol{\beta}^{\prime}\mathbf{X}^{\prime}\mathbf{Y} - \boldsymbol{\beta}^{\prime}\mathbf{X}^{\prime}\mathbf{X}\boldsymbol{\beta}
+$$
+
+Combining the two middle terms,
+
+$$
+\mathbf{Y}^{\prime}\mathbf{Y} - 2\boldsymbol{\beta}^{\prime}\mathbf{X}^{\prime}\mathbf{Y} - \boldsymbol{\beta}^{\prime}\mathbf{X}^{\prime}\mathbf{X}\boldsymbol{\beta}
+$$
+
+To find the values for the elements in $\boldsymbol{\beta}$ that minimize the equation, we differentiate with respect to $\boldsymbol{\beta}$.
+
+$$
+\frac{\delta}{\delta\boldsymbol{\beta}}~\mathbf{Y}^{\prime}\mathbf{Y} - 2\boldsymbol{\beta}^{\prime}\mathbf{X}^{\prime}\mathbf{Y} - \boldsymbol{\beta}^{\prime}\mathbf{X}^{\prime}\mathbf{X}\boldsymbol{\beta}
+$$
+
+Differentiating this we get
+
+$$
+-2\mathbf{X}^{\prime}\mathbf{Y} + 2\mathbf{X}^{\prime}\mathbf{X}\boldsymbol{\beta}
+$$
+
+We set this equal to zero and solve for $\boldsymbol{\beta}$.
+
+$$
+\begin{split}
+0 &= -2\mathbf{X}^{\prime}\mathbf{Y} + 2\mathbf{X}^{\prime}\mathbf{X}\boldsymbol{\beta} \\
+2\mathbf{X}^{\prime}\mathbf{Y} &= 2\mathbf{X}^{\prime}\mathbf{X}\boldsymbol{\beta} \\
+\mathbf{X}^{\prime}\mathbf{Y} &=\mathbf{X}^{\prime}\mathbf{X}\boldsymbol{\beta}
+\end{split}
+$$
+
+To isolate $\boldsymbol{\beta}$ we pre-multiply both sides of the equation by $(\mathbf{X}^{\prime}\mathbf{X})^{-1}$.
+
+$$
+\begin{split}
+(\mathbf{X}^{\prime}\mathbf{X})^{-1}(\mathbf{X}^{\prime}\mathbf{Y}) &=(\mathbf{X}^{\prime}\mathbf{X})^{-1}(\mathbf{X}^{\prime}\mathbf{X})\boldsymbol{\beta} \\
+(\mathbf{X}^{\prime}\mathbf{X})^{-1}\mathbf{X}^{\prime}\mathbf{Y} &= \mathbf{I}\boldsymbol{\beta} \\
+(\mathbf{X}^{\prime}\mathbf{X})^{-1}\mathbf{X}^{\prime}\mathbf{Y} &= \boldsymbol{\beta}
+\end{split}
+$$
+
+The equation,
+
+$$
+\boldsymbol{\beta} = (\mathbf{X}^{\prime}\mathbf{X})^{-1}\mathbf{X}^{\prime}\mathbf{Y}
+$$
+
+implies that the vector of regression coefficients can be obtained directly through manipulation of the design matrix and the vector of outcomes. In other words, the coefficients that minimize the sum of squared residuals is a direct function of the data.
+
+## Example Using Data
+
+We will use the following toy data set to illustrate how regression is carried out via matrix algebra.
+
+```{r}
+Y  = c(12, 8, 16.26, 13.65, 8.5)
+X1 = c(32, 33, 32, 33, 26)
+```
+
+Say we wanted to fit a regression model using *X1* to predict variation in *Y*. We can estimate the regression coefficients as,
+
+```{r}
+# Create design matrix
+X = matrix(
+  data = c(rep(1, 5), X1),
+  ncol = 2
+  )
+
+X
+
+# Estimate coefficients
+B = solve(t(X) %*% X) %*% t(X) %*% Y
+B
+```
+
+Let's compare this to the estimates given in the `lm()` function.
+
+```{r}
+lm.1 = lm(Y ~ 1 + X1)
+tidy(lm.1)
+```
+
+They are identical. The `lm()` function actually uses the exact same matrix algebra to compute the regression coefficients that it outputs.
+
+# Fitted Values
+
+The $n\times 1$ vector of *fitted values*, $\mathbf{\hat{Y}}$ can be computed as,
+
+$$
+\mathbf{\hat{Y}} = \begin{bmatrix}\hat{Y}_1 \\ \hat{Y}_2 \\ \hat{Y}_3 \\ \vdots \\ \hat{Y}_n\end{bmatrix} = \mathbf{X}\boldsymbol{\beta}
+$$
+
+In our example, we can compute the fitted values as
+
+```{r}
+# Compute fitted values
+X %*% B
+
+# Verify using the fitted() function
+fitted(lm.1)
+```
+
+# H-Matrix (Hat Matrix)
+
+One useful matrix in regression is the **H**-matrix. To obtain the **H**-matrix we substitute the matrix formulation of $\boldsymbol{\beta}$ into the equation to compute the fitted values,
+
+$$
+\begin{split}
+\mathbf{\hat{Y}} &= \mathbf{X}\boldsymbol{\beta} \\
+&= \mathbf{X}(\mathbf{X}^{\prime}\mathbf{X})^{-1}\mathbf{X}^{\prime}\mathbf{Y} \\
+&= \mathbf{HY}
+\end{split}
+$$
+
+The **H**-matrix is then,
+
+$$
+\mathbf{H} = \mathbf{X}(\mathbf{X}^{\prime}\mathbf{X})^{-1}\mathbf{X}^{\prime}
+$$
+
+This matrix has the following properties,
+
+- **H** is a square $n \times n$ matrix
+- **H** is a symmetric matrix.
+- **H** is an idempotent matrix.
+- It can be created completely from the design matrix and its transpose.
+
+In our example,
+
+```{r}
+h = X %*% solve(t(X) %*% X) %*% t(X)
+h
+```
+
+We can also use the **H**-matrix to compute the fitted values,
+
+```{r}
+# Compute fitted values
+h %*% Y
+```
+
+The fitted values can be expressed as linear combinations of the response vector **Y** using coefficients found in **H**. Because of this, **H** is often referred to as the *hat matrix*.
+
+One of the properties of **H** is *idempotency*. This is a property where multiplying a matrix by itself results in the original matrix.
+
+$$
+\mathbf{HH} = \mathbf{H}
+$$
+
+We can verify this using R
+
+```{r}
+h %*% h
+```
+
+# Residual Matrix
+
+The $n\times 1$ vector of *residuals*, $\boldsymbol{\epsilon}$ can be computed as,
+
+$$
+\boldsymbol{\epsilon} = \begin{bmatrix}\epsilon_1 \\ \epsilon_2 \\ \epsilon_3 \\ \vdots \\ \epsilon_n\end{bmatrix} = \mathbf{Y} - \mathbf{\hat{Y}}
+$$
+
+Doing a little substitution,
+
+$$
+\begin{split}
+\boldsymbol{\epsilon} &= \mathbf{Y} - \mathbf{\hat{Y}} \\
+&= \mathbf{Y} - \mathbf{X}\boldsymbol{\beta} \\
+&= \mathbf{Y} - \mathbf{HY} \\
+&= (\mathbf{I} - \mathbf{H}) \mathbf{Y}
+\end{split}
+$$
+
+Thus the residuals can also be expressed as linear combinations of the response vector **Y**. The matrix $(\mathbf{I}-\mathbf{H})$ has some of the same properties as **H**, namely, it is
+
+- Square
+- Symmetric
+- Idempotent
+
+We can compute the residual vector using R
+
+```{r}
+# Create 5x5 identity matrix
+i = diag(5)
+
+residuals = (i - h) %*% Y
+residuals
+
+# Verify the residual vector
+resid(lm.1)
+```
+
+# Estimation of Error Variance
+
+Recall that the estimate of the error variance, or Mean Squared Error ($\hat\sigma^2_{\epsilon}$), is
+
+$$
+\hat\sigma^2_{\epsilon} = \frac{\mathrm{SS}_{\mathrm{Error}}}{\mathrm{df}_{\mathrm{Error}}}
+$$
+
+Using matrices, the sum of squared error ($\mathrm{SS}_{\mathrm{Error}}$) is
+
+$$
+\mathrm{SS}_{\mathrm{Error}} = \boldsymbol{\epsilon}^{\prime}\boldsymbol{\epsilon}
+$$
+
+The $\mathrm{df}_{\mathrm{Error}}$ is
+
+$$
+n - k
+$$
+
+where $k$ is the number of coefficients being estimated in the model. In the simple regression case, $k=2$.
+
+```{r}
+# Compute SS for the residuals
+ss_error = t(residuals) %*% residuals
+ss_error
+
+# Compute df for the residuals
+n = 5
+num_coef = 2
+df_residual = n - num_coef
+
+# Compute error variance estimate
+mse = ss_error / df_residual
+mse
+```
+
+We can verify these results by examining the ANOVA decomposition using the `anova()` function.
+
+```{r}
+anova(lm.1)
+```
+
+# Variance-Covariance Matrix of the Regression Coefficients
+
+Reember that the standard error (SE) for a coefficient represents the uncertainty in the estimate. We use them to construct a test statistic (*z* or *t*) or confidence interval.
+
+While the SEs are useful for CIs and tests because they are on the same scale as the metric used to measure the estimate, in mathematical applications the variances are more commonly used. We typically provide the variances in a variance–covariance matrix of the coefficients. In this matrix the variances for each of the coefficients is given on the main diagonal of the matrix. The covariances between the coefficients are given in the off-diagonal elements. For example, the variance–covariance matrix for a simple regression model is
+
+$$
+\boldsymbol{\sigma^2_B} = \begin{bmatrix}\sigma^2_{b_0} & \sigma_{b_0,b_1} \\ \sigma_{b_0,b_1} & \sigma^2_{b_1} \end{bmatrix}
+$$
+
+Examining this, we find that the variance-covariance matrix is a square, symmetric matrix. To compute the variance-covariance matrix of the regression coefficients
+
+$$
+\boldsymbol{\sigma^2_B} = \sigma^2_{\epsilon} (\mathbf{X}^{\prime}\mathbf{X})^{-1}
+$$
+
+Based on this formula, we see that the variance of the estimator increases when the error term is more noisy ($\sigma^2_{\epsilon}$ increases). However, it decreases when the variation in $X$ increases.\footnote{Convince yourself of this.} This is bxecause having more observations, allows for more accurate estiation of $\boldsymbol{\beta}$. These also affect the size of the covariance terms on the off-diagonal.
+
+
+In our example,
+
+```{r}
+# (X'X)^(-1)
+solve(t(X) %*% X)
+
+# Variance-covariance matrix
+V_b = 13.31216 * solve(t(X) %*% X)
+V_b
+```
+
+The variance of $\hat\beta_0$ is 375.04 and the variance for $\hat\beta_1$ is 0.38. The covariance between $\hat\beta_0$ and $\hat\beta_1$ is $-11.94$.
+
+# Standard Errors for the Coefficients
+
+The standard error for each regression coefficient can be found by computing the square root of the variance estimates.\footnote{Verify this with the output from the \texttt{tidy()} function.}
+
+```{r}
+sqrt(diag(V_b))
+```
+
+## Correlation Between the Coefficients
+
+Recall that the correlation is the standardized covariance. We can obtain the correlation coefficient between $\hat\beta_0$ and $\hat\beta_1$, which is more interpretable than the covariance using
+
+$$
+r_{b_0,b_1} = \frac{\sigma_{b_0,b_1}}{\sqrt{\sigma^2_{b_0}\sigma^2_{b_1}}}
+$$
+
+Using the values from our example,
+
+$$
+\begin{split}
+r_{b_0,b_1} &= \frac{-11.93504}{\sqrt{375.03568 \times 0.3825333}} \\
+&= -0.996
+\end{split}
+$$
+
+If we have assigned the variance-covariance matrix to an object, we can use indexing to access the different elements to compute the correlation.
+
+```{r}
+V_b[1, 2] / sqrt(V_b[1, 1] * V_b[2, 2])
+```
+
+The correlation indicates that the regression coefficients are highly, negatively correlated. How can one set of regression coefficients have a correlation? You have to remember the thought experiements about repeated sampling from a population that we talked about in EPsy 8251/8252. The estimated correlation gives the *expected correlation* of the regression coefficients across muliple random samples. In our example, it is telling you that if you did the experiment again and it so happened that the intercept was smaller, it is likely that the slope coefficient would be larger.
+
+In practice, the variance-covariance matrix of the regression coefficients can be obtained directly from R using the `vcov()` function.
+
+```{r}
+vcov(lm.1)
+```
+
+# Regression Assumptions
+
+There are several assumptions about the errors for the regression model, namely that:
+
+- They are independent of one another;
+- The average error is 0; and
+- They have constant variance
+
+We can express these assumptions using matrix notation. The independence assumption implies that the covariance between two errors is 0.
+
+$$
+\sigma(\epsilon_j, \epsilon_k) = 0
+$$
+
+for all $j\neq k$.
+
+The assumption that the average residual (at each $X$) is zero can be written as:
+
+$$
+\begin{split}
+E(\boldsymbol{\epsilon}) = \mathbf{0} \\[2em]
+E\begin{pmatrix}\begin{bmatrix}\epsilon_1 \\ \epsilon_2\\ \epsilon_3\\ \vdots \\ \epsilon_n\end{bmatrix}\end{pmatrix} = \begin{bmatrix}0 \\ 0\\ 0\\ \vdots \\ 0\end{bmatrix}
+\end{split}
+$$
+
+The constant variance assumption says that the variance of the residuals (at each $X$) is the same, $\sigma^2_{\epsilon}$.
+
+## Variance-Covariance Matrix of the Residuals
+
+If we combine this with the independence assumption, we can write out the variance-covariance matrix of the residuals.
+
+$$
+\boldsymbol{\sigma^2}(\boldsymbol{\epsilon}) = \begin{bmatrix}\sigma^2_{\epsilon} & 0 & 0 & \ldots & 0 \\ 0 & \sigma^2_{\epsilon} & 0 & \ldots & 0\\ 0 & 0 & \sigma^2_{\epsilon} & \ldots & 0\\ \vdots & \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & 0 & \ldots & \sigma^2_{\epsilon}\end{bmatrix}
+$$
+
+Notice that the variance-covariance matrix of the residuals is a scalar matrix and can also be expressed as the product of $\sigma^2_{\epsilon}$ and an $n \times n$ identity matrix
+
+$$
+\begin{split}
+\boldsymbol{\sigma^2}(\boldsymbol{\epsilon}) &= \sigma^2_{\epsilon} \begin{bmatrix}1 & 0 & 0 & \ldots & 0 \\ 0 & 1 & 0 & \ldots & 0\\ 0 & 0 & 1 & \ldots & 0\\ \vdots & \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & 0 & \ldots & 1\end{bmatrix}\\[1em]
+&= \sigma^2 \mathbf{I}
+\end{split}
+$$
+
+In our toy example,
+
+```{r}
+# Variance-covariance matrix of residuals
+13.31216 * diag(5)
+```
+
+## Writing the Regression Model
+
+We can use the matrix expressions of the model equation and assumptions to completely specify the regression model. Namely,
+
+
+\begin{mdframed}[style=mystyle]
+$$
+\mathbf{Y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\epsilon}
+$$
+where $\boldsymbol{\epsilon}$ is a vector of independent random variables with $E(\boldsymbol{\epsilon})=0$ and $\boldsymbol{\sigma^2}(\boldsymbol{\epsilon})= \sigma^2_{\epsilon}\mathbf{I}$.
+\end{mdframed}
+
+
+# References

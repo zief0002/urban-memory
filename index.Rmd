@@ -1,0 +1,55 @@
+---
+title: "EPsy 8264"
+site: distill::distill_website
+listing: posts
+---
+
+
+
+# Welcome
+
+
+Welcome to *EPsy 8264: Advanced Multiple Regression Analysis*. This is an advanced seminar for doctoral students in education covering a diverse set of regression methodologies. We will begin with a brief review of the General Linear Model and establishment of a mathematical foundation for the estimation of regression coefficients and standard errors in these models through the use of matrix algebra. The course will also cover more advanced modeling techniques, such as regression diagnostics, WLS and sandwich estimation, PCA, shrinkage methods, model selection and local models.
+
+
+<!-- - **Syllabus, assignments, data, and script files:** [github repository](https://github.com/zief0002/epsy-8251) -->
+<!-- - **Course notes and readings:** [website](https://zief0002.github.io/book-8252/) | [github repository](https://github.com/zief0002/book-8252) -->
+
+
+<br />
+
+
+
+
+## Classroom
+
+- Tuesday/Thursday (9:45&ndash;11:00): [Appleby Hall 102](https://campusmaps.umn.edu/appleby-hall)
+
+
+<br />
+
+
+## Syllabus
+
+- The course syllabus is available [here](https://github.com/zief0002/epsy-8264/raw/master/syllabus/f21-epsy-8264-syllabus.pdf).
+- [Message from Snoop Dogg](https://t.co/5X88O0DBUZ?amp=1) about the syllabus
+
+
+<br />
+
+
+## Textbooks
+
+The course textbook is available via the University of Minnesota library.
+
+- Fox, J. (2013). [A mathematical primer for social statistics](https://primo.lib.umn.edu/permalink/f/1q7ssba/UMN_ALMA21325943720001701). Sage. 
+
+<!-- - Grolemund, G., &amp; Wickham, H. (2017). [R for data science](http://r4ds.had.co.nz/). O'Reilly. -->
+
+
+<br />
+
+
+
+
+<br />

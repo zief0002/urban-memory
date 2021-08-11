@@ -1,0 +1,276 @@
+---
+title: "Assignment 01"
+author: "Matrix Algebra for Linear Regression"
+header-includes:
+   - \usepackage{xcolor}
+   - \usepackage{mathtools}
+   - \usepackage{tikz}
+   - \usepackage{tkz-euclide}
+   - \definecolor{umn}{RGB}{153, 0, 85}
+   - \definecolor{umn2}{rgb}{0.1843137, 0.4509804, 0.5372549}
+output: 
+  pdf_document:
+    highlight: tango
+urlcolor: "umn2"
+---
+
+
+This assignment is worth 20 points. 
+
+
+
+
+
+```{r echo=FALSE}
+x = data.frame(
+  country = c("Algeria", "Bolivia", "Burundi", "Dominican Republic", "Kenya", "Malawi", 
+              "Nicaragua", "Paraguay", "Rwanda", "Trinidad & Tobago"),
+  infant = c( 86.3, 60.4, 150.0, 48.8, 55.0, 148.3, 46.0, 38.6, 132.9, 26.2),
+  pci = c(400, 200, 68, 406, 169, 130, 507, 347, 61, 732),
+  region = c("Africa", "Americas", "Africa", "Americas", "Africa", "Africa", "Americas", "Americas", "Africa", "Americas")
+)
+
+#knitr::kable(x)
+```
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE)
+```
+
+
+## Unstandardized Regression
+
+**1. Write out the design matrix that would be used if we fitted the model `lm(infant ~ 1 + pci + region + pci:region)`. Assume that `Americas` is the reference group in this model.**
+
+```{r echo=FALSE}
+x$americas = ifelse(x$region == "Africa", 1, 0)
+
+X = matrix(
+  data = c(rep(1, 10), x$pci, x$americas, x$americas*x$pci),
+  nrow = 10
+  )
+
+Y = matrix(
+  data = x$infant,
+  nrow = 10
+)
+
+X
+```
+
+\vspace{2em}
+
+**2. Write out the elements of the matrix $\mathbf{X}^{\intercal}\mathbf{X}$, where $\mathbf{X}$ is the design matrix.**
+
+```{r}
+t(X) %*% X
+```
+
+\vspace{2em}
+
+**3. Using matrix algebra, compute the column vector of coefficients from the OLS regression. Report this matrix.**
+
+```{r}
+b = solve(t(X) %*% X) %*% t(X) %*% Y
+b
+```
+
+\vspace{2em}
+
+**4. Using matrix algebra, compute and report the matrix of fitted values for each of the 10 observations.**
+
+```{r}
+y_hat = X %*% b
+y_hat
+```
+
+\vspace{2em}
+
+**5. Using matrix algebra, compute and report the matrix of residuals for each of the 10 observations.**
+
+```{r}
+e = Y - y_hat
+e
+```
+
+\vspace{2em}
+
+**6. Using matrix algebra, compute and report the estimated value for the MSE.**
+
+```{r}
+mse = (t(e) %*% e) / 6
+mse
+```
+
+\newpage
+
+**7.  Using matrix algebra, compute and report the variance--covariance matrix of the coefficients.**
+
+```{r}
+var_cov_b = as.numeric(mse) * solve(t(X) %*% X)
+var_cov_b
+```
+
+\vspace{2em}
+
+**8. Based on the variance--covariance matrix you reported in the previous question, find the SE for the coefficient associated with the main-effect of PCI.**
+
+```{r}
+sqrt(var_cov_b[2, 2])
+```
+
+\vspace{2em}
+
+**9. Given the assumptions of the OLS model and the MSE estimate you computed in Question 6, compute and report the variance--covariance matrix of the residuals.**
+
+
+```{r}
+as.numeric(mse) * diag(10)
+```
+
+\newpage
+
+**10. Compute the hat-matrix and show how you would use the values in the hat-matrix to find $\hat{y}_1$ (the predicted value for Algeria).**
+
+```{r}
+h = X %*% solve(t(X) %*% X) %*% t(X)
+sum(h[1, ] * Y)
+```
+
+## Standardized Regression
+
+```{r echo=FALSE}
+x$z_infant = scale(x$infant)
+x$z_pci = scale(x$pci)
+
+X = matrix(
+  data = c(rep(1, 10), x$z_pci, x$americas, x$americas*x$z_pci),
+  nrow = 10
+  )
+
+Y = matrix(
+  data = x$z_infant,
+  nrow = 10
+)
+```
+
+
+
+**11. Write out the design matrix that would be used to fit the model. Again, assume that `Americas` is the reference group in this model.**
+
+```{r echo=FALSE}
+X
+```
+
+
+\vspace{2em}
+
+**Use for Questions 12--13**
+
+Using the standardized infant mortality `z_infant` and per-capita income `z_pci` variables. Fit the model: `lm(z_infant ~ z_pci + americas + z_pci:americas - 1)`.
+
+```{r echo=FALSE, eval=FALSE}
+lm(z_infant ~ z_pci + americas + z_pci:americas - 1, data = x)
+```
+
+\vspace{2em}
+
+**12. How is the design matrix for this model different than the design matrix for the model fitted in Question 11? What effect does this have on the vector of coefficient values?**
+
+The formula suppresses the intercept; thus the design matrix will not have a column of ones. As a result, the vector of coefficients will be $3\times 1$ (one less coefficient).
+
+```{r echo=FALSE}
+x$z_infant = scale(x$infant)
+x$z_pci = scale(x$pci)
+
+X = matrix(
+  data = c(x$z_pci, x$americas, x$americas*x$z_pci),
+  nrow = 10
+  )
+
+Y = matrix(
+  data = x$z_infant,
+  nrow = 10
+)
+```
+
+\vspace{2em}
+
+**13. Using matrix algebra, compute and report the estimates for each of the coefficients, the standard errors of the coefficients, and the RMSE. (3pts)**
+
+```{r}
+# Compute coefficients
+b = solve(t(X) %*% X) %*% t(X) %*% Y
+b
+
+
+y_hat = X %*% b
+e = Y - y_hat
+mse = (t(e) %*% e) / 7
+
+# Compute SEs
+sqrt(diag(as.numeric(mse) * solve(t(X) %*% X)))
+
+# Compute RMSE
+sqrt(as.numeric(mse))
+```
+
+
+## ANOVA Model via Regression
+
+
+```{r echo=FALSE}
+x$effect = ifelse(x$region == "Africa", 1, -1)
+
+X = matrix(
+  data = c(rep(1, 10), x$effect),
+  nrow = 10
+  )
+
+Y = matrix(
+  data = x$z_infant,
+  nrow = 10
+)
+```
+
+**14. Write out the design matrix that would be used to fit the model. **
+
+```{r echo=FALSE}
+X
+```
+
+
+\vspace{2em}
+
+**15. Using matrix algebra, compute and report the column vector of coefficients from the OLS regression.**
+
+```{r}
+b = solve(t(X) %*% X) %*% t(X) %*% Y
+b
+```
+
+
+\newpage
+
+**16. Using matrix algebra, compute and report the variance--covariance matrix for the coefficients.**
+
+```{r}
+y_hat = X %*% b
+e = Y - y_hat
+mse = (t(e) %*% e) / 7
+
+# Compute variance-covariance matrix
+as.numeric(mse) * solve(t(X) %*% X)
+```
+
+\vspace{2em}
+
+**17. Explain why the sampling variances for the coefficients are the same and why the sampling covariance is zero by referring to computations produced in the matrix algebra. (2pts)**
+
+The reason is the computation of the inverse of $\mathbf{X}^{\intercal}\mathbf{X}$. This produces a $2\times 2$ diagonal matrix that has 0.1 on the main diagonal and zeros on the off-diagonal. Since the diagonal elements are the same, the sampling variances will be equal; since the off-diagonal elements are zero, the covariance will also be zero.
+
+```{r}
+solve(t(X) %*% X)
+```
+

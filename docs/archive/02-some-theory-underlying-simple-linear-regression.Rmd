@@ -1,0 +1,98 @@
+---
+title: "Some Theory Underlying Simple Linear Regression"
+date: "`r Sys.Date()`"
+header-includes:
+   - \usepackage{amsthm}
+   - \usepackage{xcolor}
+   - \usepackage{xfrac}
+   - \usepackage[framemethod=tikz]{mdframed}
+   - \usepackage{graphicx}
+   - \usepackage{rotating}
+   - \usepackage{booktabs}
+   - \usepackage{caption}
+   - \definecolor{umn}{RGB}{153, 0, 85}
+   - \definecolor{umn2}{rgb}{0.1843137, 0.4509804, 0.5372549}
+   - \definecolor{myorange}{HTML}{EA6153}
+output: 
+  pdf_document:
+    includes:
+      before_body: notes.tex
+    highlight: tango
+    latex_engine: xelatex
+    fig_width: 6
+    fig_height: 6
+mainfont: "Minion Pro"
+sansfont: "ITC Slimbach Std Book"
+monofont: "Source Code Pro"
+urlcolor: "umn2"
+always_allow_html: yes
+bibliography: epsy8264.bib
+csl: apa-single-spaced.csl
+---
+
+\frenchspacing
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(dplyr)
+library(knitr)
+library(kableExtra)
+library(sm)
+```
+
+To show that the slope estimator is unbiased, we need to show that $\mathbb{E}(B_1) = \beta$. We can express the slope estimator $B_1$ as a linear function of the observations, namely,
+
+$$
+B_1 = \sum m_iY_i \qquad \mathrm{where~} m_i = \frac{x_i-\bar{x}}{\sum(x_i-\bar{x})^2}
+$$
+
+We also make use of the fact that,
+
+
+$$
+\begin{split}
+\sum(x_i-\bar{x})^2 &= \sum(x_i-\bar{x})(x_i-\bar{x})\\
+&= \sum(x_i^2 -2x_i\bar{x} + \bar{x}^2) \\
+&= \sum x_i^2 -2\bar{x} \sum x_i + \sum \bar{x}^2 \\
+&= \sum x_i^2 -2\bar{x}(n\bar{x}) + n \bar{x}^2 \\
+&= \sum x_i^2 -2n\bar{x}^2 + n \bar{x}^2 \\
+&= \sum x_i^2 - n \bar{x}^2
+\end{split}
+$$
+
+and the assumption of linearity in the population, namely that,
+
+$$
+\mathbb{E}(Y_i) = \beta_0 + \beta_1(x_i)
+$$
+
+Since $B_1 = \sum \frac{(x_i-\bar{x})Y_i}{\sum x_i^2 - n \bar{x}^2}$, then
+
+
+\begin{proof}
+\[
+$$
+\begin{align*}
+\mathbb{E}(B_1) &= \mathbb{E}\bigg(\sum \frac{(x_i-\bar{x})Y_i}{\sum x_i^2 - n \bar{x}^2}\bigg) \\
+&= \mathbb{E}\bigg(\frac{1}{\sum x_i^2 - n \bar{x}^2} \times \sum \bigg[(x_i-\bar{x})Y_i\bigg] \bigg) \\
+&= \frac{1}{\sum x_i^2 - n \bar{x}^2} \times \mathbb{E}\bigg(\sum \bigg[(x_i-\bar{x})Y_i\bigg] \bigg) \\
+&= \frac{1}{\sum x_i^2 - n \bar{x}^2} \times \sum\bigg(\mathbb{E} \bigg[(x_i-\bar{x})Y_i\bigg] \bigg) \tag*{Expected value of a sum is the sum of an expected value.} \\
+&= \frac{1}{\sum x_i^2 - n \bar{x}^2} \times \sum\bigg((x_i-\bar{x})\mathbb{E} \big[Y_i\big] \bigg) \\
+&= \frac{1}{\sum x_i^2 - n \bar{x}^2} \times \sum\bigg((x_i-\bar{x})\big[\beta_0 + \beta_1(x_i)\big] \bigg) \tag*{Use definition of linearity assumption.} \\
+&= \frac{1}{\sum x_i^2 - n \bar{x}^2} \times \sum\bigg(x_i\beta_0-\bar{x}\beta_0 + \beta_1x_i^2 - \beta_1x_i\bar{x} \bigg) \\
+&= \frac{1}{\sum x_i^2 - n \bar{x}^2} \times \beta_0\sum x_i - n\bar{x}\beta_0 + \beta_1 \sum x_i^2 - \beta_1\bar{x}\sum x_i \bigg) \tag*{Distribute sum and pull out constants} \\
+&= \frac{1}{\sum x_i^2 - n \bar{x}^2} \times \beta_0n\bar{x} - n\bar{x}\beta_0 + \beta_1 \bigg( \sum x_i^2 - \bar{x}n\bar{x} \bigg) \\
+&= \frac{1}{\sum x_i^2 - n \bar{x}^2} \times \beta_1 \bigg( \sum x_i^2 - n\bar{x}^2 \bigg) \\
+&= \beta_1
+\end{align*}
+$$
+\]
+\end{proof}
+
+
+
+
+
+
+
+

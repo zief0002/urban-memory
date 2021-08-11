@@ -1,0 +1,400 @@
+---
+title: "Assignment 06"
+author: "Shrinkage Methods: Ridge Regression"
+date: "Answer Key"
+header-includes:
+   - \usepackage{xcolor}
+   - \definecolor{umn}{HTML}{FF2D21}
+   - \usepackage{caption}
+   - \captionsetup[table]{textfont={it}, labelfont={bf}, singlelinecheck=false, labelsep=period}
+   - \captionsetup[figure]{textfont={it}, labelfont={bf}, singlelinecheck=false, labelsep=period}
+   - \usepackage{floatrow}
+   - \floatsetup[figure]{capposition=top}
+   - \usepackage{xfrac}
+   - \usepackage{booktabs}
+   - \usepackage{float}
+   - \floatstyle{plaintop}
+   - \restylefloat{table}
+   - \usepackage{siunitx}
+   - \newcolumntype{d}{S[table-format=3.2]}
+output: 
+  pdf_document:
+    highlight: tango
+    latex_engine: xelatex
+    fig_width: 6
+    fig_height: 6
+mainfont: "Sabon"
+sansfont: "Helvetica Neue UltraLight"
+monofont: "Inconsolata"
+urlcolor: "umn"
+always_allow_html: yes
+---
+
+```{r setup, include=FALSE, message=FALSE}
+library(broom)
+library(car)
+library(corrr)
+library(glmnet)
+library(MASS)
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+library(patchwork)
+
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE)
+
+credit = readr::read_csv("~/Dropbox/My Mac (CEHD-m1752583)/Documents/github/epsy-8264/data/credit.csv")
+```
+
+
+This assignment is worth 20 points.
+
+
+## Exploratory Analysis
+
+**1. Create and report a correlation matrix of the outcome (`balance`) and the six predictors.**
+
+```{r, message=FALSE, echo=FALSE}
+credit %>%
+  correlate() %>%
+  fashion(decimals = 3) %>%
+  data.frame() %>%
+  mutate(rowname = c("1. Credit balance", "2. Income", "3. Credit limit", "4. Credit rating", "5. Number of credit cards", 
+                     "6. Age", "Tears of edcuation")
+         ) %>%
+  knitr::kable(
+    format = "latex",
+    booktabs = TRUE,
+    col.names = c("Variable", "1", "2", "3", "4", "5", "6", "7"),
+    align = c("l", rep("r", 7)),
+    caption = "Correlation matrix for the credit data."
+    )  %>%
+  kable_styling(latex_options = "HOLD_position")
+```
+
+
+\vspace{3em}
+
+**2. Based on the correlation matrix, comment on whether there may be any potential collinearity problems. Explain.**
+
+The pairwise correlations between the income, credit limit, and credit rating variables are all quite high. This might indicate a potential collinearity issue.
+
+\newpage
+
+**3. Fit the OLS model that regresses customers' credit card balance on the six predictors. (Don't forget to standardize any numeric variables prior to fitting the model.) Report the coefficient-level output, including the estimated coefficients, standard errors, *t*-values, and *p*-values.**
+
+```{r echo=FALSE}
+# Scale the predictors and outcome
+z_credit = scale(credit) %>%
+  data.frame()
+
+# Fit standardized regression
+lm.1 = lm(balance ~ income + limit + rating + cards + age + education - 1, data = z_credit)
+
+tidy(lm.1) %>%
+  mutate(p = if_else(p.value < 0.001, "< 0.001", as.character(round(p.value, 3)))) %>%
+  select(term, estimate, std.error, statistic, p) %>%
+  knitr::kable(
+    format = "latex",
+    booktabs = TRUE,
+    digits = c(NA, 3, 2, 2, 3), 
+    col.names = c("Coefficient", "B", "SE", "t", "p"), 
+    align = c("l", "r", "r", "r", "r"),
+    caption = "Coefficient-level output from the standardized regression model in which credit balance was regressed on a set of potential predictors."
+    ) %>%
+  kable_styling(latex_options = "HOLD_position")
+```
+
+
+\vspace{3em}
+
+**4. Compute and report the condition number for the $\mathbf{X}^{\intercal}\mathbf{X}$ matrix. Show your work.**
+
+```{r}
+# Create design matrix
+X = z_credit[ , 2:7] %>%
+  data.matrix()
+
+# Compute eienvalues
+e_values = eigen(t(X) %*% X)$values
+
+# Compute condition number
+max(e_values) / min(e_values)
+```
+
+\vspace{3em}
+
+**5. Based on the condition number of the $\mathbf{X}^{\intercal}\mathbf{X}$ matrix, is there evidence of collinearity? Explain.**
+
+Yes, there is evidence of collinearity. The condition number is quite large indicating that there is likely collinearity collinearity among the predictors.
+
+\newpage
+
+**6. Compute and report the VIF values for the standardized regression. Based on the VIF values, which estimates from the coefficient-level output you reported in Question 3 are likely affected by the collinearity? Explain.**
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+vif(lm.1)
+
+# Effect on SEs
+#sqrt(vif(lm.1))
+```
+
+The sampling variances associated with credit limit and credit rating are extrodinarily inflated. The standard errors associated with those coefficients are over 30 times larger than they would be in a model where all the predictors are independent.
+
+
+## Finding an Optimal d Value
+
+**7. Use the AIC to help you select the *d* value to use in the ridge regression. What is the value of *d* you will use in the ridge regression? Show your work.**
+
+```{r cache=TRUE}
+X = z_credit[ , 2:7] %>% data.matrix()
+Y = z_credit[ , 1] %>% data.matrix()
+d = seq(from = 0, to = 10, by = 0.001)
+
+
+# FOR loop to cycle through the different values of d
+aic = c()
+
+for(i in 1:length(d)){
+  
+  b = solve(t(X) %*% X + d[i]*diag(6)) %*% t(X) %*% Y
+  e = Y - (X %*% b)
+  H = X %*% solve(t(X) %*% X + d[i]*diag(6)) %*% t(X)
+  df = sum(diag(H))
+  
+  # Create and store the AIC value
+  aic[i] = 400 * log(t(e) %*% e) + 2 * df
+}
+
+# Find d associated with smallest AIC
+data.frame(d, aic) %>% 
+  filter(aic == min(aic))
+```
+
+The *d* value with the smallest AIC is $d=1.833$.
+
+\newpage
+
+**8. Create a ridge trace plot that includes the values of *d* you examined in Question 7. Also include a guideline indicating the value of *d* chosen by the AIC.**
+
+```{r echo=FALSE, fig.width=8, fig.height=6, out.width='4.5in', fig.cap="Ridge trace plot of the coefficients for differetn d values. The vertical line is place at 1.833, the d value that has the lowest AIC."}
+ridge_models = lm.ridge(balance ~ income + limit + rating + cards + age + education - 1, data = z_credit,
+                   lambda = seq(from = 0, to = 10, by = 0.001))
+
+out = tidy(ridge_models)
+
+# Ridge trace with line at d = 21.765
+ggplot(data = out, aes(x = lambda, y = estimate)) +
+  geom_line(aes(group = term, color = term)) +
+  geom_vline(xintercept = 1.833, linetype = "dotted") +
+  theme_bw() +
+  xlab("d value") +
+  ylab("Coefficient estimate") +
+  ggsci::scale_color_d3(name = "Predictor")
+```
+
+
+\vspace{3em}
+
+**9. Use the ridge trace plot you created to indicate the direction of bias for each of the coefficients. Explain.**
+
+The number of credit cards, age, and education predictors show little difference in bias ($\approx0$). The income predictor is biased upwards, while the credit limt and credit rating predictors are biased downward.
+
+
+## Fitting the Ridge Regression Model
+
+**10. Use matrix algebra to compute the ridge regression coefficient estimates using the *d* value you identified in Question \#7. Show your work.**
+
+```{r}
+X = z_credit[ , 2:7] %>% data.matrix()
+Y = z_credit[ , 1] %>% data.matrix()
+b = solve(t(X) %*% X + 1.849 * diag(6)) %*% t(X) %*% Y
+b
+```
+
+\vspace{3em}
+
+**11. Fit the ridge regression model to the standardized credit data using the *d* value you identified in Question \#7 and the `glmnet()` function. Show your syntax (not the output) and report the fitted equation based on the ridge regression.**
+
+```{r}
+# Fit ridge regression
+ridge.3 = glmnet(
+  x = X,
+  y = Y,
+  alpha = 0,
+  lambda = 1.833 / 400,
+  intercept = FALSE,
+  standardize = FALSE
+  )
+
+# Show coefficients
+tidy(ridge.3)
+```
+
+The fitted equation is:
+
+$$
+\begin{split}
+\hat{\mathrm{Balance}}_i = &-0.566(\mathrm{Income}_i) + 0.670(\mathrm{Credit~Limit}_i) + 0.643(\mathrm{Credit~Rating}_i) + 0.037(\mathrm{Cards}_i) \\
+&- 0.034(\mathrm{Age}_i) + 0.013(\mathrm{Education}_i)
+\end{split}
+$$
+
+where all variables are standardized.
+
+## Coefficient-Level Summaries
+
+
+**12. Although they are not meaningful in practice, as an exercise, I still want you to compare the SEs from the standardized OLS and ridge regression models. Create and report a table that allows a comparison of the standard error estimates for the coefficients estimated in each of the two models.**
+
+```{r echo=FALSE}
+mse = glance(lm.1)$sigma^2
+W = solve(t(X) %*% X + 1.833*diag(6))
+var_b = mse * W %*% t(X) %*% X %*% W
+
+data.frame(
+  OLS = tidy(lm.1)$std.error,
+  Ridge = sqrt(diag(var_b))
+  ) %>%
+  knitr::kable(
+    format = "latex",
+    booktabs = TRUE,
+    digits = 3, 
+    col.names = c("OLS", "Ridge"), 
+    align = "c",
+    caption = "Standard errors from the standardized regression model (OLS) and the ridge regression model with d=1.849."
+    ) %>%
+  kable_styling(latex_options = "HOLD_position")
+```
+
+\vspace{3em}
+
+**13. Which coefficients saw the biggest reduction in their SEs? How could you predict this? Explain. (Hint: Revisit your response to Question \#6.) **
+
+The ridge regression model shrunk the SEs for the credit limit and credit rating coefficients the most. This was predictable as the collinearity diagnostics pointed toward these coefficients as being problematic.
+
+\vspace{3em}
+
+**14. Create a coefficient-level regression table that reports the estimates, SEs, *t*-values, *p*-values, and confidence intervals for each of the predictors from the ridge regression model.**
+
+```{r echo=FALSE}
+# Compute variance-covariance matrix of coefficients
+mse = glance(lm.1)$sigma ^2
+W = solve(t(X) %*% X + 1.833*diag(6))
+var_b = mse * W %*% t(X) %*% X %*% W
+
+# Compute df residual
+H = X %*% solve(t(X) %*% X + 1.833*diag(6)) %*% t(X)
+df_model = sum(diag(H))
+df_residual = 399 - df_model
+
+
+
+RIDGE = data.frame(
+  Predictor = tidy(lm.1)$term,
+  B = tidy(ridge.3)$estimate,
+  SE = sqrt(diag(var_b))
+) %>%
+  mutate(
+    t = B / SE,
+    p.value = pt(-abs(t), df = df_residual) * 2,
+    LL = B - qt(p = 0.975, df = df_residual) * SE,
+    UL = B + qt(p = 0.975, df = df_residual) * SE
+  ) %>%
+  knitr::kable(
+    format = "latex",
+    booktabs = TRUE,
+    digits = 3, 
+    col.names = c("Predictor", "B", "SE", "t", "p", "LL", "UL"), 
+    align = c("l", rep("c", 6)),
+    caption = "Coefficient-level output from the ridge regression model with d=1.833."
+    ) %>%
+  kable_styling(latex_options = "HOLD_position") %>%
+  add_header_above(c(" " = 5, "95% CI" = 2))
+```
+
+\vspace{3em}
+
+**15. Compute and report the amount of bias in each of the coefficients. Show your work.**
+
+```{r}
+b_ols = solve(t(X) %*% X) %*% t(X) %*% Y # OLS estimates
+dI = 1.833 * diag(6) # Compute dI
+
+# Estimate bias in ridge regression coefficients
+bias = -1.833 * solve(t(X) %*% X + dI) %*% b_ols
+round(bias, 3)
+```
+
+
+\vspace{3em}
+
+**16. Compute the VIF values for each of the coefficients from the ridge regression model.**
+
+```{r}
+R = cov2cor(var_b)
+
+VIF = c()
+
+for (i in 1:6) {
+    VIF[i] <- R[i, i] * det(R[-i, -i]) / det(R)
+}
+```
+
+```{r echo=FALSE}
+data.frame(
+  Predictor = tidy(lm.1)$term,
+  VIF = VIF
+) %>%
+  knitr::kable(
+    format = "latex",
+    booktabs = TRUE,
+    digits = 2, 
+    col.names = c("Predictor", "VIF"), 
+    align = c("l", "c"),
+    caption = "VIF values for the ridge regression coefficients (d=1.833)."
+    ) %>%
+  kable_styling(latex_options = "HOLD_position")
+```
+
+\vspace{3em}
+
+**17. Based on the VIF values, have we eliminated the collinearity problems? Explain.**
+
+Not really. The VIF values for the credit limit and credit rating predictors are still quite high. 
+
+
+## Model-Level Summaries
+
+**18. Compute and report the model-level $R^2$ for the ridge regression model. (Hint: Remember that the model-level $R^2$ is the squared correlation between the observed and predicted values of the outcome.) Show your work. How does this compare to the $R^2$ from the OLS model?**
+
+```{r}
+# Compute R2 for the OLS
+glance(lm.1)$r.squared
+
+# Compute R2 for ridge regression
+b = tidy(ridge.3)$estimate
+yhat = X %*% b
+R2 = cor(Y, yhat)^2
+R2
+```
+
+The model-level $R^2$ is 0.878. This is virtually identical to the $R^2$ for the OLS model.
+
+\vspace{3em}
+
+**19. Compute and report the *F*-value associated with the $R^2$ value you computed in Question \#18.**
+
+```{r}
+F = (R2) / (1 - R2) * df_residual / df_model
+F
+```
+
+\vspace{3em}
+
+**20. Compute and report the *p*-value associated with the test of whether $\rho^2=0$.**
+
+```{r}
+p = 1 - pf(F, df1 = df_model, df2 = df_residual)
+p
+```

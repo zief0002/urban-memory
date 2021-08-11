@@ -1,0 +1,98 @@
+country,region,contraceptive,educ_female,gni
+Algeria,Middle East and North Africa,57,5.9,High
+Austria,Europe and Central Asia,66,8.9,High
+Azerbaijan,Europe and Central Asia,55,10.5,High
+Bangladesh,South Asia,62,4.6,Low
+Belgium,Europe and Central Asia,67,10.5,High
+Belize,Latin America and the Caribbean,51,9.2,High
+Benin,Sub-Saharan Africa,16,2,Low
+Bolivia,Latin America and the Caribbean,67,8.4,Low
+Bosnia and Herzegovina,Europe and Central Asia,46,7.2,High
+Botswana,Sub-Saharan Africa,53,8.7,High
+Bulgaria,Europe and Central Asia,69,10.6,High
+Burkina Faso,Sub-Saharan Africa,32,1.9,Low
+Burundi,Sub-Saharan Africa,29,2.2,Low
+Cambodia,East Asia and Pacific,56,3.2,Low
+Cameroon,Sub-Saharan Africa,34,5.1,Low
+Canada,North America,85,12.3,High
+Chad,Sub-Saharan Africa,6,0.6,Low
+Chile,Latin America and the Caribbean,76,9.6,High
+Colombia,Latin America and the Caribbean,81,7,High
+"Congo, Democratic Republic",Sub-Saharan Africa,20,2.1,Low
+Costa Rica,Latin America and the Caribbean,78,8.4,High
+Croatia,Europe and Central Asia,69,10.5,High
+Czech Republic,Europe and Central Asia,86,12.1,High
+Dominican Republic,Latin America and the Caribbean,70,7.7,High
+Ecuador,Latin America and the Caribbean,80,7.4,High
+"Egypt, Arab Republic",Middle East and North Africa,59,5.3,Low
+El Salvador,Latin America and the Caribbean,72,6.1,Low
+Ethiopia,Sub-Saharan Africa,40,1.4,Low
+France,Europe and Central Asia,78,10.9,High
+Ghana,Sub-Saharan Africa,31,5.9,Low
+Greece,Europe and Central Asia,76,9.9,High
+Guinea,Sub-Saharan Africa,9,0.8,Low
+Haiti,Latin America and the Caribbean,34,3.2,Low
+Honduras,Latin America and the Caribbean,73,5.3,Low
+Hungary,Europe and Central Asia,62,11.2,High
+India,South Asia,54,3.2,Low
+Indonesia,East Asia and Pacific,61,6.9,Low
+Iraq,Middle East and North Africa,53,4.4,High
+Italy,Europe and Central Asia,65,9.7,High
+Jamaica,Latin America and the Caribbean,73,9.8,High
+Japan,East Asia and Pacific,40,11.2,High
+Jordan,Middle East and North Africa,52,9.4,High
+Kazakhstan,Europe and Central Asia,55,10.2,High
+Kenya,Sub-Saharan Africa,61,5.4,Low
+"Korea, Republic",East Asia and Pacific,80,11.1,High
+Lao PDR,East Asia and Pacific,54,3.8,Low
+Lebanon,Middle East and North Africa,55,7.6,High
+Lesotho,Sub-Saharan Africa,60,6.8,Low
+Liberia,Sub-Saharan Africa,31,2.3,Low
+Madagascar,Sub-Saharan Africa,48,4.8,Low
+Malawi,Sub-Saharan Africa,59,3.4,Low
+Malaysia,East Asia and Pacific,52,9.2,High
+Maldives,South Asia,19,5.4,High
+Mali,Sub-Saharan Africa,16,1.4,Low
+Malta,Middle East and North Africa,86,9.5,High
+Mauritius,Sub-Saharan Africa,64,8,High
+Mexico,Latin America and the Caribbean,67,8.1,High
+Moldova,Europe and Central Asia,60,9.6,Low
+Mongolia,East Asia and Pacific,55,8.5,Low
+Morocco,Middle East and North Africa,71,3.2,Low
+Mozambique,Sub-Saharan Africa,27,0.8,Low
+Namibia,Sub-Saharan Africa,56,6.3,High
+Nepal,South Asia,53,2.4,Low
+Nicaragua,Latin America and the Caribbean,80,4.8,Low
+Niger,Sub-Saharan Africa,11,0.8,Low
+Nigeria,Sub-Saharan Africa,28,4.2,Low
+Pakistan,South Asia,34,3.3,Low
+Panama,Latin America and the Caribbean,63,9.6,High
+Paraguay,Latin America and the Caribbean,68,7.5,High
+Philippines,East Asia and Pacific,54,8.8,Low
+Portugal,Europe and Central Asia,74,8,High
+Romania,Europe and Central Asia,70,10.4,High
+Rwanda,Sub-Saharan Africa,53,3.1,Low
+Sao Tome and Principe,Sub-Saharan Africa,41,4,Low
+Senegal,Sub-Saharan Africa,28,3.4,Low
+Serbia,Europe and Central Asia,58,9.2,High
+Sierra Leone,Sub-Saharan Africa,23,2,Low
+Slovak Republic,Europe and Central Asia,80,11.6,High
+Slovenia,Europe and Central Asia,79,11.8,High
+South Africa,Sub-Saharan Africa,55,9.8,High
+Spain,Europe and Central Asia,71,9.5,High
+Suriname,Latin America and the Caribbean,48,7.3,High
+Swaziland,Sub-Saharan Africa,66,7.4,Low
+Tajikistan,Europe and Central Asia,29,10,Low
+Tanzania,Sub-Saharan Africa,38,4.5,Low
+Thailand,East Asia and Pacific,78,7,High
+Togo,Sub-Saharan Africa,20,3.3,Low
+Tunisia,Middle East and North Africa,63,5.5,Low
+Uganda,Sub-Saharan Africa,42,4.3,Low
+Ukraine,Europe and Central Asia,65,11.2,Low
+United Kingdom,Europe and Central Asia,84,12.8,High
+Uruguay,Latin America and the Caribbean,80,8.7,High
+"Venezuela, RB",Latin America and the Caribbean,75,8.7,High
+Vietnam,East Asia and Pacific,76,5.2,Low
+"Yemen, Republic",Middle East and North Africa,34,1.2,Low
+Zambia,Sub-Saharan Africa,49,5.8,Low
+Zimbabwe,Sub-Saharan Africa,67,6.7,Low

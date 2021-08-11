@@ -1,0 +1,16 @@
+name: "EPsy 8264"
+title: "EPsy 8264"
+description: |
+  Fall 2021
+output_dir: "docs"
+navbar:
+  right:
+    - text: "Home"
+      href: index.html
+    - text: "Instructor and TA"
+      href: about.html
+    - text: "Schedule"
+      href: schedule.html
+    - text: "Assignments"
+      href: assignments.html
+output: distill::distill_article

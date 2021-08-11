@@ -1,0 +1,111 @@
+---
+title: "Assignment 01"
+description: |
+  Matrix Algebra for Linear Regression
+author: andy
+date: 08-09-2021
+output:
+  distill::distill_article:
+    self_contained: false
+categories:
+  - Assignments
+---
+
+
+The goal of this assignment is to give you experience using matrix algebra to compute various analytic output for regression. In this assignment, you will use the data given below that includes measurements for 10 countries on: infant mortality rate per 1000 live births (`infant`), the per-capita income (`pci`) and world region (`region`) of the country. 
+
+```{r echo=FALSE}
+x = data.frame(
+  country = c("Algeria", "Bolivia", "Burundi", "Dominican Republic", "Kenya", "Malawi", 
+              "Nicaragua", "Paraguay", "Rwanda", "Trinidad & Tobago"),
+  infant = c( 86.3, 60.4, 150.0, 48.8, 55.0, 148.3, 46.0, 38.6, 132.9, 26.2),
+  pci = c(400, 200, 68, 406, 169, 130, 507, 347, 61, 732),
+  region = c("Africa", "Americas", "Africa", "Americas", "Africa", "Africa", "Americas", "Americas", "Africa", "Americas")
+)
+
+knitr::kable(x)
+```
+
+
+
+<!-- - [[CSV]](https://raw.githubusercontent.com/zief0002/epsy-8251/master/data/broadband.csv) -->
+<!-- - [[Data Codebook]](http://zief0002.github.io/epsy-8251/codebooks/broadband.html) -->
+
+
+<!-- ```{r echo=FALSE, out.width="60%", fig.align='center'} -->
+<!-- knitr::include_graphics("figs/assign-01.png") -->
+<!-- ``` -->
+
+
+# Instructions
+
+Submit a printed document of your responses to the following questions. Please adhere to the following guidelines for further formatting your assignment:
+
+- All plots should be resized so that they do not take up more room than necessary. 
+- All figures and tables should have a name (e.g., Figure 1) *and* an appropriate caption.
+
+In questions that ask you to "use matrix algebra" to solve the problem, you can either show your syntax and output from carrying out the matrix operations, or you can use Equation Editor to input the matrices involved in your calculations.
+
+This assignment is worth 20 points.
+
+
+<br />
+
+# Unstandardized Regression
+
+You will be fitting the model `lm(infant ~ 1 + pci + region + pci:region)`. Within this model, use dummy coding to encode the `region` predictor and make `Americas` the reference group. 
+
+1. Write out the elements of the matrix $\mathbf{X}^{\intercal}\mathbf{X}$, where $\mathbf{X}$ is the design matrix.  
+
+2. Does $\mathbf{X}^{\intercal}\mathbf{X}$ have an inverse? Explain.
+
+3. Compute (using matrix algebra) and report the vector of coefficients, **b** for the OLS regression.
+
+4. Compute (using matrix algebra) and report the variance--covariance matrix of the coefficients.
+
+5. Use the values from **b** (Question 3) and from the variance--covariance matrix you reported in the previous question to find the 95% CI for the coefficient associated with the main-effect of PCI. (Hint: If you need to refresh yourself on how CIs are computed, see [here](https://zief0002.github.io/epsy-8252/misc/s21-05-probability-distributions-in-regression.html).)
+
+6. Compute (using matrix algebra) and report the hat-matrix, **H**. Also show how you would use the values in the hat-matrix to find $\hat{y}_1$ (the predicted value for Algeria).
+
+7. Compute (using matrix algebra) and report the vector of residuals, **e**.
+
+8. Compute (using matrix algebra) and report the estimated value for the RMSE.
+
+9. Given the assumptions of the OLS model and the RMSE estimate you computed in the previous question, compute and report the variance--covariance matrix of the residuals.
+
+
+<br />
+
+
+# ANOVA Decomposition
+
+In this section you will be re-creating the output from the ANOVA decomposition for the model fitted in the previous section.
+
+10. Compute (using matrix algebra) and report the model, residual, and total sum of squares terms in the ANOVA decomposition table. **(2pts)**
+
+11. Compute (using matrix algebra) and report the model, residual, and total degrees of freedom terms in the ANOVA decomposition table. **(2pts)**
+
+12. Use the values you obtained in Questions 11 and 12 to compute the model and residual mean square terms.
+
+13. Use the mean square terms you found in Question 13 to compute the *F*-value for the model (i.e., to test $H_0:\rho^2=0$). Also compute the *p*-value associated with this *F*-value. (Hint: If you need to refresh yourself on how *F*-values or *p*-values are computed, see [here](https://zief0002.github.io/epsy-8252/misc/s21-05-probability-distributions-in-regression.html).)
+
+<br />
+
+
+# Regression: Effects-Coding
+
+Now consider fitting the model to the data to examine whether there is an effect of region (no other predictors) on infant mortality. In this model, we will use effects-coding to encode the region variable (see [here](https://stats.idre.ucla.edu/other/mult-pkg/faq/general/faqwhat-is-effect-coding/)). This model is often expressed as:
+
+$$
+\mathrm{Infant~Mortality}_i = \mu + \alpha_{\mathrm{Region}} + \epsilon_i 
+$$
+
+14. Write out the design matrix that would be used to fit this model.
+
+15. Compute (using matrix algebra) and report the vector of coefficients, **b**, from the OLS regression.
+
+16. Compute (using matrix algebra) and report the variance--covariance matrix for the coefficients.
+
+17. Explain why the sampling variances for the coefficients are the same and why the sampling covariance is zero by referring to computations produced in the matrix algebra. **(2pts)**
+
+

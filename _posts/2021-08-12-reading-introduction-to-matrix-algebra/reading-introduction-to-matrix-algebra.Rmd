@@ -1,0 +1,34 @@
+---
+title: "`r paste(emo::ji('book'), 'Introduction to Matrix Algebra')`"
+description: |
+  Review some common mathematical ideas of matrix algebra.
+author:
+  - name: andy
+    url: {}
+date: 08-12-2021
+output:
+  distill::distill_article:
+    self_contained: false
+categories:
+  - Reading
+---
+
+
+Read the following (short) chapters in [Matrix Algebra for Educational Scientists](https://zief0002.github.io/matrix-algebra/):
+
+- Introduction
+- Data Structures
+- Vectors
+- Vector Operations
+
+
+In class, we will be working through some problems to cement these ideas. We will also examine and work through some problems related to matrix operations, so you could also read through:
+
+
+- Matrices
+- Matrix Addition and Subtraction
+- Matrix Multiplication
+- Matrix Transposition
+
+
+

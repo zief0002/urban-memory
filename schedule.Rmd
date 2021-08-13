@@ -16,7 +16,9 @@ The calendar below lists the tentative course topics. The dates listed are subje
 <tr>
 <th style="width:5%;text-align:center"></th>
 <th style="width:10%;">Date</th>
-<th style="width:75%;">Topic</th>
+<th style="width:10%;text-align:center">Reading</th>
+<th style="width:65%;">Topic</th>
+<th style="width:10%;text-align:center">Notes</th>
 </tr>
 </thead>
 
@@ -28,20 +30,30 @@ The calendar below lists the tentative course topics. The dates listed are subje
 <tr>
 <td align="center" style="vertical-align:middle;">&nbsp;</td>
 <td>Sept. 07</td>
+<td align="center" style="vertical-align:middle;">
+  <a class="my-link" href="posts/2021-08-09-message-to-students"><span class="fa fa-book"></span></a>
+</td>
 <td>Welcome to EPsy 8264</td>
+<td align="center" style="vertical-align:middle;">&nbsp;</td>
 </tr>
 
 
 <!-- Unit 01: MATHEMATICS -->
 
 <tr>
-<td colspan="3"><b>Unit 01: Mathematical and Computational Foundations</b></td>
+<td colspan="5"><b>Unit 01: Mathematical and Computational Foundations</b></td>
 </tr>
 
 <tr>
 <td align="center" style="vertical-align:middle;">&nbsp;</td>
 <td>Sept. 09</td>
+<td align="center" style="vertical-align:middle;" rowspan="2">
+  <a class="my-link" href="posts/2021-08-12-reading-introduction-to-matrix-algebra"><span class="fa fa-book"></span></a>
+</td>
 <td style="vertical-align:middle;" rowspan="2">Introduction to Matrix Algebra</td>
+<td align="center" style="vertical-align:middle;" rowspan="2">
+  <a class = "my-link" href="posts/2021-08-11-worksheet-introduction-to-matrix-algebra"><span class="fas fa-link"></span></a>
+</td>
 </tr>
 
 
@@ -54,7 +66,9 @@ The calendar below lists the tentative course topics. The dates listed are subje
 <tr>
 <td align="center" style="vertical-align:middle;">&nbsp;</td>
 <td>Sept. 16</td>
+<td align="center" style="vertical-align:middle;" rowspan="2"></td>
 <td style="vertical-align:middle;" rowspan="2">OLS Regression using Matrices and its Properties</td>
+<td align="center" style="vertical-align:middle;" rowspan="2"></td>
 </tr>
 
 <tr>
@@ -65,7 +79,9 @@ The calendar below lists the tentative course topics. The dates listed are subje
 <tr>
 <td align="center" style="vertical-align:middle;">&nbsp;</td>
 <td>Sept. 23</td>
+<td align="center" style="vertical-align:middle;" rowspan="3"></td>
 <td style="vertical-align:middle;" rowspan="3">Simulating from the Regression Model</td>
+<td align="center" style="vertical-align:middle;" rowspan="3"></td>
 </tr>
 
 <tr>
@@ -82,85 +98,85 @@ The calendar below lists the tentative course topics. The dates listed are subje
 <!-- Unit 02: REGRESSION DIAGNOSTICS -->
 
 
-<tr>
-<td colspan="3"><b>Unit 02: Regression Diagnostics</b></td>
-</tr>
+<!-- <tr> -->
+<!-- <td colspan="3"><b>Unit 02: Regression Diagnostics</b></td> -->
+<!-- </tr> -->
 
-<tr>
-<td align="center" style="vertical-align:middle;">&nbsp;</td>
-<td>Oct. 05</td>
-<td style="vertical-align:middle;" rowspan="2">Regression Diagnostics</td>
-</tr>
+<!-- <tr> -->
+<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
+<!-- <td>Oct. 05</td> -->
+<!-- <td style="vertical-align:middle;" rowspan="2">Regression Diagnostics</td> -->
+<!-- </tr> -->
 
-<tr>
-<td align="center" style="vertical-align:middle;">&nbsp;</td>
-<td>Oct. 07</td>
-</tr>
+<!-- <tr> -->
+<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
+<!-- <td>Oct. 07</td> -->
+<!-- </tr> -->
 
 
    
 
 <!-- Unit 03: HETEROSKEDASTICITY-->
 
-<tr>
-<td colspan="3"><b>Unit 03: Tools for Dealing with Heteroskedasticity</b></td>
-</tr>
+<!-- <tr> -->
+<!-- <td colspan="3"><b>Unit 03: Tools for Dealing with Heteroskedasticity</b></td> -->
+<!-- </tr> -->
 
-<tr>
-<td align="center" style="vertical-align:middle;">&nbsp;</td>
-<td>Oct. 12</td>
-<td style="vertical-align:middle;">Variance Stabilizing  Transformations</td>
-</tr>
+<!-- <tr> -->
+<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
+<!-- <td>Oct. 12</td> -->
+<!-- <td style="vertical-align:middle;">Variance Stabilizing  Transformations</td> -->
+<!-- </tr> -->
 
-<tr>
-<td align="center" style="vertical-align:middle;">&nbsp;</td>
-<td>Oct. 14</td>
-<td style="vertical-align:middle;">Weighted Least Squares (WLS) and Sandwich Estimation</td>
-</tr>
+<!-- <tr> -->
+<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
+<!-- <td>Oct. 14</td> -->
+<!-- <td style="vertical-align:middle;">Weighted Least Squares (WLS) and Sandwich Estimation</td> -->
+<!-- </tr> -->
 
 
 <!-- Unit 04: COLLINEARITY-->
 
 
-<tr>
-<td colspan="3"><b>Unit 04: Diagnosing Collinearity and Tools for Dealing with It</b></td>
-</tr>
+<!-- <tr> -->
+<!-- <td colspan="3"><b>Unit 04: Diagnosing Collinearity and Tools for Dealing with It</b></td> -->
+<!-- </tr> -->
 
-<tr>
-<td align="center" style="vertical-align:middle;">&nbsp;</td>
-<td>Oct. 19</td>
-<td style="vertical-align:middle;">Collinearity Diagnostics</td>
-</tr>
+<!-- <tr> -->
+<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
+<!-- <td>Oct. 19</td> -->
+<!-- <td style="vertical-align:middle;">Collinearity Diagnostics</td> -->
+<!-- </tr> -->
 
-<tr>
-<td align="center" style="vertical-align:middle;">&nbsp;</td>
-<td>Oct. 21</td>
-<td style="vertical-align:middle;" rowspan="2">Variable Reduction</td>
-</tr>
+<!-- <tr> -->
+<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
+<!-- <td>Oct. 21</td> -->
+<!-- <td style="vertical-align:middle;" rowspan="2">Variable Reduction</td> -->
+<!-- </tr> -->
 
-<tr>
-<td align="center" style="vertical-align:middle;">&nbsp;</td>
-<td>Oct. 26</td>
-</tr>
+<!-- <tr> -->
+<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
+<!-- <td>Oct. 26</td> -->
+<!-- </tr> -->
 
-<tr>
-<td align="center" style="vertical-align:middle;">&nbsp;</td>
-<td>Oct. 28</td>
-<td style="vertical-align:middle;" rowspan="2">Biased Estimation and Shrinkage</td>
-</tr>
+<!-- <tr> -->
+<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
+<!-- <td>Oct. 28</td> -->
+<!-- <td style="vertical-align:middle;" rowspan="2">Biased Estimation and Shrinkage</td> -->
+<!-- </tr> -->
 
-<tr>
-<td align="center" style="vertical-align:middle;">&nbsp;</td>
-<td>Nov. 02</td>
-</tr>
+<!-- <tr> -->
+<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
+<!-- <td>Nov. 02</td> -->
+<!-- </tr> -->
 
 
 <!-- Unit 05: MODEL SELECTION -->
 
 
-<tr>
-<td colspan="3"><b>Unit 05: Model Selection</b></td>
-</tr>
+<!-- <tr> -->
+<!-- <td colspan="3"><b>Unit 05: Model Selection</b></td> -->
+<!-- </tr> -->
 
 <!-- <tr> -->
 <!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
@@ -168,84 +184,84 @@ The calendar below lists the tentative course topics. The dates listed are subje
 <!-- <td style="vertical-align:middle;">NO CLASS&mdash; Election Day</td> -->
 <!-- </tr> -->
 
-<tr>
-<td align="center" style="vertical-align:middle;">&nbsp;</td>
-<td>Nov. 04</td>
-<td style="vertical-align:middle;" rowspan="2">Traditional Methods of Model Selection</td>
-</tr>
+<!-- <tr> -->
+<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
+<!-- <td>Nov. 04</td> -->
+<!-- <td style="vertical-align:middle;" rowspan="2">Traditional Methods of Model Selection</td> -->
+<!-- </tr> -->
 
-<tr>
-<td align="center" style="vertical-align:middle;">&nbsp;</td>
-<td>Nov. 09</td>
-</tr>
+<!-- <tr> -->
+<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
+<!-- <td>Nov. 09</td> -->
+<!-- </tr> -->
 
-<tr>
-<td align="center" style="vertical-align:middle;">&nbsp;</td>
-<td>Nov. 11</td>
-<td style="vertical-align:middle;" rowspan="2">Cross-Validation</td>
-</tr>
+<!-- <tr> -->
+<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
+<!-- <td>Nov. 11</td> -->
+<!-- <td style="vertical-align:middle;" rowspan="2">Cross-Validation</td> -->
+<!-- </tr> -->
 
-<tr>
-<td align="center" style="vertical-align:middle;">&nbsp;</td>
-<td>Nov. 16</td>
-</tr>
+<!-- <tr> -->
+<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
+<!-- <td>Nov. 16</td> -->
+<!-- </tr> -->
 
 
 <!-- Unit 06: BOOTSTRAPPING -->
 
-<tr>
-<td colspan="3"><b>Unit 06: Bootstrapping</b></td>
-</tr>
+<!-- <tr> -->
+<!-- <td colspan="3"><b>Unit 06: Bootstrapping</b></td> -->
+<!-- </tr> -->
 
-<tr>
-<td align="center" style="vertical-align:middle;">&nbsp;</td>
-<td>Nov. 18</td>
-<td style="vertical-align:middle;" rowspan="2">Bootstrapping</td>
-</tr>
+<!-- <tr> -->
+<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
+<!-- <td>Nov. 18</td> -->
+<!-- <td style="vertical-align:middle;" rowspan="2">Bootstrapping</td> -->
+<!-- </tr> -->
 
-<tr>
-<td align="center" style="vertical-align:middle;">&nbsp;</td>
-<td>Nov. 23</td>
-</tr>
+<!-- <tr> -->
+<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
+<!-- <td>Nov. 23</td> -->
+<!-- </tr> -->
 
-<tr>
-<td align="center" style="vertical-align:middle;">&nbsp;</td>
-<td>Nov. 25</td>
-<td style="vertical-align:middle;">NO CLASS&mdash;Thanksgiving Break</td>
-</tr>
+<!-- <tr> -->
+<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
+<!-- <td>Nov. 25</td> -->
+<!-- <td style="vertical-align:middle;">NO CLASS&mdash;Thanksgiving Break</td> -->
+<!-- </tr> -->
 
-<tr>
-<td align="center" style="vertical-align:middle;">&nbsp;</td>
-<td>Nov. 30</td>
-<td style="vertical-align:middle;">Bootstrapping (cntd.)</td>
-</tr>
+<!-- <tr> -->
+<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
+<!-- <td>Nov. 30</td> -->
+<!-- <td style="vertical-align:middle;">Bootstrapping (cntd.)</td> -->
+<!-- </tr> -->
 
 <!-- Unit 07: PREDICTION -->
 
-<tr>
-<td colspan="3"><b>Unit 07: Prediction</b></td>
-</tr>
+<!-- <tr> -->
+<!-- <td colspan="3"><b>Unit 07: Prediction</b></td> -->
+<!-- </tr> -->
 
-<tr>
-<td align="center" style="vertical-align:middle;">&nbsp;</td>
-<td>Dec. 02</td>
-<td style="vertical-align:middle;" rowspan="4">Prediction</td>
-</tr>
+<!-- <tr> -->
+<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
+<!-- <td>Dec. 02</td> -->
+<!-- <td style="vertical-align:middle;" rowspan="4">Prediction</td> -->
+<!-- </tr> -->
 
-<tr>
-<td align="center" style="vertical-align:middle;">&nbsp;</td>
-<td>Dec. 07</td>
-</tr>
+<!-- <tr> -->
+<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
+<!-- <td>Dec. 07</td> -->
+<!-- </tr> -->
 
-<tr>
-<td align="center" style="vertical-align:middle;">&nbsp;</td>
-<td>Dec. 09</td>
-</tr>
+<!-- <tr> -->
+<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
+<!-- <td>Dec. 09</td> -->
+<!-- </tr> -->
 
-<tr>
-<td align="center" style="vertical-align:middle;">&nbsp;</td>
-<td>Dec. 14</td>
-</tr>
+<!-- <tr> -->
+<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
+<!-- <td>Dec. 14</td> -->
+<!-- </tr> -->
 
 
 </tbody>

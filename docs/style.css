@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+body {
+  font-family: 'Atkinson Hyperlegible', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0px;
+  font-style: normal;
+  /*font-size: 16px;*/
+}
+
+/* Style the Font Awesome icons */
+.fa {
+  color: #ff2600; 
+  font-size: 20px;
+}
+
+.fas {
+  color: #ff2600; 
+  font-size: 20px;
+}
+
+/* Change link appearance in the schedule */
+.my-link {
+  text-decoration: none;
+  border-bottom: 0;
+}

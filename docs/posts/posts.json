@@ -1,5 +1,24 @@
 [
   {
+    "path": "posts/2021-08-14-reading-ols/",
+    "title": "📖 OLS Regression using Matrices and its Properties",
+    "description": "Reading for OLS Regression",
+    "author": [
+      {
+        "name": "andy",
+        "url": {}
+      }
+    ],
+    "date": "2021-08-14",
+    "categories": [
+      "Reading"
+    ],
+    "contents": "\nRead the following (short) chapters in Matrix Algebra for Educational Scientists:\nSystems of Equations\nStatistical Application: Estimating Regression Coefficients\nIn class, we will be working through the ideas in the following chapters:\nImportant Matrices in Regression\nSums of Squares in Regression\nStandard Errors and Variance Estimates\nAssumptions of the Regression Model\n\n\n\n",
+    "preview": {},
+    "last_modified": "2021-08-14T12:33:12-05:00",
+    "input_file": {}
+  },
+  {
     "path": "posts/2021-08-11-worksheet-introduction-to-matrix-algebra/",
     "title": "📝 Introduction to Matrix Algebra",
     "description": "In-class worksheet",

@@ -1,0 +1,29 @@
+---
+title: "`r paste(emo::ji('book'), 'OLS Regression using Matrices and its Properties')`"
+description: |
+  Reading for OLS Regression
+author:
+  - name: andy
+    url: {}
+date: 08-14-2021
+output:
+  distill::distill_article:
+    self_contained: false
+categories:
+  - Reading
+---
+
+
+Read the following (short) chapters in [Matrix Algebra for Educational Scientists](https://zief0002.github.io/matrix-algebra/):
+
+- Systems of Equations
+- Statistical Application: Estimating Regression Coefficients
+
+
+In class, we will be working through the ideas in the following chapters:
+
+- Important Matrices in Regression
+- Sums of Squares in Regression
+- Standard Errors and Variance Estimates
+- Assumptions of the Regression Model
+

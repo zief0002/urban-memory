@@ -1,0 +1,325 @@
+---
+title: "OLS Regression and Its Properties"
+date: "`r Sys.Date()`"
+header-includes:
+   - \usepackage{amsthm}
+   - \usepackage{xcolor}
+   - \usepackage{xfrac}
+   - \usepackage[framemethod=tikz]{mdframed}
+   - \usepackage{graphicx}
+   - \usepackage{rotating}
+   - \usepackage{booktabs}
+   - \usepackage{caption}
+   - \definecolor{umn}{RGB}{153, 0, 85}
+   - \definecolor{umn2}{rgb}{0.1843137, 0.4509804, 0.5372549}
+   - \definecolor{myorange}{HTML}{EA6153}
+output: 
+  pdf_document:
+    includes:
+      before_body: notes.tex
+    highlight: tango
+    latex_engine: xelatex
+    fig_width: 6
+    fig_height: 6
+mainfont: "Minion Pro"
+sansfont: "ITC Slimbach Std Book"
+monofont: "Source Code Pro"
+urlcolor: "umn2"
+always_allow_html: yes
+bibliography: '../epsy8264.bib'
+csl: '../style/apa-single-spaced.csl'
+nocite: | 
+  @Fox:2009
+---
+
+\frenchspacing
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(knitr)
+library(kableExtra)
+library(dplyr)
+```
+
+We have previously defined the population regression model (using scalar algebra) as:
+
+$$
+y_i = \beta_0 + \beta_1(x_i) + \epsilon_i
+$$
+
+where the outcome (*y*) is assumed to be statistically and linearly related to the predictor (*x*) and $\epsilon$. We also assume that the error term, $\epsilon$, is a random variable.
+
+Recall that the least squares estimators can be analytically computed as:
+
+$$
+\begin{split}
+b_1 &= \frac{\sum (x_i - \bar{x})(y_i - \bar{y})}{\sum (x_i - \bar{x})^2} \\[1em]
+b_0 &= \bar{y} - b_1(\bar{x}) \\[1em]
+\end{split}
+$$
+
+
+
+# Representing the Population Regression Model Using Matrix Algebra
+
+Using the subject-specific subscripts ($1, 2, 3, \ldots, n$), we can write out each subject's equation:
+
+$$
+\begin{split}
+y_1 &= \beta_0 + \beta_1(x_1) + \epsilon_1 \\
+y_2 &= \beta_0 + \beta_1(x_2) + \epsilon_2 \\
+y_3 &= \beta_0 + \beta_1(x_3) + \epsilon_3 \\
+\vdots &~ ~~~~~\vdots ~~~~~~~~~~\vdots~~~~~~~~~~~~~\vdots  \\
+y_n &= \beta_0 + \beta_1(x_n) + \epsilon_n
+\end{split}
+$$
+
+These can be arranged into a set of vectors and matrices, namely,
+
+$$
+\begin{split}
+\begin{bmatrix}y_1 \\ y_2 \\ y_3 \\ \vdots \\ y_n\end{bmatrix} &= \begin{bmatrix}1 & x_1 \\ 1 & x_2 \\ 1 & x_3 \\ \vdots \\ 1 & x_n\end{bmatrix} \begin{bmatrix}\beta_0 \\ \beta_1\end{bmatrix}+ \begin{bmatrix}\epsilon_1 \\ \epsilon_2 \\ \epsilon_3 \\ \vdots \\ \epsilon_n\end{bmatrix} \\[2ex]
+\mathbf{y} &= \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\epsilon}
+\end{split}
+$$
+
+where,
+
+- **y** is an $n \times 1$ vector of observations on the outcome variable.
+- **X** is an $n \times k$ matrix (called the *design matrix*) consisting of a column of ones and the observations for *k* independent predictors. In the simple regression example, $k=2$, and the design matrix has two columns---a column of ones and a column of observations for the predictor *X*.
+- $\boldsymbol\beta$ is a $k \times 1$ vector of unknown population parameters that we want to estimate. In the simpke regression model, **b** is a $2 \times 1$ vector consisting of $\beta_0$ and $\beta_1$.
+- $\boldsymbol\epsilon$ is a $n \times 1$ vector of residuals.
+
+
+# Estimating the Regression Coefficients
+
+In a regression analysis, one goal is often to estimate the values of the parameters in the $\boldsymbol\beta$ vector using sample data (i.e., the *y* and *x* values. We denote the estimates of the regression parameters using the roman letters; the vector of the sample estimates for the $\beta$-values are denoted as **b**. Similarly the sample residuals are denoted as **e** rather than $\boldsymbol\epsilon$. (It is common to refer to the population errors as "errors" and the sample estimates as "residuals".) Thus, the sample equivalent of the model is:
+
+$$
+\mathbf{y} = \mathbf{Xb} + \mathbf{e}
+$$
+
+In ordinary least squares (OLS) estimation, the estimated coefficients minimize the sum of the squared *sample residuals* (i.e., the SSE). Using scalar algebra, the SSE can be expressed as: $\mathrm{SSE}=\sum e_i^2$. The SSE can be expressed in matrix notation as: 
+
+$$
+\begin{split}
+\mathrm{SSE} &= \mathbf{e}^{\intercal}\mathbf{e} \\[2ex]
+&= \begin{bmatrix}e_1 & e_2 & e_3 & \ldots & e_n\end{bmatrix}\begin{bmatrix}e_1 \\ e_2 \\ e_3 \\ \vdots \\ e_n\end{bmatrix}
+\end{split}
+$$
+
+Re-arranging the sample regression equation, we can express the residual vector as $\mathbf{e} = \mathbf{y}-\mathbf{Xb}$. The SSE can then be expressed as:
+
+$$
+\mathrm{SSE} = (\mathbf{y}-\mathbf{Xb})^{\intercal}(\mathbf{y}-\mathbf{Xb})
+$$
+
+This can be re-written as:
+
+$$
+\begin{split}
+\mathrm{SSE} &= \mathbf{y}^{\intercal}\mathbf{y} - \mathbf{b}^{\intercal}\mathbf{X}^{\intercal}\mathbf{y} - \mathbf{y}^{\intercal}\mathbf{X}\mathbf{b} + \mathbf{b}^{\intercal}\mathbf{X}^{\intercal}\mathbf{X}\mathbf{b} \\[2ex]
+&= \mathbf{y}^{\intercal}\mathbf{y} - 2\mathbf{b}^{\intercal}\mathbf{X}^{\intercal}\mathbf{y} + \mathbf{b}^{\intercal}\mathbf{X}^{\intercal}\mathbf{X}\mathbf{b}
+\end{split}
+$$
+
+To find the values for the elements in **b** that minimize the equation, we use calculus to differentiate this expression with respect to **b**
+
+\newpage
+
+\begin{mdframed}[style=mystyle2]
+Although calculus, especially calculus on matrices, is beyond the scope of this course, Fox (2009) gives the interested reader some mathematical background on optimization (i.e., minimizing). For now you just need to understand we can optimize a function by computing its derivative, setting the derivative equal to 0, and solve for any remaining unknowns.
+\end{mdframed}
+
+
+This gives the expression:
+
+$$
+(\mathbf{X}^{\intercal}\mathbf{X})\mathbf{b} = \mathbf{X}^{\intercal}\mathbf{y}
+$$
+
+This expression is referred to as the *Normal Equations*. Note that the $(\mathbf{X}^{\intercal}\mathbf{X})$ matrix has two important properties:
+
+- It is square; and
+- It is symmetric.
+
+
+To solve for the elements in **b**, we pre-multiply both sides of the equation by $(\mathbf{X}^{\intercal}\mathbf{X})^{-1}$.
+
+$$
+\begin{split}
+(\mathbf{X}^{\intercal}\mathbf{X})^{-1}(\mathbf{X}^{\intercal}\mathbf{X})\mathbf{b} &= (\mathbf{X}^{\intercal}\mathbf{X})^{-1}(\mathbf{X}^{\intercal}\mathbf{y}) \\[2ex]
+\mathbf{I}\mathbf{b} &= (\mathbf{X}^{\intercal}\mathbf{X})^{-1}\mathbf{X}^{\intercal}\mathbf{y} \\[2ex]
+\mathbf{b} &= (\mathbf{X}^{\intercal}\mathbf{X})^{-1}\mathbf{X}^{\intercal}\mathbf{y}
+\end{split}
+$$
+
+As long as $(\mathbf{X}^{\intercal}\mathbf{X})^{-1}$ exists, the vector of regression coefficients is given as:
+
+$$
+\mathbf{b} = (\mathbf{X}^{\intercal}\mathbf{X})^{-1}\mathbf{X}^{\intercal}\mathbf{y}
+$$
+
+This implies that the vector of regression coefficients can be obtained directly through manipulation of the design matrix and the vector of outcomes. In other words, the OLS coefficients is a direct function of the data. Note that as of yet, we have made no assumptions about the residuals. The coefficients can be estimated making no assumptions about the distributions of the residuals.
+
+
+## Extending the Model
+
+Using matrix algebra to compute the OLS regression coefficients gives us the same values as using the analytic formulas. So why use matrix algebra? The simple reason is that we can use the same matrix algebra computation of **b** regardless of how many predictors we include in the model (it is extensible). The analytic formulas change and become quite difficult to manipulate. For example, consider an example where we want to estimate the coefficients for a model that includes two main effects ($x_1$ and $x_2$) and an interaction between these effects. The population model written in scalar algebra is:
+
+$$
+y_i = \beta_0 + \beta_1(x_{1i}) + \beta_2(x_{2i}) + \beta_3(x_{1i})(x_{2i}) + \epsilon_i
+$$
+
+If we express this using matrix notation, we get:
+
+$$
+\begin{split}
+\begin{bmatrix}y_1 \\ y_2 \\ y_3 \\ \vdots \\ y_n\end{bmatrix} &= \begin{bmatrix}1 & x_{11} & x_{21} & x_{11}(x_{21})\\ 1 & x_{12} & x_{22} & x_{12}(x_{22}) \\ 1 & x_{13} & x_{23} & x_{13}(x_{23}) \\ \vdots & \vdots & \vdots & \vdots \\ 1 & x_{1n} & x_{2n} & x_{1n}(x_{2n})\end{bmatrix} \begin{bmatrix}\beta_0 \\ \beta_1 \\ \beta_2 \\ \beta_3\end{bmatrix}+ \begin{bmatrix}\epsilon_1 \\ \epsilon_2 \\ \epsilon_3 \\ \vdots \\ \epsilon_n\end{bmatrix} \\[2ex]
+\mathbf{y} &= \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\epsilon}
+\end{split}
+$$
+
+Adding predictors expands the size of the design matrix and the length of the $\boldsymbol\beta$ matrix, but the compact notation ($\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\epsilon}$) is exactly the same, so estimating the values in the **b** vector for multiple regression models is identical to doing so for the simple regression model!
+
+
+# Properties of the OLS Estimators
+
+One property of the OLS estimators (in simple or multiple regression) is that they minimize the sum of squared residuals. There are also several other properties that the OLS estimators have. (Note: We derive these properties for the simple regression model, but they also can be extended for the multiple regression model.) Remember these estimators are based on the normal equations:
+
+$$
+\mathbf{X}^{\intercal}\mathbf{Xb} = \mathbf{X}^{\intercal}\mathbf{y}
+$$
+
+If we substitute $\mathbf{Xb}+\mathbf{e}$ in for **y** in this expression, we get:
+
+$$
+\begin{split}
+\mathbf{X}^{\intercal}\mathbf{Xb} &= \mathbf{X}^{\intercal}(\mathbf{Xb}+\mathbf{e}) \\[2ex]
+&= \mathbf{X}^{\intercal}\mathbf{Xb} + \mathbf{X}^{\intercal}\mathbf{e}
+\end{split}
+$$
+
+To make this equality work, implies that:
+
+$$
+\mathbf{X}^{\intercal}\mathbf{e} = \mathbf{0}
+$$
+
+Let's examine $\mathbf{X}^{\intercal}\mathbf{e}$:
+
+$$
+\begin{split}
+\mathbf{X}^{\intercal}\mathbf{e} &= \mathbf{0} \\[2ex]
+\begin{bmatrix}1 & 1 & 1 & \ldots & 1\\X_1 & X_2 & X_3 & \ldots & X_n\end{bmatrix}\begin{bmatrix}e_1 \\ e_2 \\ e_3 \\ \vdots \\ e_n\end{bmatrix} &= \mathbf{0} \\[2ex]
+\begin{bmatrix}e_1 + e_2 + e_3 + \ldots + e_n \\ X_1e_1 + X_2e_2 + X_3e_3 + \ldots + X_ne_n\end{bmatrix} &= \begin{bmatrix}0 \\ 0 \end{bmatrix}
+\end{split}
+$$
+
+This implies that for every column in the design matrix, $\mathbf{X}_k$, that $\mathbf{X}_k^{\intercal}\mathbf{e}=0$. In other words, the dot product between $\mathbf{X}_k$ and $\mathbf{e}$ is zero indicating that the two vectors are independent.
+
+\vspace{2em}
+
+**P.1: The observed values of the predictor(s) are uncorrelated with the sample residuals.**
+
+Note that this does not mean that the predictor(s) are uncorrelated with the residuals in the population; that is an assumption we will have to make later on.
+
+
+
+## Properties of the OLS Regressors
+
+If the regression model includes an intercept (the first column of the design matrix is a ones vector) then the following properties also hold. 
+
+\vspace{2em}
+
+**P.2: The sum of the sample residuals is 0.**
+
+If the first column of the design matrix is a ones vector, then the first element of the $\mathbf{X}^{\intercal}\mathbf{e}$ matrix is $e_1 + e_2 + e_3 + \ldots + e_n = \sum e_i$, which is equal to zero since $\mathbf{X}^{\intercal}\mathbf{e}=\mathbf{0}$.
+
+\vspace{2em}
+
+**P.3: The mean of the sample residuals is zero.**
+
+Since the mean of the residuals is computed as $\bar{\mathbf{e}}=\dfrac{\sum e_i}{n}$, and the sum (numerator) is zero, then the mean is also zero.
+
+\vspace{2em}
+
+**P.4: The regression line passes through the point $(\bar{X}, \bar{Y})$.**
+
+Remember that $\mathbf{e}=\mathbf{y}-\mathbf{bX}$. This means that:
+
+
+$$
+\begin{split}
+\sum\mathbf{e} &= \sum\bigg(\mathbf{y}-\mathbf{Xb}\bigg) \\[2ex]
+&= \sum\mathbf{y} - \sum\mathbf{Xb} \\[2ex]
+&=\sum\mathbf{y}- \mathbf{b}\sum\mathbf{X} \\[2ex]
+\end{split}
+$$
+If we divide this expression by *n*, we get 
+
+$$
+\begin{split}
+\frac{\sum\mathbf{e}}{n} &= \frac{\sum\mathbf{y}}{n} - \frac{\mathbf{b}\sum\mathbf{X}}{n} \\[2ex]
+\bar{\mathbf{e}} &= \bar{y} - \mathbf{b}\bar{x}
+\end{split}
+$$
+
+But, the mean of the residuals is zero, so:
+
+$$
+\begin{split}
+0 &= \bar{y} - \mathbf{b}\bar{x} \\[2ex]
+\bar{y} &= \mathbf{b}\bar{x} 
+\end{split}
+$$
+
+That is, the predicted *y*-value when the mean of *X* is used as a predictor is the mean of *Y*. In other words, the point $(\bar{X}, \bar{Y})$ is on the regression line.
+
+\vspace{2em}
+
+**P.5: The predicted y-values are uncorrelated with the sample residuals.**
+
+Since $\hat{\mathbf{y}}=\mathbf{Xb}$  then $\hat{\mathbf{y}}^\intercal=(\mathbf{Xb})^\intercal$. If we post-multiply both sides of this expression by the residual vector **e**, we get:
+
+$$
+\begin{split}
+\hat{\mathbf{y}}^\intercal\mathbf{e} &= (\mathbf{Xb})^\intercal\mathbf{e} \\[2ex]
+&= \mathbf{b}^\intercal\mathbf{X}^\intercal\mathbf{e}
+\end{split}
+$$
+
+Since $\mathbf{X}^\intercal\mathbf{e}=0$, then $\hat{\mathbf{y}}^\intercal\mathbf{e}=0$. This implies that $\hat{\mathbf{y}}$ and $\mathbf{e}$ are uncorrelated.
+
+\vspace{2em}
+
+**P.6: The mean of the predicted y-values is equal to the mean of the observed y-values.**
+
+We can make use of the fact that $\mathbf{y}=\hat{\mathbf{y}}+\mathbf{e}$. Taking the sum of both sides of the expression and dividing by *n*, we get:
+
+$$
+\begin{split}
+\frac{\sum\mathbf{y}}{n} &= \frac{\sum\hat{\mathbf{y}}}{n} + \frac{\sum\mathbf{e}}{n} \\[2ex]
+\bar{y} &= \bar{\hat{y}} + 0 \\[2ex]
+\bar{y} &= \bar{\hat{y}}
+\end{split}
+$$
+
+\begin{mdframed}[style=mystyle]
+\textbf{IMPORTANT:} These properties will always be true. They do not rely on any distributional assumptions of the residuals. Furthermore, these properties do not tell us anything about how "good" the coefficient estimates (**b**) are. Nor do these properties allow us to make inferences about the true parameters ($\beta$). 
+\end{mdframed}
+
+
+
+
+
+
+
+# References
+
+\noindent
+\leftskip 0.2in
+\parindent -0.2in
+
+
+

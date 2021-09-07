@@ -1,0 +1,324 @@
+---
+title: "Assumptions for OLS Regression and the Gauss-Markov Theorem"
+date: "`r Sys.Date()`"
+header-includes:
+   - \usepackage{amsthm}
+   - \usepackage{xcolor}
+   - \usepackage{xfrac}
+   - \usepackage[framemethod=tikz]{mdframed}
+   - \usepackage{graphicx}
+   - \usepackage{rotating}
+   - \usepackage{booktabs}
+   - \usepackage{caption}
+   - \definecolor{umn}{RGB}{153, 0, 85}
+   - \definecolor{umn2}{rgb}{0.1843137, 0.4509804, 0.5372549}
+   - \definecolor{myorange}{HTML}{EA6153}
+output: 
+  pdf_document:
+    includes:
+      before_body: notes.tex
+    highlight: tango
+    latex_engine: xelatex
+    fig_width: 6
+    fig_height: 6
+mainfont: "Minion Pro"
+sansfont: "ITC Slimbach Std Book"
+monofont: "Source Code Pro"
+urlcolor: "umn2"
+always_allow_html: yes
+bibliography: '../epsy8264.bib'
+csl: '../style/apa-single-spaced.csl'
+---
+
+\frenchspacing
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(knitr)
+library(kableExtra)
+library(dplyr)
+```
+
+One reason that OLS estimation is so useful is that, under a certain set of assumptions underlying the classical linear regression model, the estimators, $b_0,b_1,b_2,\ldots,b_k$, have several desirable statistical properties. These properties include:
+
+- The least squares estimators are *linear estimators*; they are linear functions of the observations. (This property helps us derive the sampling distributions for each estimator, which allows for statistical inference.)
+- The least squares estimators are *unbiased estimators* of the population coefficients.
+- The least squares estimators have sampling variances and a covariance.
+- Of all the linear, unbiased estimators, the least squares estimators have the smallest sampling variance (most precise/efficient).
+
+
+# Assumptions of the OLS Regression Model
+
+As mentioned, there are a certain set of assumptions underlying the linear regression model (both the simple and multiple regression models) for these properties to be true. These assumptions are:
+
+- **A.1:** The model is correctly specified.
+- **A.2:** The design matrix, **X**, is of full rank.
+- **A.3:** The population errors given **X** have a mean of zero.
+- **A.4:** The population errors given **X** are homoscedastic.
+- **A.5:** The population errors given **X** are independent.
+- **A.6:** The predictor values are fixed with finite, non-zero variance.
+
+If these six assumptions are satisfied, then the estimators will have the properties we referred to previously. This is sometimes referred to as the *weak classical regression model*. 
+
+Another assumption that is useful is:
+
+- **A.7:** The population errors given **X** are normally distributed
+
+If all seven assumptions are met, we refer to this as the *strong classical regression model*. When this assumption is met (in addition to the six other assumptions), the sampling distribution for the least squares estimators are also normally distributed; they are approximately normal under other conditions, especially with large sample sizes. This is useful for carrying out statistical inference. Furthermore, under the full set of seven assumptions, the least squares estimators are the maximum-likelihood estimators of the population coefficients.
+
+We will now examine each of the assumptions underlying the linear regression model
+
+
+### A.1: The model is correctly specified.
+
+When we posit or fit the model $\mathbf{y}=\mathbf{X}\boldsymbol\beta+\boldsymbol\epsilon$, we are assuming that there is a linear relationship between the predictor(s) and the outcome. Furthermore, we are stating that this model is correctly specified using the set of predictors included and that deviation from this model in the observed data is all due to random sampling error. 
+
+
+### A.2: The design matrix, X, is of full rank.
+
+This assumption indicates that there is no perfect multicollinearity in the predictor space. That is, the rows (or columns) of **X** are linearly independent. This is what allows us to compute $(\mathbf{X}^\intercal\mathbf{X})^{-1}$.
+
+
+### A.3: The population errors given **X** have a mean of zero.
+
+This assumption states that the mean error (in the population) at a given *x*-value is zero.  Using our rules of expectation:
+
+$$
+\begin{split}
+\mathbb{E}(\epsilon \vert X) &= \mathbb{E}\begin{bmatrix}\epsilon_1 \vert X \\ \epsilon_2 \vert X \\ \epsilon_3 \vert X \\ \vdots \\ \epsilon_n\vert X \end{bmatrix} \\[2ex]
+&= \begin{bmatrix}\mathbb{E}(\epsilon_1 \vert X) \\ \mathbb{E}(\epsilon_2 \vert X) \\ \mathbb{E}(\epsilon_3 \vert X) \\ \vdots \\ \mathbb{E}(\epsilon_n\vert X) \end{bmatrix}\\[2ex]
+&= \begin{bmatrix}0 \\ 0 \\ 0 \\ \vdots \\ 0 \end{bmatrix} \\[2ex]
+\end{split}
+$$
+
+This assumption implies that $\mathbb{E}(\mathbf{y})=\mathbf{X}\boldsymbol{\beta}$.
+
+
+### A.4: The population errors given **X** are homoscedastic.
+
+This assumption indicates that residuals at a given value of **X** have equal variances (homoskedasticity). To show this, we make use of our rules of expectations and the fact that the variance-covariance matrix of the errors at a given **X** (denoted as $\boldsymbol\Sigma(\boldsymbol{\epsilon} \vert \mathbf{X})$) can be defined as the expected value of $\boldsymbol\epsilon^\intercal\boldsymbol\epsilon$.
+
+
+$$
+\begin{split}
+\boldsymbol\Sigma(\boldsymbol{\epsilon} \vert \mathbf{X}) &= \mathbb{E}(\boldsymbol{\epsilon} \boldsymbol{\epsilon}^\intercal \vert X)  \\[2ex]
+&= \mathbb{E}\bigg(\begin{bmatrix}\epsilon_1 \vert X \\ \epsilon_2 \vert X \\ \epsilon_3 \vert X \\ \vdots \\ \epsilon_n\vert X \end{bmatrix}\begin{bmatrix}\epsilon_1 \vert X & \epsilon_2 \vert X & \epsilon_3 \vert X & \ldots & \epsilon_n\vert X \end{bmatrix} \bigg)\\[2ex]
+&= \mathbb{E}\begin{bmatrix}\epsilon_1^2 \vert X & \epsilon_1\epsilon_2 \vert X & \epsilon_1\epsilon_3 \vert X & \ldots & \epsilon_1\epsilon_n \vert X \\ 
+\epsilon_2\epsilon_1 \vert X & \epsilon_2^2 \vert X & \epsilon_2\epsilon_3 \vert X & \ldots & \epsilon_2\epsilon_n \vert X &\\ 
+\epsilon_3\epsilon_1 \vert X & \epsilon_3\epsilon_2 \vert X & \epsilon_3^2 \vert X & \ldots & \epsilon_3\epsilon_n \vert X \\ 
+\vdots & \vdots & \vdots & \ddots & \vdots \\ 
+\epsilon_n\epsilon_1\vert X & \epsilon_n\epsilon_2\vert X & \epsilon_n\epsilon_3\vert X & \ldots & \epsilon_n^2\vert X \end{bmatrix} \\[2ex]
+&= \begin{bmatrix}\mathbb{E}(\epsilon_1^2 \vert X) & \mathbb{E}(\epsilon_1\epsilon_2 \vert X) & \mathbb{E}(\epsilon_1\epsilon_3 \vert X) & \ldots & \mathbb{E}(\epsilon_1\epsilon_n \vert X) \\ 
+\mathbb{E}(\epsilon_2\epsilon_1 \vert X) & \mathbb{E}(\epsilon_2^2 \vert X) & \mathbb{E}(\epsilon_2\epsilon_3 \vert X) & \ldots & \mathbb{E}(\epsilon_2\epsilon_n \vert X) &\\ 
+\mathbb{E}(\epsilon_3\epsilon_1 \vert X) & \mathbb{E}(\epsilon_3\epsilon_2 \vert X) & \mathbb{E}(\epsilon_3^2 \vert X) & \ldots & \mathbb{E}(\epsilon_3\epsilon_n \vert X) \\ 
+\vdots & \vdots & \vdots & \ddots & \vdots \\ 
+\mathbb{E}(\epsilon_n\epsilon_1\vert X) & \mathbb{E}(\epsilon_n\epsilon_2\vert X) & \mathbb{E}(\epsilon_n\epsilon_3\vert X) & \ldots & \mathbb{E}(\epsilon_n^2\vert X) \end{bmatrix}
+\end{split}
+$$
+
+
+The elements along the main diagonal are the error variances. For example $\mathbb{E}(\epsilon_i^2 \vert X)$ is the variance of the *i*th residual. To show that this is the case we use the rules of expectations:
+
+$$
+\begin{split}
+\mathrm{Var}(\epsilon_i \vert \mathbf{X}) &= \mathbb{E}(\epsilon_i^2\vert \mathbf{X}) - \big[\mathbb{E}(\epsilon_i\vert \mathbf{X})\big]^2 \\[2ex]
+&= \mathbb{E}(\epsilon_i^2\vert \mathbf{X}) - 0 \\[2ex]
+&= \mathbb{E}(\epsilon_i^2\vert \mathbf{X})
+\end{split}
+$$
+
+The homoskedasticity assumption makes each variance in the matrix equal, but unknown. Because it the value of the variance is unknow, we can denote it as such usiung the placeholder $\sigma^2$---e.g., $\mathbb{E}(\epsilon_i^2 \vert X) = \sigma^2$. Using this to re-write our variance-covariance matrix:
+
+
+
+$$
+\boldsymbol\Sigma(\boldsymbol{\epsilon} \vert \mathbf{X}) = \begin{bmatrix}\sigma^2 & \mathbb{E}(\epsilon_1\epsilon_2 \vert X) & \mathbb{E}(\epsilon_1\epsilon_3 \vert X) & \ldots & \mathbb{E}(\epsilon_1\epsilon_n \vert X) \\ 
+\mathbb{E}(\epsilon_2\epsilon_1 \vert X) & \sigma^2 & \mathbb{E}(\epsilon_2\epsilon_3 \vert X) & \ldots & \mathbb{E}(\epsilon_2\epsilon_n \vert X) &\\ 
+\mathbb{E}(\epsilon_3\epsilon_1 \vert X) & \mathbb{E}(\epsilon_3\epsilon_2 \vert X) & \sigma^2 & \ldots & \mathbb{E}(\epsilon_3\epsilon_n \vert X) \\ 
+\vdots & \vdots & \vdots & \ddots & \vdots \\ 
+\mathbb{E}(\epsilon_n\epsilon_1\vert X) & \mathbb{E}(\epsilon_n\epsilon_2\vert X) & \mathbb{E}(\epsilon_n\epsilon_3\vert X) & \ldots & \sigma^2 \end{bmatrix}
+$$
+
+### A.5: The population errors given **X** are independent.
+
+The off-diagonal elements in the variance-covariance matrix of the error are the covariances between the errors. For example, $\mathbb{E}(\epsilon_i\epsilon_j \vert X)$ is the covariance between the *i*th and *j*th errors. We can show this using rules of expectations:
+
+$$
+\begin{split}
+\mathrm{Cov}(\epsilon_i,\epsilon_j) &= \mathbb{E}\bigg[\bigg(\epsilon_i - \mathbb{E}[\epsilon_i]\bigg)\bigg(\epsilon_j - \mathbb{E}[\epsilon_j]\bigg)\bigg]\\[2ex]
+&= \mathbb{E}\bigg[\bigg(\epsilon_i - 0\bigg)\bigg(\epsilon_j - 0\bigg)\bigg] \\[2ex]
+&= \mathbb{E}(\epsilon_i\epsilon_j)  \\
+\end{split}
+$$
+
+
+The assumption of independence indicates that each of these covariances is equal to zero. Using this result and the result from the homoscedasticity assumption, we can re-write the variance-covariance matrix of the errors as:
+
+$$
+\begin{split}
+\boldsymbol\Sigma(\boldsymbol{\epsilon} \vert \mathbf{X}) &= \begin{bmatrix}\sigma^2 & 0  & 0 & \ldots & 0 \\
+0 & \sigma^2 & 0  & \ldots & 0\\
+0 & 0 & \sigma^2 & \ldots & 0 \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+0 & 0 & 0 & \ldots & \sigma^2 \end{bmatrix} \\[2ex]
+&= \sigma^2\begin{bmatrix}1 & 0  & 0 & \ldots & 0 \\
+0 & 1 & 0  & \ldots & 0\\
+0 & 0 & 1 & \ldots & 0 \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+0 & 0 & 0 & \ldots & 1 \end{bmatrix} \\[2ex]
+&= \sigma^2 \mathbf{I}
+\end{split}
+$$
+
+
+\begin{mdframed}[style=mystyle]
+The assumptions of homoskedasticity and independence can be more compactly expressed as:
+
+$$
+\boldsymbol\Sigma(\boldsymbol{\epsilon} \vert \mathbf{X}) = \sigma^2 \mathbf{I} = 
+$$
+\end{mdframed}
+
+
+### A.6: The predictor values are fixed with finite, non-zero variance.
+
+Fixing the predictor values implies that the values in the **X** matrix are the same under repeated sampling from the same population. **In most research in the social sciences, this is not the case.** In those cases, we instead assume that the values in **X** are measured without error and that they are independent (uncorrelated) with the errors; $\mathrm{Cov}(\mathbf{X}, \boldsymbol\epsilon)=0$. 
+
+
+# Gauss-Markov Theorem
+
+The Gauss–Markov Theorem is a powerful theorem that states that under the weak classical model (**A.1**–-**A.6**), the least squares estimators have certain desirable properties. Both estimators are:
+- Linear functions of the observations, $y_i$;
+- Unbiased estimators of the population coefficients;
+- The most efficient (smallest sampling variance) unbiased linear estimators of the population coefficients.
+
+\begin{mdframed}[style=mystyle2]
+Because of this theorem, we typically refer to the OLS coefficents as BLUE (Best Linear Unbiased Estimators).
+\end{mdframed}
+
+
+@Fox:2016 reminds us that the "best" in BLUE means that they have the smallest sampling variance of all the possible linear unbiased estimators. There may be a biased or non-linear estimator that produces a smaller sampling variance than the OLS estimator. It is also worth noting that if we also invoke the normality assumption (A.7), then the OLS estimators become "best" among all unbiased estimators (both linear and non-linear).
+
+Proving this theorem is beyond the scope of the class, but an outline for this proof would entail:
+- Show that $b_0$ and $b_1$ are linear functions of the observations; we can express each estimator as $\sum w_iy_i$ for some $w_i$.
+- Show that $b_0$ and $b_1$ are unbiased; that $\mathbb{E}(b_0)=\beta_0$ and $\mathbb{E}(b_1)=\beta_1$
+- Show that for any other unbiased linear estimator, say $L_0$ and $L_1$, that $\mathrm{Var}(b_0)<\mathrm{Var}(L_0)$ and $\mathrm{Var}(b_1)<\mathrm{Var}(L_1)$.
+
+<!-- # Proof of Gauss-Markov Theorem -->
+
+<!-- Remember that the Gauss-Markov Theorem states that the OLS estimators (**b**) are BLUE; they are the best linear, unbiased and efficient estimators (BLUE) for $\boldsymbol\beta$. -->
+
+<!-- **The OLS estimators are unbiased estimators of $\boldsymbol\beta$.** -->
+
+<!-- To show this, we will make use of the following equations: $\mathbf{b} = (\mathbf{X}^{\intercal}\mathbf{X})^{-1}\mathbf{X}^{\intercal}\mathbf{y}$ and $\mathbf{y}=\mathbf{X}\boldsymbol\beta+\boldsymbol\epsilon$. Substituting for **y**, we get: -->
+
+<!-- $$ -->
+<!-- \begin{split} -->
+<!-- \mathbf{b} &= (\mathbf{X}^{\intercal}\mathbf{X})^{-1}\mathbf{X}^{\intercal}(\mathbf{X}\boldsymbol\beta+\boldsymbol\epsilon) \\[2ex] -->
+<!-- &= (\mathbf{X}^{\intercal}\mathbf{X})^{-1}(\mathbf{X}^{\intercal}\mathbf{X})\boldsymbol\beta + (\mathbf{X}^{\intercal}\mathbf{X})^{-1}\mathbf{X}^{\intercal}\boldsymbol\epsilon \\[2ex] -->
+<!-- &= \boldsymbol\beta + (\mathbf{X}^{\intercal}\mathbf{X})^{-1}\mathbf{X}^{\intercal}\boldsymbol\epsilon -->
+<!-- \end{split} -->
+<!-- $$ -->
+
+<!-- Then, if *X* is fixed, then taking the expectation of both sides and using the rules of expectations: -->
+
+<!-- $$ -->
+<!-- \begin{split} -->
+<!-- \mathbb{E}(\mathbf{b}) &= \mathbb{E}(\boldsymbol\beta + (\mathbf{X}^{\intercal}\mathbf{X})^{-1}\mathbf{X}^{\intercal}\boldsymbol\epsilon) \\[2ex] -->
+<!-- &= \boldsymbol\beta + (\mathbf{X}^{\intercal}\mathbf{X})^{-1}\mathbf{X}^{\intercal}\mathbb{E}(\boldsymbol\epsilon) -->
+<!-- \end{split} -->
+<!-- $$ -->
+
+<!-- And since the expectation of the errors is zero, then: -->
+
+<!-- $$ -->
+<!-- \mathbb{E}(\mathbf{b}) = \boldsymbol\beta -->
+<!-- $$ -->
+
+<!-- If the *X* values are random, but are uncorrelated with the errors, then: -->
+
+<!-- $$ -->
+<!-- \begin{split} -->
+<!-- \mathbb{E}(\mathbf{b}) &= \mathbb{E}(\boldsymbol\beta + (\mathbf{X}^{\intercal}\mathbf{X})^{-1}\mathbf{X}^{\intercal}\boldsymbol\epsilon) \\[2ex] -->
+<!-- &= \boldsymbol\beta + (\mathbf{X}^{\intercal}\mathbf{X})^{-1}\mathbf{X}^{\intercal}\mathbb{E}(\boldsymbol\epsilon) -->
+<!-- \end{split} -->
+<!-- $$ -->
+
+
+### A.7: The population errors given **X** are normally distributed.
+
+A final assumption that we make about normality is not required to prove the Gauss-Markov Theorem, but it is used to carry out hypothesis testing. This assumption states that the distribution of errors (in the population) at each *x*-value is normally distributed. If we combine this with the property that the mean error given **X** is zero, and the homoskedasticity assumption, then 
+
+$$
+\boldsymbol{\epsilon} \vert X \sim \mathcal{N}(0, \sigma^2\mathbf{I})
+$$
+
+This encapsulates the assumptions we check about the probability distribution of the model errors.
+
+# OLS Estimators are Maximum Likelihood Estimators
+
+Given the assumptions of the strong classical model (**A.1**--**A.7**), we can show that the least squares estimators are also the maximum likelihood estimators. Recall that the likelihood is the probability of a set of parameters, computed as the joint density of the data, given a set of observations under a particular probability distribution.
+
+The joint density of the errors is:
+
+$$
+\prod_{i=1}^n f(\epsilon_i;~0, \sigma^2_\epsilon) = (2\pi\sigma^2_\epsilon)^{\sfrac{-n}{2}} \times e^{-\frac{1}{2\sigma^2_\epsilon}\sum \epsilon^2_i}
+$$
+
+Using properties **P.3** (independence of $Y$s) and **P.4** (normality of **Y**), and that $\epsilon_i$ is a linear function of $y_i$, we can write the likelihood of the parameters given the observations and the normal probability distribution of **y** as,
+
+$$
+\mathcal{L}\bigg(\beta_0,\beta_1,\ldots,\beta_k,\sigma^2_\epsilon~~|~~Y,n\bigg) = (2\pi\sigma^2_\epsilon)^{\sfrac{-n}{2}} \times e^{-\frac{1}{2\sigma^2_\epsilon}\sum \big(\mathbf{y} - \mathbf{X}\boldsymbol\beta\big)^2}
+$$
+
+Or, in log-likelihood form,
+
+$$
+\log \mathcal{L}\bigg(\beta_0,\beta_1,\ldots,\beta_k,\sigma^2_\epsilon~~\vert~~\mathbf{y},n\bigg) = -\frac{n}{2} \log (2\pi) - \frac{n}{2} \log (\sigma^2_\epsilon) - \frac{1}{2\sigma^2_\epsilon} \sum \big(\mathbf{y} - \mathbf{X}\boldsymbol\beta\big)^2
+$$
+
+We can again use calculus (beyond the scope of this course) to optimize this function.
+
+\newpage
+
+\begin{mdframed}[style=mystyle]
+Differentiating this expression with respect to each of the parameters, we get:
+
+\begin{equation}
+\begin{split}
+\frac{\partial \log \mathcal{L}}{\partial \beta_0} = \frac{1}{\sigma^2_\epsilon} \sum \big(\mathbf{y} - \mathbf{X}\boldsymbol\beta\big) \\[2ex]
+\frac{\partial \log \mathcal{L}}{\partial \beta_1} &= \frac{1}{\sigma^2_\epsilon} \sum x_{1i} \big(\mathbf{y} - \mathbf{X}\boldsymbol\beta\big) \\[2ex]
+&\vdots \\[2ex]
+\frac{\partial \log \mathcal{L}}{\partial \beta_k} &= \frac{1}{\sigma^2_\epsilon} \sum x_{ki} \big(\mathbf{y} - \mathbf{X}\boldsymbol\beta\big) \\[2ex]
+\frac{\partial \log \mathcal{L}}{\partial \sigma^2_\epsilon} &= -\frac{n}{2\sigma^2_\epsilon} + \frac{1}{2\sigma^4_\epsilon} \sum \big(\mathbf{y} - \mathbf{X}\boldsymbol\beta\big)^2
+\end{split}
+\end{equation}
+
+We can then set each of these equal to zero and solve.
+\end{mdframed}
+
+Solving these equations, we find that the maximum likelihood estimators for the regression coefficients are equivalent to the OLS estimators of these parameters. We also find that,
+
+$$
+\begin{split}
+\hat{\sigma}^2_\epsilon &= \frac{1}{n} \sum \big(\mathbf{y} - \mathbf{X}\boldsymbol\beta\big)^2 \\[1em]
+&= \frac{1}{n} \sum \big(e_i\big)^2
+\end{split}
+$$
+
+Thus the maximum likelihood estimate for the error variance is not the same as the OLS estimate for error variance (the OLS version divides the sum of the errors by $n-2$).
+
+
+
+
+
+
+
+# References
+
+\noindent
+\leftskip 0.2in
+\parindent -0.2in
+
+
+

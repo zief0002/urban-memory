@@ -2,8 +2,10 @@
 title: "`r paste(emo::ji('memo'), 'Introduction to Matrix Algebra')`"
 description: |
   In-class worksheet
-author: andy
-date: 08-13-2021
+author:
+  name: andy
+  url: {}
+date: "08-13-2021"
 output:
   distill::distill_article:
     self_contained: false

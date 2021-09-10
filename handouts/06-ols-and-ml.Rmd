@@ -1,0 +1,113 @@
+---
+title: "Maximum Likelihood Estimators"
+date: "`r Sys.Date()`"
+header-includes:
+   - \usepackage{amsthm}
+   - \usepackage{xcolor}
+   - \usepackage{xfrac}
+   - \usepackage[framemethod=tikz]{mdframed}
+   - \usepackage{graphicx}
+   - \usepackage{rotating}
+   - \usepackage{booktabs}
+   - \usepackage{caption}
+   - \definecolor{umn}{RGB}{153, 0, 85}
+   - \definecolor{umn2}{rgb}{0.1843137, 0.4509804, 0.5372549}
+   - \definecolor{myorange}{HTML}{EA6153}
+output: 
+  pdf_document:
+    includes:
+      before_body: notes.tex
+    highlight: tango
+    latex_engine: xelatex
+    fig_width: 6
+    fig_height: 6
+mainfont: "Minion Pro"
+sansfont: "ITC Slimbach Std Book"
+monofont: "Source Code Pro"
+urlcolor: "umn2"
+always_allow_html: yes
+bibliography: '../epsy8264.bib'
+csl: '../style/apa-single-spaced.csl'
+---
+
+\frenchspacing
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(knitr)
+library(kableExtra)
+library(dplyr)
+```
+
+
+# OLS Estimators are Maximum Likelihood (ML) Estimators
+
+Given the assumptions of the strong classical model (**A.1**--**A.7**), we can show that the least squares estimators are also the maximum likelihood estimators. Recall that the likelihood is the probability of a set of parameters, computed as the joint density of the data, given a set of observations under a particular probability distribution.
+
+The joint density of the errors is:
+
+$$
+\prod_{i=1}^n f(\epsilon_i;~0, \sigma^2_\epsilon) = (2\pi\sigma^2_\epsilon)^{\sfrac{-n}{2}} \times e^{-\frac{1}{2\sigma^2_\epsilon}\sum \epsilon^2_i}
+$$
+
+Using assumptions **A.5** (independence of errors) and **A.7** (conditional normality of errors), and the fact that $\epsilon_i$ is a linear function of $y_i$, we can write the likelihood of the parameters given the observations and the normal probability distribution of **y** as,
+
+$$
+\mathcal{L}\bigg(\beta_0,\beta_1,\ldots,\beta_k,\sigma^2_\epsilon~~|~~\mathbf{y},n\bigg) = (2\pi\sigma^2_\epsilon)^{\sfrac{-n}{2}} \times e^{-\frac{1}{2\sigma^2_\epsilon}\sum \big(\mathbf{y} - \mathbf{X}\boldsymbol\beta\big)^2}
+$$
+
+Or, in log-likelihood form,
+
+$$
+\log \mathcal{L}\bigg(\beta_0,\beta_1,\ldots,\beta_k,\sigma^2_\epsilon~~\vert~~\mathbf{y},n\bigg) = -\frac{n}{2} \log (2\pi) - \frac{n}{2} \log (\sigma^2_\epsilon) - \frac{1}{2\sigma^2_\epsilon} \sum \big(\mathbf{y} - \mathbf{X}\boldsymbol\beta\big)^2
+$$
+
+We can again use calculus (beyond the scope of this course) to optimize this function.
+
+\newpage
+
+\begin{mdframed}[style=mystyle]
+Differentiating this expression with respect to each of the parameters, we get:
+
+\begin{equation}
+\begin{split}
+\frac{\partial \log \mathcal{L}}{\partial \beta_0} = \frac{1}{\sigma^2_\epsilon} \sum \big(\mathbf{y} - \mathbf{X}\boldsymbol\beta\big) \\[2ex]
+\frac{\partial \log \mathcal{L}}{\partial \beta_1} &= \frac{1}{\sigma^2_\epsilon} \sum x_{1i} \big(\mathbf{y} - \mathbf{X}\boldsymbol\beta\big) \\[2ex]
+&\vdots \\[2ex]
+\frac{\partial \log \mathcal{L}}{\partial \beta_k} &= \frac{1}{\sigma^2_\epsilon} \sum x_{ki} \big(\mathbf{y} - \mathbf{X}\boldsymbol\beta\big) \\[2ex]
+\frac{\partial \log \mathcal{L}}{\partial \sigma^2_\epsilon} &= -\frac{n}{2\sigma^2_\epsilon} + \frac{1}{2\sigma^4_\epsilon} \sum \big(\mathbf{y} - \mathbf{X}\boldsymbol\beta\big)^2
+\end{split}
+\end{equation}
+
+We can then set each of these equal to zero and solve.
+\end{mdframed}
+
+Solving these equations, we find that the maximum likelihood estimators for the regression coefficients are equivalent to the OLS estimators of these parameters. We also find that,
+
+$$
+\begin{split}
+\hat{\sigma}^2_\epsilon &= \frac{1}{n} \sum \big(\mathbf{y} - \mathbf{X}\boldsymbol\beta\big)^2 \\[1em]
+&= \frac{1}{n} \sum \big(e_i\big)^2
+\end{split}
+$$
+
+Thus the maximum likelihood estimate for the error variance is not the same as the OLS estimate for error variance (the OLS version divides the sum of the errors by $n-2$).
+
+
+# Inference with the ML Estimators
+
+The maximum likelihood estimators for the coefficients (which are the same as the OLS estimators) possess several asymptotic (large sample) properties; most importantly normality. Because of this, with a large sample size, the sampling distribution for ML estimates will also be approximately $t$-distributed with $n-k-1$ degrees of freedom.
+
+
+
+
+
+
+# References
+
+\noindent
+\leftskip 0.2in
+\parindent -0.2in
+
+
+

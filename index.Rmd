@@ -4,6 +4,10 @@ site: distill::distill_website
 listing: posts
 ---
 
+```{r include=FALSE}
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+```
+
 
 
 # Welcome

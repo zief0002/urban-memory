@@ -1,0 +1,27 @@
+---
+title: "`r paste(emo::ji('memo'), 'OLS Regression Using Matrices and Its Properties')`"
+description: |
+  Notes
+author:
+  - name: andy
+    url: {}
+date: 09-09-2021
+output:
+  distill::distill_article:
+    self_contained: false
+categories:
+  - Notes
+---
+
+
+Here are links to several PDF handouts:
+
+- [Summation, Expectation, Variance, Covariance, and Correlation](../../handouts/01-sums-expectations-covariance.pdf) is a handout that provides several mathematical rules for working with sums, expectations, variances, covariances, and correlation.
+- [OLS Estimators and Their Properties](../../handouts/02-ols-estimators-and-their-properties.pdf) is a handout that steps through estimating the OLS regression estimators and also derives some of the properties of those estimators
+- [Assumptions for OLS Regression and the Gauss-Markov Theorem](../../handouts/03-assumptions-and-gauss-markov.pdf) is a handout that examines the assumptions underlying the Gauss-Markov theorem; the theorem showing that the OLS estimators are BLUE.
+- [Statistical Inference for the Regression Model](../../handouts/04-inference-for-the-regression-model.pdf) is a handout working through how we carry out coefficient-level and model-level statistical inference.
+- [A Regression Example in Practice](../../handouts/05-regression-example-in-practice.pdf) is a handout that walks through using matrix algebra to compute many of the things we are interested in as applied researchers. It also show the equivalent built-in R functions for obtaining this.
+
+The handouts include more detail than I will cover in class. I will highlight some important ideas from each of them, and you can work through some of the mathematical derivation on your own if it is of interest.
+
+

@@ -13,6 +13,11 @@ navbar:
       href: schedule.html
     - text: "Assignments"
       href: assignments.html
+    - text: "Data"
+      href: data.html  
 output: 
   distill::distill_article:
-    css: "style.css"
+    css: ["style/style.css"]
+    includes:
+      in_header:
+      - header.html

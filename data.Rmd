@@ -1,0 +1,397 @@
+---
+title: "Data"
+description: |
+  Datasets and codebooks used in the course.
+---
+
+
+<br />
+
+
+<table class="table">
+
+<thead>
+<tr>
+<th style="width:50%;">Name</th>
+<th style="width:25%;text-align:center;">Data</th>
+<th style="width:25%;text-align:center;">Codebook</th>
+</tr>
+</thead>
+
+
+<tbody>
+
+<!-- <tr> -->
+<!-- <td>activity-based-courses.csv</td> -->
+<!-- <td align="center" style="vertical-align:middle;"> -->
+<!--   <a href="https://github.com/zief0002/epsy-8264/raw/master/data/activity-based-courses.csv"> -->
+<!--     <span class="fas fa-file-csv" style="color: #ff2600; font-size: 20px;"></span> -->
+<!--   </a> -->
+<!-- </td> -->
+<!-- <td align="center" style="vertical-align:middle;"> -->
+<!--   <a href="codebooks/activity-based-courses.html" target="_blank"> -->
+<!--     <span class="fas fa-book-open" style="color: #ff2600; font-size: 20px;"></span> -->
+<!--   </a> -->
+<!-- </td> -->
+<!-- </tr> -->
+
+<tr>
+<td>bluegills.csv</td>
+<td align="center" style="vertical-align:middle;">
+  <a class="my-link" href="https://github.com/zief0002/epsy-8264/raw/master/data/bluegills.csv">
+    <span class="fas fa-file-csv" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
+</td>
+<td align="center" style="vertical-align:middle;">
+  <!-- <a class="my-link" href="codebooks/colleges-bordering-mn.html" target="_blank"> -->
+  <!--   <span class="fas fa-book-open" style="color: #ff2600; font-size: 20px;"></span> -->
+  <!-- </a> -->
+</td>
+</tr>
+
+<tr>
+<td>canadian-prestige.csv</td>
+<td align="center" style="vertical-align:middle;">
+  <a class="my-link" href="https://github.com/zief0002/epsy-8264/raw/master/data/canadian-prestige.csv">
+    <span class="fas fa-file-csv" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
+</td>
+<td align="center" style="vertical-align:middle;">
+  <!-- <a class="my-link" href="codebooks/evaluations.html" target="_blank"> -->
+  <!--   <span class="fas fa-book-open" style="color: #ff2600; font-size: 20px;"></span> -->
+  <!-- </a> -->
+</td>
+</tr>
+
+<tr>
+<td>contraception.csv</td>
+<td align="center" style="vertical-align:middle;">
+  <a class="my-link" href="https://github.com/zief0002/epsy-8264/raw/master/data/contraception.csv">
+    <i class="fas fa-file-csv"></i>
+  </a>
+</td>
+<td align="center" style="vertical-align:middle;">
+  <a class="my-link" href="codebooks/contraception.html" target="_blank">
+    <span class="fas fa-book-open" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
+</td>
+</tr>
+
+<tr>
+<td>credit.csv</td>
+<td align="center" style="vertical-align:middle;">
+  <a class="my-link" href="https://github.com/zief0002/epsy-8264/raw/master/data/credit.csv">
+    <span class="fas fa-file-csv" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
+</td>
+<td align="center" style="vertical-align:middle;">
+  <a class="my-link" href="codebooks/credit.html" target="_blank">
+    <span class="fas fa-book-open" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
+</td>
+</tr>
+
+<tr>
+<td>davis.csv</td>
+<td align="center" style="vertical-align:middle;">
+  <a class="my-link" href="https://github.com/zief0002/epsy-8264/raw/master/data/davis.csv">
+    <span class="fas fa-file-csv" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
+</td>
+<td align="center" style="vertical-align:middle;">
+  <!-- <a href="codebooks/keith-gpa.html" target="_blank"> -->
+  <!--   <span class="fas fa-book-open" style="color: #ff2600; font-size: 20px;"></span> -->
+  <!-- </a> -->
+</td>
+</tr>
+
+<tr>
+<td>davis-corrected.csv</td>
+<td align="center" style="vertical-align:middle;">
+  <a class="my-link" href="https://github.com/zief0002/epsy-8264/raw/master/data/davis-corrected.csv">
+    <span class="fas fa-file-csv" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
+</td>
+<td align="center" style="vertical-align:middle;">
+  <!-- <a href="codebooks/goodreads.html" target="_blank"> -->
+  <!--   <span class="fas fa-book-open" style="color: #ff2600; font-size: 20px;"></span> -->
+  <!-- </a> -->
+</td>
+</tr>
+
+<tr>
+<td>duff.csv</td>
+<td align="center" style="vertical-align:middle;">
+  <a class="my-link" href="https://github.com/zief0002/epsy-8264/raw/master/data/duff.csv">
+    <span class="fas fa-file-csv" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
+</td>
+<td align="center" style="vertical-align:middle;">
+  <!-- <a href="codebooks/mn-schools.html" target="_blank"> -->
+  <!--   <span class="fas fa-book-open" style="color: #ff2600; font-size: 20px;"></span> -->
+  <!-- </a> -->
+</td>
+</tr>
+
+<tr>
+<td>duncan.csv</td>
+<td align="center" style="vertical-align:middle;">
+  <a class="my-link" href="https://github.com/zief0002/epsy-8264/raw/master/data/duncan.csv">
+    <span class="fas fa-file-csv" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
+</td>
+<td align="center" style="vertical-align:middle;">
+  <!-- <a href="codebooks/riverview.html" target="_blank"> -->
+  <!--   <span class="fas fa-book-open" style="color: #ff2600; font-size: 20px;"></span> -->
+  <!-- </a> -->
+</td>
+</tr>
+
+<tr>
+<td>education-expenditures.csv</td>
+<td align="center" style="vertical-align:middle;">
+  <a class="my-link" href="https://github.com/zief0002/epsy-8264/raw/master/data/education-expenditures.csv">
+    <span class="fas fa-file-csv" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
+</td>
+<td align="center" style="vertical-align:middle;">
+  <!-- <a href="codebooks/state-education.html" target="_blank"> -->
+  <!--   <span class="fas fa-book-open" style="color: #ff2600; font-size: 20px;"></span> -->
+  <!-- </a> -->
+</td>
+</tr>
+
+<tr>
+<td>equal-education-opportunity.csv</td>
+<td align="center" style="vertical-align:middle;">
+  <a class="my-link" href="https://github.com/zief0002/epsy-8264/raw/master/data/equal-education-opportunity.csv">
+    <span class="fas fa-file-csv" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
+</td>
+<td align="center" style="vertical-align:middle;">
+  <!-- <a href="codebooks/substance-family.html" target="_blank"> -->
+  <!--   <span class="fas fa-book-open" style="color: #ff2600; font-size: 20px;"></span> -->
+  <!-- </a> -->
+</td>
+</tr>
+
+
+<tr>
+<td>evaluations.csv</td>
+<td align="center" style="vertical-align:middle;">
+  <a class="my-link" href="https://github.com/zief0002/epsy-8264/raw/master/data/evaluations.csv">
+    <i class="fas fa-file-csv"></i>
+  </a>
+</td>
+<td align="center" style="vertical-align:middle;">
+  <a class="my-link" href="codebooks/evaluations.html" target="_blank">
+    <i class="fas fa-book-open"></i>
+  </a>
+</td>
+</tr>
+
+<tr>
+<td>fake-piecewise-data.csv</td>
+<td align="center" style="vertical-align:middle;">
+  <a class="my-link" href="https://github.com/zief0002/epsy-8264/raw/master/data/fake-piecewise-data.csv">
+    <span class="fas fa-file-csv" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
+</td>
+<td align="center" style="vertical-align:middle;">
+  <!-- <a href="codebooks/work-demands.html" target="_blank"> -->
+  <!--   <span class="fas fa-book-open" style="color: #ff2600; font-size: 20px;"></span> -->
+  <!-- </a> -->
+</td>
+</tr>
+
+<tr>
+<td>galton.csv</td>
+<td align="center" style="vertical-align:middle;">
+  <a class="my-link" href="https://github.com/zief0002/epsy-8264/raw/master/data/galton.csv">
+    <span class="fas fa-file-csv" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
+</td>
+<td align="center" style="vertical-align:middle;">
+  <!-- <a href="codebooks/work-demands.html" target="_blank"> -->
+  <!--   <span class="fas fa-book-open" style="color: #ff2600; font-size: 20px;"></span> -->
+  <!-- </a> -->
+</td>
+</tr>
+
+<tr>
+<td>grade_data.csv</td>
+<td align="center" style="vertical-align:middle;">
+  <a class="my-link" href="https://github.com/zief0002/epsy-8264/raw/master/data/grade_data.csv">
+    <span class="fas fa-file-csv" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
+</td>
+<td align="center" style="vertical-align:middle;">
+  <!-- <a href="codebooks/work-demands.html" target="_blank"> -->
+  <!--   <span class="fas fa-book-open" style="color: #ff2600; font-size: 20px;"></span> -->
+  <!-- </a> -->
+</td>
+</tr>
+
+<tr>
+<td>houston.csv</td>
+<td align="center" style="vertical-align:middle;">
+  <a class="my-link" href="https://github.com/zief0002/epsy-8264/raw/master/data/houston.csv">
+    <span class="fas fa-file-csv" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
+</td>
+<td align="center" style="vertical-align:middle;">
+  <!-- <a href="codebooks/work-demands.html" target="_blank"> -->
+  <!--   <span class="fas fa-book-open" style="color: #ff2600; font-size: 20px;"></span> -->
+  <!-- </a> -->
+</td>
+</tr>
+
+<tr>
+<td>iowa-judges.csv</td>
+<td align="center" style="vertical-align:middle;">
+  <a class="my-link" href="https://github.com/zief0002/epsy-8264/raw/master/data/iowa-judges.csv">
+    <span class="fas fa-file-csv" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
+</td>
+<td align="center" style="vertical-align:middle;">
+  <a class="my-link" href="codebooks/iowa-judges.html" target="_blank">
+    <span class="fas fa-book-open" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
+</td>
+</tr>
+
+<tr>
+<td>loess.csv</td>
+<td align="center" style="vertical-align:middle;">
+  <a class="my-link" href="https://github.com/zief0002/epsy-8264/raw/master/data/loess.csv">
+    <span class="fas fa-file-csv" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
+</td>
+<td align="center" style="vertical-align:middle;">
+  <!-- <a class="my-link" href="codebooks/work-demands.html" target="_blank"> -->
+  <!--   <span class="fas fa-book-open" style="color: #ff2600; font-size: 20px;"></span> -->
+  <!-- </a> -->
+</td>
+</tr>
+
+<tr>
+<td>mcycle.csv</td>
+<td align="center" style="vertical-align:middle;">
+  <a class="my-link" href="https://github.com/zief0002/epsy-8264/raw/master/data/mcycle.csv">
+    <span class="fas fa-file-csv" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
+</td>
+<td align="center" style="vertical-align:middle;">
+  <a class="my-link" href="codebooks/mcycle.html" target="_blank">
+    <span class="fas fa-book-open" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
+</td>
+</tr>
+
+<tr>
+<td>mpls-violent-crime.csv</td>
+<td align="center" style="vertical-align:middle;">
+  <a href="https://github.com/zief0002/epsy-8264/raw/master/data/mpls-violent-crime.csv">
+    <span class="fas fa-file-csv" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
+</td>
+<td align="center" style="vertical-align:middle;">
+  <a class="my-link" href="codebooks/mpls-violent-crime.html" target="_blank">
+    <span class="fas fa-book-open" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
+</td>
+</tr>
+
+<tr>
+<td>polynomial-example.csv</td>
+<td align="center" style="vertical-align:middle;">
+  <a class="my-link" href="https://github.com/zief0002/epsy-8264/raw/master/data/polynomial-example.csv">
+    <span class="fas fa-file-csv" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
+</td>
+<td align="center" style="vertical-align:middle;">
+  <!-- <a class="my-link" href="codebooks/work-demands.html" target="_blank"> -->
+  <!--   <span class="fas fa-book-open" style="color: #ff2600; font-size: 20px;"></span> -->
+  <!-- </a> -->
+</td>
+</tr>
+
+<tr>
+<td>relate.csv</td>
+<td align="center" style="vertical-align:middle;">
+  <a class="my-link" href="https://github.com/zief0002/epsy-8264/raw/master/data/relate.csv">
+    <span class="fas fa-file-csv" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
+</td>
+<td align="center" style="vertical-align:middle;">
+  <!-- <a class="my-link" href="codebooks/work-demands.html" target="_blank"> -->
+  <!--   <span class="fas fa-book-open" style="color: #ff2600; font-size: 20px;"></span> -->
+  <!-- </a> -->
+</td>
+</tr>
+
+<tr>
+<td>slid.csv</td>
+<td align="center" style="vertical-align:middle;">
+  <a class="my-link" href="https://github.com/zief0002/epsy-8264/raw/master/data/slid.csv">
+    <span class="fas fa-file-csv" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
+</td>
+<td align="center" style="vertical-align:middle;">
+  <!-- <a class="my-link" href="codebooks/work-demands.html" target="_blank"> -->
+  <!--   <span class="fas fa-book-open" style="color: #ff2600; font-size: 20px;"></span> -->
+  <!-- </a> -->
+</td>
+</tr>
+
+<tr>
+<td>stack-1979.csv</td>
+<td align="center" style="vertical-align:middle;">
+  <a class="my-link" href="https://github.com/zief0002/epsy-8264/raw/master/data/stack-1979.csv">
+    <span class="fas fa-file-csv" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
+</td>
+<td align="center" style="vertical-align:middle;">
+  <a class="my-link" href="codebooks/stack-1979.html" target="_blank">
+    <span class="fas fa-book-open" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
+</td>
+</tr>
+
+<tr>
+<td>states-2019.csv</td>
+<td align="center" style="vertical-align:middle;">
+  <a class="my-link" href="https://github.com/zief0002/epsy-8264/raw/master/data/states-2019.csv">
+    <span class="fas fa-file-csv" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
+</td>
+<td align="center" style="vertical-align:middle;">
+  <a class="my-link" href="codebooks/states-2019.html" target="_blank">
+    <span class="fas fa-book-open" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
+</td>
+</tr>
+
+<tr>
+<td>tokyo-water-use.csv</td>
+<td align="center" style="vertical-align:middle;">
+  <a class="my-link" href="https://github.com/zief0002/epsy-8264/raw/master/data/tokyo-water-use.csv">
+    <span class="fas fa-file-csv" style="color: #ff2600; font-size: 20px;"></span>
+  </a>
+</td>
+<td align="center" style="vertical-align:middle;">
+  <!-- <a class="my-link" href="codebooks/work-demands.html" target="_blank"> -->
+  <!--   <span class="fas fa-book-open" style="color: #ff2600; font-size: 20px;"></span> -->
+  <!-- </a> -->
+</td>
+</tr>
+
+
+
+
+</tbody>
+</table>
+
+
+
+

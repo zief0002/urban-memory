@@ -1,0 +1,401 @@
+---
+title: "A Regression Example"
+date: "`r Sys.Date()`"
+header-includes:
+   - \usepackage{amsthm}
+   - \usepackage{xcolor}
+   - \usepackage{xfrac}
+   - \usepackage[framemethod=tikz]{mdframed}
+   - \usepackage{graphicx}
+   - \usepackage{rotating}
+   - \usepackage{booktabs}
+   - \usepackage{caption}
+   - \definecolor{umn}{RGB}{153, 0, 85}
+   - \definecolor{umn2}{rgb}{0.1843137, 0.4509804, 0.5372549}
+   - \definecolor{myorange}{HTML}{EA6153}
+output: 
+  pdf_document:
+    includes:
+      before_body: notes.tex
+    highlight: tango
+    latex_engine: xelatex
+    fig_width: 6
+    fig_height: 6
+mainfont: "Minion Pro"
+sansfont: "ITC Slimbach Std Book"
+monofont: "Source Code Pro"
+urlcolor: "umn2"
+always_allow_html: yes
+bibliography: '../epsy8264.bib'
+csl: '../style/apa-single-spaced.csl'
+---
+
+\frenchspacing
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+library(kableExtra)
+library(dplyr)
+```
+
+In this document we will use the data in [contraception.csv](https://github.com/zief0002/epsy-8264/raw/master/data/contraception.csv) to examine whether female education level explains variation in contraceptive useage after controlling for GNI.
+
+```{r message=FALSE, warning=FALSE}
+# Load libraries
+library(tidyverse)
+library(ggExtra)
+library(broom)
+
+# Import data
+contraception = read_csv("https://github.com/zief0002/epsy-8264/raw/master/data/contraception.csv")
+
+# View data
+contraception
+
+# IF you want to see all the variables
+#print(contraception, width = Inf)
+```
+
+## Examine the Data
+
+We need to correctly specify the model. Since we have no theory to guide us, this is done empirically by looking at the data.
+
+```{r fig.show='hold', out.width='45%', message=FALSE}
+# Create scatterplot
+p = ggplot(data = contraception, aes(x = educ_female, y = contraceptive)) + 
+   geom_point() +
+   geom_smooth(method = "lm", se = FALSE) +
+   theme_bw() +
+   labs(
+      x = "Female education level",
+      y = "Contraceptive useage"
+   ) 
+
+# Add marginal density plots
+ggMarginal(p, type = "density")
+
+# Condition the relationship on GNI
+ggplot(data = contraception, aes(x = educ_female, y = contraceptive, color = gni)) + 
+   geom_point() +
+   geom_smooth(method = "lm", se = FALSE) +
+   theme_bw() +
+   labs(
+      x = "Female education level",
+      y = "Contraceptive useage"
+   ) +
+   facet_wrap(~gni)
+```
+
+- Should we include main-effects only? Or an interaction?
+- Is there non-linearity to account for (e.g., transformations)? Or does it look linear?
+
+
+
+
+## Use Matrix Algebra to Compute Coefficient Estimates
+
+$$
+\mathbf{b} = (\mathbf{X}^\intercal\mathbf{X})^{-1} \mathbf{X}^\intercal\mathbf{y}
+$$
+
+
+```{r}
+# Store values
+n = nrow(contraception) #Sample size
+k = 2 #Number of predictors
+
+
+# Create outcome vector
+y = contraception$contraceptive
+
+# Create dummy variable for GNI
+contraception = contraception %>%
+   mutate(
+      high_gni = if_else(gni == "High", 1, 0)
+      )
+
+# Create design matrix
+X = matrix(
+   data = c(rep(1, n), contraception$educ_female, contraception$high_gni),
+   ncol = 3
+)
+
+# Compute b vector
+b = solve(t(X) %*% X) %*% t(X) %*% y
+b
+```
+
+Thus the fitted regression equation is:
+
+$$
+\widehat{\mathrm{Contraceptive~Use}}_i = 27.02 + 4.09(\mathrm{Female~Education~Level}_i) + 1.60(\mathrm{High~GNI}_i)
+$$
+
+
+## Compute Residual Standard Error 
+
+```{r}
+# Compute e vector
+e = y - X %*% b
+
+# Compute s_e
+s_e = sqrt((t(e) %*% e) / (n - k - 1))
+s_e
+```
+
+Thus the residual standard error (a.k.a., the root mean square error; RMSE) is:
+
+$$
+s_e = 14.40
+$$
+
+## Compute Variance--Covariance Matrix for the Coefficients
+
+$$
+\mathrm{Var}(\mathbf{b}) = s^2_e(\mathbf{X}^\intercal\mathbf{X})^{-1} 
+$$
+
+where $s^2_e = \sfrac{\mathbf{e}^\intercal\mathbf{e}}{n-k-1}$
+
+
+```{r}
+# Compute varaince-covariance matrix of b
+V = as.numeric(s_e^2) * solve(t(X) %*% X)
+V
+
+# Compute SEs for b
+sqrt(diag(V))
+```
+
+
+Thus
+
+$$
+\mathrm{SE}(b_0) = 3.52 \qquad \mathrm{SE}(b_1) = 0.65 \qquad \mathrm{SE}(b_2) = 4.27
+$$
+
+
+## Coefficient-Level Inference
+
+Here we will focus on the effects of female education level since it is our focal predictor. (GNI is a control.) Note this is the second effect in the **b** vector and in the **V** matrix. We will test the hypothesis:
+
+$$
+H_0: \beta_{\mathrm{Education}} = 0
+$$
+
+```{r}
+# Compute t-value
+t_0 = (b[2] - 0) / sqrt(V[2, 2])
+t_0
+
+# Evaluate t-value
+df = n - k - 1
+p = 2* (1 - pt(abs(t_0), df = df))
+p
+```
+
+Here,
+
+$$
+t(94) = 6.26,~p=0.0000000114
+$$
+
+The evidence suggests that the data are not very compatible with the hypothesis that there is no effect of female education level on contraceptive useage, after controlling for differences in GNI.
+
+## Statistical Inference: Confidence Intervals for the Coefficients
+
+From the hypothesis test, we believe there is an effect of female education level on contraceptive useage, after controlling for differences in GNI. What is that effect? To answer this we will compute a 95\% CI for the effect of female education.
+
+```{r}
+# Compute critical value
+t_star = qt(.025, df = df)
+
+# Compute CI
+b[2] - abs(t_star) * sqrt(V[2, 2])
+b[2] + abs(t_star) * sqrt(V[2, 2])
+```
+
+The 95\% CI indicates that the population effect of female education level on contraceptive useage, after controlling for differences in GNI is between 2.79 and 5.39. 
+
+# ANOVA Decompostion
+
+Here we want to partition the sums of squares:
+
+$$
+\mathrm{SS}_{\mathrm{Total}} = \mathrm{SS}_{\mathrm{Model}} + \mathrm{SS}_{\mathrm{Residual}}
+$$
+
+```{r}
+# Compute needed values
+mean_y = mean(y)
+hat_y = X %*% b
+
+
+# Compute SS_Total
+ss_total = t(y - mean_y) %*% (y - mean_y)
+ss_total
+
+# Compute SS_model
+ss_model = t(hat_y - mean_y) %*% (hat_y - mean_y)
+ss_model
+
+# Compute SS_residual
+ss_residual = t(y - hat_y) %*% (y - hat_y)
+ss_residual
+```
+
+
+Here:
+
+- $\mathrm{SS}_{\mathrm{Total}}=38,336.45$
+- $\mathrm{SS}_{\mathrm{Model}}=18,850.25$
+- $\mathrm{SS}_{\mathrm{Residual}}=19,486.2$
+
+We can verify that:
+
+$$
+38,336.45 = 18,850.25 + 19,486.2
+$$
+
+This can be used to compute the model-level $R^2$ value.
+
+$$
+R^2 = \frac{\mathrm{SS}_{\mathrm{Model}}}{\mathrm{SS}_{\mathrm{Total}}}
+$$
+
+```{r}
+# Compute R^2
+r2 = ss_model / ss_total
+r2
+```
+
+The model explains 49.1\% of the variation in contraception usage. 
+
+
+# Model-Level Inference
+
+Here we want to test whether the model explained variation is more than we would expect because of sampling variation, namely 
+
+$$
+H_0: \rho^2=0
+$$
+
+This is equivalent to testing:
+
+$$
+H_0: \beta_{\mathrm{Female~Education}} = \beta_{\mathrm{GNI}} = 0
+$$
+
+We compute an observed *F*-value as:
+
+$$
+F_0 = \frac{(\mathbf{Lb}-\mathbf{c})^\intercal\big[\mathbf{L}(\mathbf{X}^\intercal\mathbf{X})^{-1}\mathbf{L}^\intercal\big]^{-1}(\mathbf{Lb}-\mathbf{c})}{q(s^2_e)}
+$$
+
+```{r}
+# Create L (hypothesis matrix)
+L = matrix(
+   data = c(0, 1, 0, 0, 0, 1),
+   byrow = TRUE,
+   ncol = 3
+)
+
+# Create vector of hypothesized values
+C = matrix(
+   data = c(0, 0),
+   ncol = 1
+)
+
+q = 2
+
+F_num = t(L %*% b - C) %*% solve(L %*% solve(t(X) %*% X) %*% t(L)) %*% (L %*% b - C)
+F_denom = q * s_e^2
+
+F_0 = F_num / F_denom
+F_0
+
+# Evaluate F_0
+1 - pf(F_0, df1 = q, df2 = (n - k - 1))
+```
+
+Here,
+
+$$
+F(2, 94) = 45.47,~p=0.0000000000000153
+$$
+
+The data are not very compatible with the hypothesis that the model explains no variation in the outcome. It is likely there is a controlled effect of female education level, or GNI (or both) on contraceptive usage. That is, the explained variation of 49.1\% is more than we would expect because of chance.
+
+
+# In Practice
+
+In practice, you would simply use built-in R functions to do all of this. Note that you can use a categorical variable in the `lm()` function directly (without dummy coding it beforehand), but it will pick the reference category for you (alphabetically). For example:
+
+```{r}
+# Fit model
+lm.1 = lm(contraceptive ~ 1 + educ_female + gni, data = contraception)
+
+# Coefficient-level output
+tidy(lm.1)
+
+# Coempute confidence intervals for coefficients
+confint(lm.1)
+
+# Model-level output
+glance(lm.1)
+
+# ANOVA decomposition
+anova(lm.1)
+```
+
+## Accessing Regression Matrices from lm()
+
+There are several built-in R functions that allow you to access different regression matrices once you have fitted a model with `lm()`.
+
+```{r eval=FALSE}
+# Access design matrix
+model.matrix(lm.1)
+```
+
+```
+   (Intercept) educ_female gniLow
+1            1         5.9      0
+2            1         8.9      0
+3            1        10.5      0
+4            1         4.6      1
+:            :          :       :
+97           1         6.7      1
+attr(,"assign")
+[1] 0 1 2
+attr(,"contrasts")
+attr(,"contrasts")$gni
+[1] "contr.treatment"
+```
+
+The design matrix is given and information about this design matrix is also encoded. There is an attribute "assign", an integer vector with an entry for each column in the matrix giving the term in the formula which gave rise to the column. Value 0 corresponds to the intercept (if any), and positive values to terms in the order given by the term.labels attribute of the terms structure corresponding to object. There is also an attribute called "contrasts" that identifies any factors (categorical variables) in the model and indicates how the contrast testing (comparison of the factor levels) will be carried out. Here "contr.treatment" is used. This compares each level of the factor to the baseline (which is how dummy coding works).
+
+```{r}
+# Access coefficient estimates
+coef(lm.1)
+
+# Access variance-covariance matrix for b
+vcov(lm.1)
+
+# Access fitted values
+fitted(lm.1)
+
+# Access raw residuals
+resid(lm.1)
+```
+
+
+
+<!-- # References -->
+
+<!-- \noindent -->
+<!-- \leftskip 0.2in -->
+<!-- \parindent -0.2in -->
+
+
+

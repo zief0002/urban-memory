@@ -56,8 +56,6 @@ The calendar below lists the tentative course topics. The dates listed are subje
 </td>
 </tr>
 
-
-
 <tr>
 <td align="center" style="vertical-align:middle;">&nbsp;</td>
 <td>Sept. 14</td>
@@ -70,7 +68,9 @@ The calendar below lists the tentative course topics. The dates listed are subje
   <a class="my-link" href="posts/2021-08-14-reading-ols"><span class="fa fa-book"></span></a>
 </td>
 <td style="vertical-align:middle;" rowspan="2">OLS Regression using Matrices and its Properties</td>
-<td align="center" style="vertical-align:middle;" rowspan="2"></td>
+<td align="center" style="vertical-align:middle;" rowspan="2">
+  <a class = "my-link" href="posts/2021-09-09-2021-09-09-notes-ols-regression"><span class="fas fa-link"></span></a>
+</td>
 </tr>
 
 <tr>

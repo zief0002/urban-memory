@@ -84,7 +84,7 @@ $$
 \end{split}
 $$
 
-This implies that the sampling variances and covariances of the estimators depend only on the predictor values and the error variance.
+This implies that the sampling variances and covariances of the estimators depend only on the predictor values and the error variance. This matrix is often reffered to as **V**.
 
 Note that to derive this, we only need the assumption of linearity. The normality assumption is not used to compute the mean (expectation) nor the sampling variance, nor covariances of the estimators. However, if the errors (and hence **y**) are normally distributed (i.e., assumption **A.7**), then so are the sampling distributions of the estimators. We can express these distributions as:
 
@@ -98,10 +98,10 @@ $$
 An individual estimator, $b_j$, has a sampling distribution of:
 
 $$
-b_j \sim \mathcal{N}\bigg(\beta_j,~ \sigma^2_{\epsilon}v_{jj}\bigg)
+b_j \sim \mathcal{N}\bigg(\beta_j,~ \mathbf{V}_{jj}\bigg)
 $$
 
-where $v_{jj}$ is the element in the *j*th row and *j*th column of the variance--covariance matrix for **b**. To test the hypothesis that:
+where $\mathbf{V}_{jj}$ is the element in the *j*th row and *j*th column of the variance--covariance matrix for **b**. To test the hypothesis that:
 
 $$
 H_0: \beta_j = \beta_j^{(0)}
@@ -109,12 +109,12 @@ $$
 where $\beta_j^{(0)}$ is some value (e.g., $H_0:\beta_j=0$), we compute the ratio:
 
 $$
-Z_0 = \frac{b_j - \beta_j^{(0)}}{\sigma_{\epsilon}\sqrt{v_{jj}}}
+Z_0 = \frac{b_j - \beta_j^{(0)}}{\sqrt{\mathbf{V}_{jj}}}
 $$
 
 which is unit-normal distributed; $\mathcal{N}(0,1)$. Note the denominator is the standard deviation of the sampling distribution for $b_j$.
 
-Unfortunately, in practice we do not know $\sigma_{\epsilon}$. Instead, we substitute in the estimate for this value from our sample, the unbiased estimator $s_e$, where:
+Unfortunately, in practice we do not know $\sigma_{\epsilon}$ to compute **V**. Instead, we substitute in the estimate for this value from our sample, the unbiased estimator $s_e$, where:
 
 $$
 s_e^2 = \frac{\mathbf{e}^\intercal\mathbf{e}}{n-k-1}
@@ -131,28 +131,8 @@ $$
 
 The standard error for $b_j$ is then estimated using the *j*th diagonal element of this matrix, namely $\sqrt{\hat{v}_{jj}}$.
 
-
-
-
-This estimation o introduces additional uncertainty into the sampling process.
-
-To derive the sampling distributions for the estimators, which are the basis for statistical inference, we need to also take advantage of the normality assumption (**A.7**). Recall that we used the *t*-distribution with $n-2$ degrees of freedom to test hypotheses about the slope and intercept. The general form of a hypotheses test for a regression coefficient, is
-
-$$
-H_0: \beta_j = k \quad \mathrm{where~k~is~the~tested~value}
-$$
-
-To test this, we create a test statistic (*T*) by studentizing the regression estimator ($b_j$) as:
-
-$$
-T = \frac{B_j - k}{\mathrm{SE}(B_j)}
-$$
-
-In the simple regression model this statistic follows a *t*-distribution with $n-2$ degrees of freedom.  
-
-
 \begin{mdframed}[style=mystyle]
-There is a theorem which says that (1) if $Z$ is a standard normal variable and $W$ is chi-squared distributed with $\nu$ degrees of freedom, and (2) $Z$ and $W$ are independent, then
+There is a theorem which says that (1) if $Z$ is a standard normal variable and $W$ is chi-squared distributed with $\nu$ degrees of freedom, and (2) $Z$ and $W$ are independent, then $T$, defined as:
 
 $$
 T = \frac{Z}{\sqrt{W/\nu}}
@@ -161,157 +141,123 @@ $$
 will follow a $t$-distribution with $\nu$ degrees of freedom.
 \end{mdframed}
 
-
-In the case of the test of the mean, we can write $T = \frac{\bar{y}-\mu}{\mathrm{SE}(\bar{y})}$ in this form as:
-
-$$
-T = \frac{\sqrt{n}(\bar{y} - \mu) / \sigma_y}{\sqrt{\bigg[(n-1)s^2_y / \sigma^2_y\bigg] / (n-1)}}
-$$
-
-Thus, the distribution of $T$ will be $t$-distributed with $n-1$ degrees of freedom.
-
-
-For the regression estimators, under the assumption of normality, the least squares estimators are also normally distributed. This is true since $B_j$ is a linear combination of the observations, and we are assuming the observations to be normally distributed (linear shifts do not change the distribution). Thus, we have,
+Since it can be shown that $(n-k-1) \frac{s_e^2}{\sigma_{\epsilon}^2}$ follows a chi-squared distribution with $n-k-1$ degrees of freedom, and also that $B_j$ and $s^2_e$ are independent; it follows that:
 
 $$
 \begin{split}
-T &= \frac{B_j - k}{\mathrm{SE}(B_j)} \\[1em]
-&= \frac{\frac{B_j - b}{\sigma_{B_j}}}{\frac{\mathrm{SE}(B_j)}{\sigma_{B_j}}}
+t &= \frac{b_j - \beta_j^{(0)}}{\sqrt{\mathbf{V}_{jj}}}
 \end{split}
 $$
 
-From this it is clear that the numerator of $T$ is a standard normal variable. The denominator is
+is $t$-distributed with $n-k-1$ degrees of freedom. To evaluate the hypothesis that $H_0:\beta_j = \beta_j^{(0)}$, we compute the test statistic:
+
+$$
+t_0 = \frac{b_j - \beta_j^{(0)}}{\sqrt{\mathbf{V}_{jj}}}
+$$
+and evaluate it within the *t*-distribution having $n-k-1$ degrees of freedom (where *n* is the sample size, and *k* is the number of predictors in the model).
+
+
+## Confidence Intervals
+
+A $1-\alpha$\% confidence interval can also be constructed for each coefficient using:
 
 $$
 \begin{split}
-\frac{\mathrm{SE}(B_j)}{\sigma_{B_j}} &= \sqrt{\frac{\mathrm{Var}(B_j)}{\sigma^2_{B_j}}} \\[1em]
-&= \sqrt{\frac{\frac{\mathrm{MSE}}{\sum (x_i - \bar{x})^2}}{\frac{\sigma^2_\epsilon}{\sum (x_i - \bar{x})^2}}} \\[1em]
-&= \sqrt{\frac{\mathrm{MSE}}{\sigma^2_\epsilon}} \\[1em]
-&= \sqrt{\frac{\frac{\mathrm{SSE}}{n-2}}{\sigma^2_\epsilon}} \\[1em]
-&= \sqrt{\frac{\mathrm{SSE}}{\sigma^2_\epsilon (n-2)}}
+\mathrm{CI}_{1-\alpha} &= b_j \pm \vert t^*_{\alpha/2}\vert \big[s_e (\mathbf{X}^\intercal\mathbf{X})^{-1}\big] \\[2ex]
+&= b_j \pm \vert t^*_{\alpha/2}\vert (\sqrt{\mathbf{V}_{jj}})
 \end{split}
 $$
+where $t^*_{\alpha/2}$ is the critical value demarcating the area in the $\alpha/2$ proportion of the distribution in the *t*-distribution with $n-k-1$ degrees of freedom. Fo example, if we wanted to compute a 95\% CI, then $\alpha=0.05$ and $t^*$ would be the critical value that demarcates the lowest 0.025 of the distribution. 
 
-At this point we rely on a common theorem from regression theory which says that $\frac{\mathrm{SSE}}{\sigma^2_\epsilon}$ is distributed as $\chi^2$ with $n-2$ degrees of freedom and is independent of both $b_0$ and $b_1$. Relying on this,
+
+# Model-Level Inference
+
+At the model-level we are interested in testing the hypothesis $H_0:\rho^2=0$. Recall this is equivalent to testing the hypothesis that all the regression parameters (except the intercept) in the model are zero:
 
 $$
-\begin{split}
-T &= \frac{B_j - k}{\mathrm{SE}(B_j)} = \frac{z}{\sqrt{\frac{\chi^2(n-2)}{ (n-2)}}}
-\end{split}
+H_0: \beta_1 = \beta_2 = \beta_3 = \ldots = \beta_k
 $$
 
-Since $z$ is a function of $B_0$ and $B_1$, then $z$ and $\chi^2$ are also independent, and it follows that $\frac{B_j - k}{\mathrm{SE}(B_j)}$ is $t$-distributed with $n-2$ degrees of freedom.
+This is a specific form of the general linear hypothesis which can be expressed as:
+
+$$
+H_0: \mathbf{L}\boldsymbol\beta = \mathbf{c}
+$$
+
+where, 
+
+- **L** is a $q \times (k+1)$ matrix referred to as the *hypothesis matrix*, where *q* is the number of parameters being tested;
+- $\boldsymbol\beta$ is a $(k+1) \times 1$ vector of parameters included in the model; and 
+- **c** is a $q \times 1$ vector of hypothesized values. 
+
+As an example, if we wanted to test the model-level null hypothesis in a two predictor model ($y_i=\beta_0 + \beta_1(x_{1i}) + \beta_2(x_{2i})+\epsilon_i$),
+
+$$
+H_0: \beta_1 = \beta_2 = 0
+$$
+
+Then the general linear hypothesis could be expressed as:
+
+$$
+H_0: \begin{bmatrix}0 & 1 & 0\\0 & 0& 1\end{bmatrix}\begin{bmatrix}\beta_0 \\ \beta_1 \\ \beta_2\end{bmatrix} = \begin{bmatrix}0 \\ 0\end{bmatrix}
+$$
+
+This results in:
+
+$$
+H_0: \begin{bmatrix}\beta_1 \\ \beta_2\end{bmatrix} = \begin{bmatrix}0 \\ 0\end{bmatrix}
+$$
+
+We can construct a test statistic, $F_0$, as:
+
+$$
+F_0 = \frac{(\mathbf{Lb}-\mathbf{c})^\intercal\big[\mathbf{L}(\mathbf{X}^\intercal\mathbf{X})^{-1}\mathbf{L}^\intercal\big]^{-1}(\mathbf{Lb}-\mathbf{c})}{q(s^2_e)}
+$$
 
 
-\begin{mdframed}[style=mystyle2]
-The maximum likelihood estimators for the coefficients (which are the same as the OLS estimators) possess several asymptotic (large sample) properties; most importantly normality. Because of this, with a large sample size, the sampling distribution for the estimates will be approximately $t$-distributed with $n-2$ degrees of freedom.
-\end{mdframed}
-
-
-## Inference in the Multiple Regression Model
+This follows an *F*-distribution with *q* and $n-k-1$ degrees of freedom
 
 
 
 # Implications for Applied Researchers
 
-If the assumptions underlying the strong classical regression model (**A.1**--**A.7**) are all valid, then the OLS estimators $b_0, b_1, \ldots, b_k$ are good estimators of $\beta_0,\beta_1, \ldots, \beta_k$. They are unbiased and efficient and have accurate sampling variances and covariance.
+If the assumptions underlying the strong classical regression model (**A.1**--**A.7**) are all valid, then the OLS estimators $b_0, b_1, \ldots, b_k$ are good estimators of $\beta_0,\beta_1, \ldots, \beta_k$. They are unbiased and efficient and have accurate sampling variances and covariance (i.e., they are BLUE).
 
-Of course, any of the assumptions may be challenged either on *a priori* substantive grounds, or *post hoc*, via empirical examination of the sample residuals. If one (or more) of the assumptions are violated, then some of the properties may be compromised. **If this is the case, one can often transform the data in some way or use an alternative estimation technique.**
+Of course, any of the assumptions may be challenged either on *a priori* substantive grounds, or *post hoc*, via empirical examination of the sample residuals. If one (or more) of the assumptions are violated, then some of the properties may be compromised. Let's look at violation in turn:
 
-Violation of the normality assumption (**A.7**) causes the least number of problems. Under non-normality the regression estimators are still BLUE, and $s^2_e$ is still an unbiased estimator of $\sigma^2_\epsilon$. However, the under non-normality, the use of the *F*- and *t*-distributions for inference is questionable especially if the sample size is small. If the sample size is large, the sampling distributions of the coefficients are approximately normal and subsequently the use of the *F*- and *t*-distributions for inference is justified.
+### Violating A.1: The model is not correctly specified.
 
-If Assumptions **A.1**--**A.6** are violated, then the OLS estimators are no longer BLUE. Moreover, the formulas used to compute the sampling variances will also be incorrect (which also affects inference).
-
-<!-- ### Assumption A.1 Not Valid -->
-
-<!-- Assumption **A.1** was that $\epsilon_i$ has a mean of zero; $\mathbb{E}(\epsilon_i)=0$ for all $i$. If we let $\epsilon_i = h + \tilde{\epsilon}$ where $h$ is a non-zero constant and $\tilde{\epsilon}$ is a random error term that obeys the properties of the weak classical regression model then $\mathbb{E}(\epsilon_i) \neq 0$, since -->
-
-<!-- $$ -->
-<!-- \begin{split} -->
-<!-- \mathbb{E}(\epsilon_i) &= \mathbb{E}(h + \tilde{\epsilon}) \\[1em] -->
-<!-- &= \mathbb{E}(h) + \mathbb{E}(\tilde{\epsilon}) \\[1em] -->
-<!-- &= h ~~(\neq 0) -->
-<!-- \end{split} -->
-<!-- $$ -->
-
-<!-- The regression model becomes, -->
-
-<!-- $$ -->
-<!-- \begin{split} -->
-<!-- y_i &= \beta_0 + \beta_1(x_i) + \epsilon \\[1em] -->
-<!-- y_i &= \beta_0 + \beta_1(x_i) + h + \tilde{\epsilon} \\[1em] -->
-<!-- y_i &= \bigg(\beta_0 + h\bigg) + \beta_1(x_i) + \tilde{\epsilon} -->
-<!-- \end{split} -->
-<!-- $$ -->
-
-<!-- Using $B_0$ to estimate $\beta_0$ results in a biased estimate since -->
-
-<!-- $$ -->
-<!-- \begin{split} -->
-<!-- \mathbb{E}\bigg(\beta_0 + h\bigg) &= \mathbb{E}(\beta_0) + \mathbb{E}(h) \\[1em] -->
-<!-- &= \beta_0 + h~~(\neq \beta_0) -->
-<!-- \end{split} -->
-<!-- $$ -->
-
-<!-- Thus the estimator $B_0$ is biased when this assumption is volated. However, the estimator $B_1$ is still BLUE. Unfortunately, we can never test this assumption in practice since $\sum e_i =0$ always holds when using OLS. -->
+This is probably the most egregious and costly violation. Violating this assumption means that the theoretical model embodied in the regression equation is wrong. If this is the case, there is no use proceeding.
 
 
-<!-- ### Heteroscedasticity -->
+### Violating A.2: The design matrix, X, is not of full rank.
 
-<!-- Assumption **A.2** was that $\epsilon_i$ are homoscedastic; $\mathrm{Var}(\epsilon_i)$ is constant (but unknown) for for all $i$. If the variance is not constant, then we have, -->
+This would mean that we cannot compute an inverse for the $\mathbf{X}^\intercal\mathbf{X}$ matrix. Subsequently, we could not compute any parameter estimates nor SEs.
 
-<!-- $$ -->
-<!-- \mathrm{Var}(\epsilon_i) = \sigma^2_i -->
-<!-- $$ -->
 
-<!-- Here the error variance varies from one observation to another (note the $i$ subscript). We can show (but do not) as part of the Gauss--Markov Theorem that -->
+### Violating A.3: The population errors given X do not have a mean of zero.
 
-<!-- $$ -->
-<!-- \begin{split} -->
-<!-- B_1 &= \beta_1 + \sum w_i\epsilon_i  \\[1em] -->
-<!-- B_0 &= \beta_0 + \bigg(\beta_1 -B_1\bigg)\bar{x} + \bar{\epsilon} -->
-<!-- \end{split} -->
-<!-- $$ -->
+The estimator $b_0$ will be biased when this assumption is violated. However, the other regression estimators (e.g., $b_1, b_2, \ldots, b_k)$ are still BLUE. Unfortunately, we can never test this assumption in practice since $\sum e_i =0$ always holds when using OLS.
 
-<!-- and subsequently that $\mathbb{E}(B_0)=\beta_0$ and $\mathbb{E}(B_1)=\beta_1$ (take the expectations of both sides). Since in both equations, heteroscedasticity would affect only the last term, and would not change the expectations of those terms, even with non-constant variance, the estimators are still unbiased. -->
 
-<!-- If we assume a heteroskedastic variance, -->
+### Violating A.4: The population errors given X are heteroscedastic.
 
-<!-- $$ -->
-<!-- \begin{split} -->
-<!-- y_i &= \beta_0 + \beta_1(x_i) + \epsilon \qquad \mathrm{where~} \mathrm{Var}(\epsilon_i) = \sigma^2_i\\ -->
-<!-- \end{split} -->
-<!-- $$ -->
+If the assumption of constant variance is violated, the coefficient estimators will remain unbiased. However, the estimates for the variances/standard errors for these coefficients will be wrong. This also impacts the confidence intervals and hypothesis tests for these parameters. There are solutions to this problem, including using a different estimation method (e.g., weighted least squares) or estimating the sampling variances for these coefficients differently (e.g., sandwich estimation).
 
-<!-- We can transform these heteroskedastic variances into constant variances by weighting them by $\sfrac{1}{\sigma_i}$. Doing so we obtain, -->
 
-<!-- $$ -->
-<!-- \begin{split} -->
-<!-- \frac{y_i}{\sigma_i} &= \beta_0\bigg(\frac{1}{\sigma_i}\bigg) + \beta_1\bigg(\frac{x_i}{\sigma_i}\bigg) + \frac{\epsilon}{\sigma_i} \qquad \mathrm{where~} \sigma_i \neq 0 -->
-<!-- \end{split} -->
-<!-- $$ -->
+### Violating A.5: The population errors given X are not independent.
 
-<!-- We can express this as -->
+If the errors are correlated (not independent), the coefficient estimators will still be unbiased. Again, however, the variances/standard errors and results from the confidence intervals and hypothesis tests will be wrong. Often the hypothesis tests will indicate statistical significance much more often then it should (increased probability of a type I error). Dealing with this problem requires using models that account for the correlation (e.g., mixed-effects models) and different estimation methods (e.g., maximum likelihood). 
 
-<!-- $$ -->
-<!-- y^*_i = \beta_0V^*_i + \beta_1x^*_i + \epsilon^*_i -->
-<!-- $$ -->
 
-<!-- where $y^*_i = \frac{y_i}{\sigma_i}$, $V^*_i = \sigma^{-1}_i$, and $\epsilon^*_i = \frac{\epsilon}{\sigma_i}$. If we hold the values for $x^*_i$ (and subsequently $V^*_i$) fixed for all $i$, then -->
+### Violating A.6: The predictor values are not fixed.
 
-<!-- $$ -->
-<!-- \begin{split} -->
-<!-- \mathbb{E}(\epsilon^*_i) &= \frac{\mathbb{E}(\epsilon_i)}{\sigma_i} = 0 \\[1em] -->
-<!-- \mathrm{Var}(\epsilon^*_i) &= \frac{\mathrm{Var}(\epsilon_i)}{\sigma^2_i} = 1 \\[1em] -->
-<!-- \mathrm{Cov}(\epsilon^*_i, \epsilon^*_j) &= \frac{\mathbb{E}(\epsilon_i,\epsilon_j)}{\sigma_i\sigma_j}= 0 -->
-<!-- \end{split} -->
-<!-- $$ -->
+When **X** is fixed, the predictors are uncorrelated with the error terms. This is what leads to unbiased estimates of both the estimators and the variances/standard errors. When **X** is random (which is almost always the case in observational data), we need to assume that $\mathrm{Cov}(\mathbf{X},\boldsymbol\epsilon)=0$. That is we assume that the predictor values are generated by a mechanism unrelated to the errors. If that is not the case, then the OLS estimates will be biased. 
 
-<!-- Thus, *under the weighted transformations*, all of the assumptions of the weak classical regression model still hold and we can apply the Gauss--Markov Theorem using OLS on the transformed model. The transformation leads to the derivation of *weighted least squares* estimators which are BLUE. -->
 
-<!-- ### Non-Independence -->
+### Violating A.7: The population errors given X are not normally distributed.
 
-<!-- Assumption **A.3** is independence of errors; $\mathrm{Cov}(\epsilon_i,\epsilon_j|x_i) = 0 \quad \mathrm{for~all~} i \neq j$. Under this violation, the estimators are still unbiased, but no longer have the smallest sampling variances. Moreover, the variance estimates we get using OLS estimation tend to be too small when the independence assumption is violated; leading to $p$-values that are too small (higher chance of making a type I error). -->
+Violation of the normality assumption causes the least number of problems. Under non-normality the regression estimators are still BLUE, and $s^2_e$ is still an unbiased estimator of $\sigma^2_\epsilon$. However, the under non-normality, the use of the *F*- and *t*-distributions for inference is questionable especially if the sample size is small. If the sample size is large, the sampling distributions of the coefficients are approximately normal and subsequently the use of the *F*- and *t*-distributions for inference is justified.
 
 
 

@@ -1,5 +1,5 @@
 ---
-title: "OLS Regression and Its Properties"
+title: "OLS Estimators and Their Properties"
 date: "`r Sys.Date()`"
 header-includes:
    - \usepackage{amsthm}

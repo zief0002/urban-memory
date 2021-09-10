@@ -1,5 +1,24 @@
 [
   {
+    "path": "posts/2021-09-09-2021-09-09-notes-ols-regression/",
+    "title": "📝 OLS Regression Using Matrices and Its Properties",
+    "description": "Notes",
+    "author": [
+      {
+        "name": "andy",
+        "url": {}
+      }
+    ],
+    "date": "2021-09-09",
+    "categories": [
+      "Notes"
+    ],
+    "contents": "\nHere are links to several PDF handouts:\nSummation, Expectation, Variance, Covariance, and Correlation is a handout that provides several mathematical rules for working with sums, expectations, variances, covariances, and correlation.\nOLS Estimators and Their Properties is a handout that steps through estimating the OLS regression estimators and also derives some of the properties of those estimators\nAssumptions for OLS Regression and the Gauss-Markov Theorem is a handout that examines the assumptions underlying the Gauss-Markov theorem; the theorem showing that the OLS estimators are BLUE.\nStatistical Inference for the Regression Model is a handout working through how we carry out coefficient-level and model-level statistical inference.\nA Regression Example in Practice is a handout that walks through using matrix algebra to compute many of the things we are interested in as applied researchers. It also show the equivalent built-in R functions for obtaining this.\nThe handouts include more detail than I will cover in class. I will highlight some important ideas from each of them, and you can work through some of the mathematical derivation on your own if it is of interest.\n\n\n\n",
+    "preview": {},
+    "last_modified": "2021-09-10T09:14:00-05:00",
+    "input_file": {}
+  },
+  {
     "path": "posts/2021-08-14-reading-ols/",
     "title": "📖 OLS Regression using Matrices and its Properties",
     "description": "Reading for OLS Regression",

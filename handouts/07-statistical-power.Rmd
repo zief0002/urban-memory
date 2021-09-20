@@ -1,0 +1,176 @@
+---
+title: "Statistical Power"
+date: "`r Sys.Date()`"
+header-includes:
+   - \usepackage{amsthm}
+   - \usepackage{xcolor}
+   - \usepackage{xfrac}
+   - \usepackage[framemethod=tikz]{mdframed}
+   - \usepackage{graphicx}
+   - \usepackage{rotating}
+   - \usepackage{booktabs}
+   - \usepackage{caption}
+   - \definecolor{umn}{RGB}{153, 0, 85}
+   - \definecolor{umn2}{rgb}{0.1843137, 0.4509804, 0.5372549}
+   - \definecolor{myorange}{HTML}{EA6153}
+output: 
+  pdf_document:
+    includes:
+      before_body: notes.tex
+    highlight: tango
+    latex_engine: xelatex
+    fig_width: 6
+    fig_height: 6
+mainfont: "Minion Pro"
+sansfont: "ITC Slimbach Std Book"
+monofont: "Source Code Pro"
+urlcolor: "umn2"
+always_allow_html: yes
+bibliography: '../epsy8264.bib'
+csl: '../style/apa-single-spaced.csl'
+---
+
+\frenchspacing
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(knitr)
+library(kableExtra)
+library(tidyverse)
+```
+
+In applied research, the analyst believes the null hypothesis is false and wants to detect this. This detection is more likely when a particular method (e.g., *t*-test, *F*-test) has a high degree of statistical power. As such, a high degree of statistical power is valued in the applied sciences. Low statistical power has several consequences such as a higher probability of false negatives. If the null hypothesis is false (i.e., there is a population effect, but the researcher fails to detect it, the researcher could miss the discovery of a potentially important treatment. Recall that a Type II error is failing to reject the null hypothesis when the alternative hypothesis is true. Statistical power refers to the probability of correctly rejecting a false null hypothesis. The probabilities of these two pieces are related to each other and add to one. Because of this relationship, we can mathematically determine power by using,
+
+$$
+\mathrm{Power} = 1 - \beta
+$$
+
+where $\beta$ is the probability of a Type II error.
+
+Since the value of $\beta$ depends on exactly which part of the alternative hypothesis is true, computing the probability of making a Type II error is very difficult. It is important to note that *power is only an issue when the null hypothesis is false*. Otherwise, this probability is equal to zero (i.e., we say there is no statistical power). 
+
+## Some Pictures for Understanding
+
+To make a type I error, we reject the null hypothesis when it is true. This requires: 
+
+- The null hypothesis is true.
+- We reject the null hypothesis.
+
+For a *t*-test to evaluate the statistical significance of a regression coefficient, recall that the null hypothesis is: $H_0: \beta_k=0$. This implies that the sampling distribution of the associated *t*-statistic is centered at 0. Moreover, rejecting this hypothesis indicates that our observed *t*-value (based on our estimate and standard error for $\beta_k$) is as or more extreme than some critical value. The probability of making a Type I error is equivalent to the $\alpha$-value we set in the analysis (often 0.05 in the social sciences). This probability is shown by the shaded area in the figure below. The cut-points for our this area is demarcated by $t^*$, the critical value in the *t*-distribution.
+
+```{r echo=FALSE}
+# Create F-value and compute probability densities
+null_dist = data.frame(
+  X = seq(from = -4, to = 4, by = 0.01)
+) %>% 
+  mutate(
+    Y = dt(x = X, df = 25)
+  )
+
+# Shade Type I error
+t_star = qt(.025, 25)
+
+# Type I error
+ggplot(data = null_dist, aes(x = X, y = Y)) +
+   geom_ribbon(data = subset(null_dist, X <= t_star),  ymin = -10, aes(ymax = Y), fill = "#E69F00", alpha = 0.4) +
+   geom_ribbon(data = subset(null_dist, X >= -t_star), ymin = -10, aes(ymax = Y), fill = "#E69F00", alpha = 0.4) +
+   geom_vline(xintercept = 0, linetype = "dashed", color = "#E69F00") +
+   geom_line(color = "#E69F00") +
+   theme_light() +
+   scale_x_continuous(name = "", breaks = c(t_star, 0, -t_star), labels = c("-t*", "0", "t*")) +
+   scale_y_continuous(name = "", breaks = NULL) +
+   theme(
+      panel.grid = element_blank()
+   )
+```
+
+The *t*-distribution centered at 0 is referred to as the *central t-distribution*. 
+
+Now let's consider a Type II error. To make a Type II error, we fail to reject the null hypothesis when it is false. This requires: 
+
+- The null hypothesis is not true.
+- We fail to reject the null hypothesis.
+
+Recall that if the null hypothesis is not true, then $\beta_k\neq0$. This implies that the sampling distribution of the associated *t*-statistic is not centered at 0. Moreover, failing to reject the null hypothesis indicates that our observed *t*-value (based on our estimate and standard error for $\beta_k$) is between $-t^*$ and $t^*$. The probability of making a Type II error is denoted as $\beta$ (not to be confused with the regression parameter which uses the same notation). This probability is shown by the shaded area in the figure below.
+
+
+```{r}
+null_dist = data.frame(
+  X = seq(from = -4, to = 11, by = 0.01)
+) %>% 
+  mutate(
+    Y = dt(x = X, df = 25)
+  )
+
+nct_dist = data.frame(
+  X = seq(from = -4, to = 11, by = 0.01)
+) %>% 
+  mutate(
+    Y = dt(x = X, df = 25, ncp = 3.5)
+  )
+
+# Type II error
+ggplot(data = null_dist, aes(x = X, y = Y)) +
+   geom_ribbon(data = subset(nct_dist, X <= -t_star & X >= t_star), 
+               ymin = -10, aes(ymax = Y), fill = "#0072B2", alpha = 0.4) +
+   geom_vline(xintercept = 0, linetype = "dashed", color = "#E69F00", alpha = 0.3) +
+   geom_vline(xintercept = ((1 - 3/99)^(-1) * 3.5), linetype = "dashed", color = "#0072B2") +
+   geom_line(color = "#E69F00", alpha = 0.3) +
+   geom_line(data = nct_dist, color = "#0072B2") +
+   theme_light() +
+   scale_x_continuous(name = "t", breaks = c(t_star, 0, -t_star), labels = c("-t*", "0", "t*")) +
+   scale_y_continuous(name = "", breaks = NULL) +
+   theme(
+      panel.grid = element_blank()
+   )
+```
+
+*T*-distributions that are not centered at 0 are referred to as *non-central t-distributions*. Note that there is more than one non-central *t*-distributions; in fact there are an infinite number of them. For example, the non-central *t*-distribution displayed here has a mean of 3.609 (marked by the vertical dashed blue line). Unlike the central *t*-distribution, non-central *t*-distributions are asymmetric, and the degree of asymmetry is related to the degrees of freedom (non-central *t*-distributions with higher *df* have less asymmetry). This is why the mean is not perfectly centered in the distribution.
+
+Finally, we can turn our attention to statistical power. Statistical power, recall, is the probability of rejecting the null hypothesis when it is false. This requires: 
+
+- The null hypothesis is not true.
+- We reject the null hypothesis.
+
+This implies that the sampling distribution of the associated *t*-statistic is not centered at 0 and that our observed *t*-value is as or more extreme than $-t^*$ or $t^*$. This probability is shown by the shaded area in the figure below.
+
+```{r}
+# Statistical power
+ggplot(data = null_dist, aes(x = X, y = Y)) +
+   geom_ribbon(data = subset(nct_dist, X <=  t_star),  ymin = -10, aes(ymax = Y), fill = "#0072B2", alpha = 0.4) +
+   geom_ribbon(data = subset(nct_dist, X >= -t_star),  ymin = -10, aes(ymax = Y), fill = "#0072B2", alpha = 0.4) +
+   geom_vline(xintercept = 0, linetype = "dashed", color = "#E69F00", alpha = 0.3) +
+   geom_vline(xintercept = ((1 - 3/99)^(-1) * 3.5), linetype = "dashed", color = "#0072B2") +
+   geom_line(color = "#E69F00", alpha = 0.3) +
+   geom_line(data = nct_dist, color = "#0072B2") +
+   theme_light() +
+   scale_x_continuous(name = "t", breaks = c(t_star, 0, -t_star), labels = c("-t*", "0", "t*")) +
+   scale_y_continuous(name = "", breaks = NULL) +
+   theme(
+      panel.grid = element_blank()
+   )
+```
+
+Remember that the cumulative density in a probability distribution is 1 (the total area under any probability curve = 1). Since $\mathrm{Power}=1-\beta$, it implies that statistical power is the area in the non-central *t*-distribution that is not included by Type II error.
+
+In these three pictures,
+
+- Probability of a Type I error is 0.05 ($\alpha=0.05$)
+- Probability of a Type II error is 0.08 ($\beta=0.08$)
+- Statistical power is 0.919 ($1-\beta=0.92$)
+
+The probability of rejecting the null hypothesis if the null hypothesis is not true (in the very specific case that the mean of the non-central *t*-distribution is 3.609) is 0.919. Notice that if we have a different non-central *t*-distribution (the blue distribution is shifted right or left), that the statistical power changes! In order to compute statistical power, we have to know where this non-central *t*-distribution is located. In evaluating regression coefficients, the location of the non-central *t*-distribution is determined by the true value of the regression parameter in the population. 
+
+
+
+# OLS Estimators are Maximum Likelihood (ML) Estimators
+
+
+# References
+
+\noindent
+\leftskip 0.2in
+\parindent -0.2in
+
+
+

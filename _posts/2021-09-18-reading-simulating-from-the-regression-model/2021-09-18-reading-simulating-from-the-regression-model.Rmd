@@ -1,0 +1,22 @@
+---
+title: "`r paste(emo::ji('book'), 'Simulating from the Regression Model')`"
+description: |
+  Reading
+author:
+  - name: andy
+    url: {}
+date: 09-18-2021
+output:
+  distill::distill_article:
+    self_contained: true
+categories:
+  - Reading
+---
+
+
+Read the following chapters from Carsey, T. M., &amp; Harden, J. J. (2014). *Monte Carlo simulation and resampling methods for social science.* Sage. It should be accessible via the link after logging in with your x500 and password.
+
+- [Introduction](https://dx-doi-org.ezp2.lib.umn.edu/10.4135/9781483319605.n1): This chapter gives a short introduction to the use of simulation in the social sciences.
+
+
+

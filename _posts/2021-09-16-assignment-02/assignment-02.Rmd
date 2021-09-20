@@ -1,0 +1,109 @@
+---
+title: "`r paste(emo::ji('giraffe'), 'Assignment 02')`"
+description: |
+  Simulating from the Regression Model
+author: andy
+date: 09-20-2021
+output:
+  distill::distill_article:
+    self_contained: true
+categories:
+  - Assignments
+---
+
+
+The goal of this assignment is to give you experience using simulation to explore properties of the regression model. 
+
+
+
+
+<!-- - [[CSV]](https://raw.githubusercontent.com/zief0002/epsy-8251/master/data/broadband.csv) -->
+<!-- - [[Data Codebook]](http://zief0002.github.io/epsy-8251/codebooks/broadband.html) -->
+
+
+<!-- ```{r echo=FALSE, out.width="60%", fig.align='center'} -->
+<!-- knitr::include_graphics("figs/assign-01.png") -->
+<!-- ``` -->
+
+
+# Instructions
+
+Submit a printed document of your responses to the following questions. Please adhere to the following guidelines for further formatting your assignment:
+
+- All plots should be resized so that they do not take up more room than necessary. 
+- All figures and tables should have a name (e.g., Figure 1) *and* an appropriate caption.
+
+In questions that ask you to "use matrix algebra" to solve the problem, you can either show your syntax and output from carrying out the matrix operations, or you can use Equation Editor to input the matrices involved in your calculations.
+
+This assignment is worth 16 points.
+
+
+<br />
+
+# Simulation 1: Modeling Heteroskedasticity
+
+In this simulation, you will explore what happens to the regression estimates when the assumption of homoskedasticity is violated. For this simulation use a sample size of 200.
+
+1. Create the fixed *X* values you will use in each trial of the simulation. To do this, draw $n=200$ *X*-values from a uniform distribution with a minimum of $-2$ and a maximum of $+2$. Prior to drawing these values, set your starting seed to 678910. Report the syntax you used, and the first six *X* values.
+
+2. Create a the *Y*-values for the first trial of the simulation by using the model:
+
+$$
+\begin{split}
+y_i &= -3.2 + 1.75(x_i) + \epsilon_i \\[2ex]
+\epsilon_i &\overset{i.i.d.}{\sim} \mathcal{N}(0, \sigma)
+\end{split}
+$$
+
+<div style="margin-left:1.5em;">where</div>
+
+$$
+\begin{split}
+\sigma &= e^{\gamma(x_i)}\\[2ex]
+e &\mathrm{~is~Euhler's~constant~}(\approx2.718282) \\[2ex]
+\gamma &= 1.5
+\end{split}
+$$
+
+<div style="margin-left:1.5em;margin-bottom:1em;">Here the variation in the random error is a function of *X* and random noise. Report the syntax you used, and the first six *Y* values.</div>
+
+3. Create and report the scatterplot of the *Y*-values versus the *X*-values for this first trial of the simulation. 
+
+4. Describe the pattern of heteroscedasticity. 
+
+5. Does the pattern of heteroscedasticity you described in Question 4 make sense given how the error term was created. Explain.
+
+Carry out 1000 trials of the simulation. (Reminder: Be sure to use these same  *X* values in each trial of the simulation; they are fixed.) For each trial, collect: (a) the estimate of the intercept, (b) the estimate of the slope, and (c) the estimate of the residual standard error.
+
+6. Compute and report the mean value for the residual standard error.
+
+
+# Simulation 2: Homoskedastic Model
+
+To evaluate the different estimates from the heteroskedasticity model, we need to compare them to estimates drawn from a homoskedastic model with the same population coefficients. To make the comparisons "fair", so that we are only evaluating the effects of the heteroskedasticity, we also need to run this simulation using a residual standard error that is equal to the mean from the heteroskedastic simulation (i.e., $\mathtt{sd\neq1}$ in the `rnorm()` function). 
+
+7. Carry out 1000 trials of the simulation for the appropriate homoskedastic model. (Reminder: Be sure to use these same  *X* values in this simulation as in the previous simulation.) For each trial, collect: (a) the estimate of the intercept, (b) the estimate of the slope, and (c) the estimate of the residual standard error. Report your syntax.
+
+
+# Comparing Results from the Two Simulations: Evaluating the Effects of Hetroskedasticity
+
+8. Create a density plot of the distribution of intercept estimates. Show the density curve for both models on the same plot, differentiating the curves using color, linetype, or both. Also add a vertical line to this plot at the population value of the intercept.
+
+9. Based on your responses to Question 8, does the intercept estimate seem to be biased under heteroskedasticity? Explain.
+
+10. Based on your responses to Question 8, does the intercept estimate seem to be less efficient under heteroskedasticity? Explain.
+
+11. Create a density plot of the distribution of slope estimates. Show the density curve for both models on the same plot, differentiating the curves using color, linetype, or both. Also add a vertical line to this plot at the population value of the slope
+
+12. Based on your responses to Question 11, does the slope estimate seem to be biased under heteroskedasticity? Explain.
+
+13. Based on your responses to Question 11, does the slope estimate seem to be less efficient under heteroskedasticity? Explain.
+
+14. Create a density plot of the distribution of residual standard error estimates. Show the density curve for both models on the same plot, differentiating the curves using color, linetype, or both. Also add a vertical line to this plot at the population value of the residual standard error
+
+15. Based on your responses to Question 14, does the residual standard error estimate seem to be biased under heteroskedasticity? Explain.
+
+16. Based on your responses to Question 14, does the residual standard error estimate seem to be less efficient under heteroskedasticity? Explain.
+
+
+

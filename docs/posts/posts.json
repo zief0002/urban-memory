@@ -1,6 +1,63 @@
 [
   {
-    "path": "posts/2021-09-09-2021-09-09-notes-ols-regression/",
+    "path": "posts/2021-09-16-assignment-02/",
+    "title": "🦒 Assignment 02",
+    "description": "Simulating from the Regression Model",
+    "author": [
+      {
+        "name": "andy",
+        "url": {}
+      }
+    ],
+    "date": "2021-09-20",
+    "categories": [
+      "Assignments"
+    ],
+    "contents": "\nThe goal of this assignment is to give you experience using simulation to explore properties of the regression model.\n\n\n\n\n\nInstructions\nSubmit a printed document of your responses to the following questions. Please adhere to the following guidelines for further formatting your assignment:\nAll plots should be resized so that they do not take up more room than necessary.\nAll figures and tables should have a name (e.g., Figure 1) and an appropriate caption.\nIn questions that ask you to “use matrix algebra” to solve the problem, you can either show your syntax and output from carrying out the matrix operations, or you can use Equation Editor to input the matrices involved in your calculations.\nThis assignment is worth 16 points.\n\nSimulation 1: Modeling Heteroskedasticity\nIn this simulation, you will explore what happens to the regression estimates when the assumption of homoskedasticity is violated. For this simulation use a sample size of 200.\nCreate the fixed X values you will use in each trial of the simulation. To do this, draw \\(n=200\\) X-values from a uniform distribution with a minimum of \\(-2\\) and a maximum of \\(+2\\). Prior to drawing these values, set your starting seed to 678910. Report the syntax you used, and the first six X values.\nCreate a the Y-values for the first trial of the simulation by using the model:\n\\[\n\\begin{split}\ny_i &= -3.2 + 1.75(x_i) + \\epsilon_i \\\\[2ex]\n\\epsilon_i &\\overset{i.i.d.}{\\sim} \\mathcal{N}(0, \\sigma)\n\\end{split}\n\\]\n\nwhere\n\n\\[\n\\begin{split}\n\\sigma &= e^{\\gamma(x_i)}\\\\[2ex]\ne &\\mathrm{~is~Euhler's~constant~}(\\approx2.718282) \\\\[2ex]\n\\gamma &= 1.5\n\\end{split}\n\\]\n\nHere the variation in the random error is a function of X and random noise. Report the syntax you used, and the first six Y values.\n\nCreate and report the scatterplot of the Y-values versus the X-values for this first trial of the simulation.\nDescribe the pattern of heteroscedasticity.\nDoes the pattern of heteroscedasticity you described in Question 4 make sense given how the error term was created. Explain.\nCarry out 1000 trials of the simulation. (Reminder: Be sure to use these same X values in each trial of the simulation; they are fixed.) For each trial, collect: (a) the estimate of the intercept, (b) the estimate of the slope, and (c) the estimate of the residual standard error.\nCompute and report the mean value for the residual standard error.\nSimulation 2: Homoskedastic Model\nTo evaluate the different estimates from the heteroskedasticity model, we need to compare them to estimates drawn from a homoskedastic model with the same population coefficients. To make the comparisons “fair”, so that we are only evaluating the effects of the heteroskedasticity, we also need to run this simulation using a residual standard error that is equal to the mean from the heteroskedastic simulation (i.e., \\(\\mathtt{sd\\neq1}\\) in the rnorm() function).\nCarry out 1000 trials of the simulation for the appropriate homoskedastic model. (Reminder: Be sure to use these same X values in this simulation as in the previous simulation.) For each trial, collect: (a) the estimate of the intercept, (b) the estimate of the slope, and (c) the estimate of the residual standard error. Report your syntax.\nComparing Results from the Two Simulations: Evaluating the Effects of Hetroskedasticity\nCreate a density plot of the distribution of intercept estimates. Show the density curve for both models on the same plot, differentiating the curves using color, linetype, or both. Also add a vertical line to this plot at the population value of the intercept.\nBased on your responses to Question 8, does the intercept estimate seem to be biased under heteroskedasticity? Explain.\nBased on your responses to Question 8, does the intercept estimate seem to be less efficient under heteroskedasticity? Explain.\nCreate a density plot of the distribution of slope estimates. Show the density curve for both models on the same plot, differentiating the curves using color, linetype, or both. Also add a vertical line to this plot at the population value of the slope\nBased on your responses to Question 11, does the slope estimate seem to be biased under heteroskedasticity? Explain.\nBased on your responses to Question 11, does the slope estimate seem to be less efficient under heteroskedasticity? Explain.\nCreate a density plot of the distribution of residual standard error estimates. Show the density curve for both models on the same plot, differentiating the curves using color, linetype, or both. Also add a vertical line to this plot at the population value of the residual standard error\nBased on your responses to Question 14, does the residual standard error estimate seem to be biased under heteroskedasticity? Explain.\nBased on your responses to Question 14, does the residual standard error estimate seem to be less efficient under heteroskedasticity? Explain.\n\n\n\n",
+    "preview": {},
+    "last_modified": "2021-09-20T10:33:18-05:00",
+    "input_file": {}
+  },
+  {
+    "path": "posts/2021-09-20-notes-simulating-from-the-regression-model/",
+    "title": "📝 Simulating from the Regression Model",
+    "description": "Notes",
+    "author": [
+      {
+        "name": "andy",
+        "url": {}
+      }
+    ],
+    "date": "2021-09-20",
+    "categories": [
+      "Notes"
+    ],
+    "contents": "\nHere are links to several script files and handouts that we will use in class:\nGenerating Data\nGenerating Random Data from a Regression Model is a script file that provides syntax for generating data from a given population regression model.\nSimulation 1: Simulating from a Regression Model\nSimulating from a Regression Model is a script file that provides syntax for carrying out a simulation to produce distributions of estimates from a regression model.\nVizualization of Simulating from a Regression Model is a handout visualizing the simulation process for generating data from a given population regression model.\nSimulation 2: Simulating from a Null Regression Model\nSimulating from a Null Regression Model is a script file that provides syntax for carrying out a simulation to produce distributions of estimates assuming certain parameters in the regression model are zero.\nVizualization of Simulating from a Null Regression Model is a handout visualizing the simulation process for generating data to produce distributions of estimates assuming certain parameters in the regression model are zero.\nResources\nHere are several resources to help your understanding of simulation. The chapters from Monte Carlo Simulation and Resampling Methods for Social Science should be accessible via the links after logging in with your x500 and password.\nProbability: Common probability distributions and how to compute with them.\nRandom Number Generation: Learn how to draw random numbers from different distributions. Also information about repeating processes in R, including writing your own functions, using for loops, and using if-else functions.\n\n\n\n",
+    "preview": {},
+    "last_modified": "2021-09-20T13:18:51-05:00",
+    "input_file": {}
+  },
+  {
+    "path": "posts/2021-09-18-reading-simulating-from-the-regression-model/",
+    "title": "📖 Simulating from the Regression Model",
+    "description": "Reading",
+    "author": [
+      {
+        "name": "andy",
+        "url": {}
+      }
+    ],
+    "date": "2021-09-18",
+    "categories": [
+      "Reading"
+    ],
+    "contents": "\nRead the following chapters from Carsey, T. M., & Harden, J. J. (2014). Monte Carlo simulation and resampling methods for social science. Sage. It should be accessible via the link after logging in with your x500 and password.\nIntroduction: This chapter gives a short introduction to the use of simulation in the social sciences.\n\n\n\n",
+    "preview": {},
+    "last_modified": "2021-09-20T13:18:20-05:00",
+    "input_file": {}
+  },
+  {
+    "path": "posts/2021-09-09-notes-ols-regression/",
     "title": "📝 OLS Regression Using Matrices and Its Properties",
     "description": "Notes",
     "author": [
@@ -21,7 +78,7 @@
   {
     "path": "posts/2021-08-14-reading-ols/",
     "title": "📖 OLS Regression using Matrices and its Properties",
-    "description": "Reading for OLS Regression",
+    "description": "Reading",
     "author": [
       {
         "name": "andy",
@@ -34,7 +91,7 @@
     ],
     "contents": "\nRead the following (short) chapters in Matrix Algebra for Educational Scientists:\nSystems of Equations\nStatistical Application: Estimating Regression Coefficients\nIn class, we will be working through the ideas in the following chapters:\nImportant Matrices in Regression\nSums of Squares in Regression\nStandard Errors and Variance Estimates\nAssumptions of the Regression Model\n\n\n\n",
     "preview": {},
-    "last_modified": "2021-08-14T12:33:12-05:00",
+    "last_modified": "2021-09-20T13:12:23-05:00",
     "input_file": {}
   },
   {

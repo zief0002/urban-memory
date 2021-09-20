@@ -86,32 +86,32 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </style>
 
   <!--radix_placeholder_meta_tags-->
-  <title>📖 OLS Regression using Matrices and its Properties</title>
+  <title>🦒 Assignment 02</title>
 
-  <meta property="description" itemprop="description" content="Reading" />
+  <meta property="description" itemprop="description" content="Simulating from the Regression Model" />
 
 
   <!--  https://schema.org/Article -->
-  <meta property="article:published" itemprop="datePublished" content="2021-08-14" />
-  <meta property="article:created" itemprop="dateCreated" content="2021-08-14" />
+  <meta property="article:published" itemprop="datePublished" content="2021-09-20" />
+  <meta property="article:created" itemprop="dateCreated" content="2021-09-20" />
   <meta name="article:author" content="andy" />
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-  <meta property="og:title" content="📖 OLS Regression using Matrices and its Properties" />
+  <meta property="og:title" content="🦒 Assignment 02" />
   <meta property="og:type" content="article" />
-  <meta property="og:description" content="Reading" />
+  <meta property="og:description" content="Simulating from the Regression Model" />
   <meta property="og:locale" content="en_US" />
 
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary" />
-  <meta property="twitter:title" content="📖 OLS Regression using Matrices and its Properties" />
-  <meta property="twitter:description" content="Reading" />
+  <meta property="twitter:title" content="🦒 Assignment 02" />
+  <meta property="twitter:description" content="Simulating from the Regression Model" />
 
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output","categories"]}},"value":[{"type":"character","attributes":{},"value":["📖 OLS Regression using Matrices and its Properties"]},{"type":"character","attributes":{},"value":["Reading\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["andy"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":[]}},"value":[]}]}]},{"type":"character","attributes":{},"value":["08-14-2021"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[true]}]}]},{"type":"character","attributes":{},"value":["Reading"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output","categories"]}},"value":[{"type":"character","attributes":{},"value":["🦒 Assignment 02"]},{"type":"character","attributes":{},"value":["Simulating from the Regression Model\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name"]}},"value":[{"type":"character","attributes":{},"value":["andy"]}]}]},{"type":"character","attributes":{},"value":["09-20-2021"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[true]}]}]},{"type":"character","attributes":{},"value":["Assignments"]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   
@@ -1455,7 +1455,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"📖 OLS Regression using Matrices and its Properties","description":"Reading","authors":[{"author":"andy","authorURL":{},"affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2021-08-14T00:00:00.000+00:00","citationText":"andy, 2021"}
+{"title":"🦒 Assignment 02","description":"Simulating from the Regression Model","authors":[{"author":"andy","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2021-09-20T00:00:00.000+00:00","citationText":"andy, 2021"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -1465,34 +1465,89 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--/radix_placeholder_site_before_body-->
 
 <div class="d-title">
-<h1>📖 OLS Regression using Matrices and its Properties</h1>
+<h1>🦒 Assignment 02</h1>
 <!--radix_placeholder_categories-->
 <div class="dt-tags">
-<div class="dt=tag">Reading</div>
+<div class="dt=tag">Assignments</div>
 </div>
 <!--/radix_placeholder_categories-->
-<p><p>Reading</p></p>
+<p><p>Simulating from the Regression Model</p></p>
 </div>
 
 <div class="d-byline">
-  andy true 
   
-<br />08-14-2021
+  andy
+  
+<br />09-20-2021
 </div>
 
 <div class="d-article">
-<p>Read the following (short) chapters in <a href="https://zief0002.github.io/matrix-algebra/">Matrix Algebra for Educational Scientists</a>:</p>
+<p>The goal of this assignment is to give you experience using simulation to explore properties of the regression model.</p>
+<!-- - [[CSV]](https://raw.githubusercontent.com/zief0002/epsy-8251/master/data/broadband.csv) -->
+<!-- - [[Data Codebook]](http://zief0002.github.io/epsy-8251/codebooks/broadband.html) -->
+<!-- ```{r echo=FALSE, out.width="60%", fig.align='center'} -->
+<!-- knitr::include_graphics("figs/assign-01.png") -->
+<!-- ``` -->
+<h1 id="instructions">Instructions</h1>
+<p>Submit a printed document of your responses to the following questions. Please adhere to the following guidelines for further formatting your assignment:</p>
 <ul>
-<li>Systems of Equations</li>
-<li>Statistical Application: Estimating Regression Coefficients</li>
+<li>All plots should be resized so that they do not take up more room than necessary.</li>
+<li>All figures and tables should have a name (e.g., Figure 1) <em>and</em> an appropriate caption.</li>
 </ul>
-<p>In class, we will be working through the ideas in the following chapters:</p>
-<ul>
-<li>Important Matrices in Regression</li>
-<li>Sums of Squares in Regression</li>
-<li>Standard Errors and Variance Estimates</li>
-<li>Assumptions of the Regression Model</li>
-</ul>
+<p>In questions that ask you to “use matrix algebra” to solve the problem, you can either show your syntax and output from carrying out the matrix operations, or you can use Equation Editor to input the matrices involved in your calculations.</p>
+<p>This assignment is worth 16 points.</p>
+<p><br /></p>
+<h1 id="simulation-1-modeling-heteroskedasticity">Simulation 1: Modeling Heteroskedasticity</h1>
+<p>In this simulation, you will explore what happens to the regression estimates when the assumption of homoskedasticity is violated. For this simulation use a sample size of 200.</p>
+<ol type="1">
+<li><p>Create the fixed <em>X</em> values you will use in each trial of the simulation. To do this, draw <span class="math inline">\(n=200\)</span> <em>X</em>-values from a uniform distribution with a minimum of <span class="math inline">\(-2\)</span> and a maximum of <span class="math inline">\(+2\)</span>. Prior to drawing these values, set your starting seed to 678910. Report the syntax you used, and the first six <em>X</em> values.</p></li>
+<li><p>Create a the <em>Y</em>-values for the first trial of the simulation by using the model:</p></li>
+</ol>
+<p><span class="math display">\[
+\begin{split}
+y_i &amp;= -3.2 + 1.75(x_i) + \epsilon_i \\[2ex]
+\epsilon_i &amp;\overset{i.i.d.}{\sim} \mathcal{N}(0, \sigma)
+\end{split}
+\]</span></p>
+<div style="margin-left:1.5em;">
+where
+</div>
+<p><span class="math display">\[
+\begin{split}
+\sigma &amp;= e^{\gamma(x_i)}\\[2ex]
+e &amp;\mathrm{~is~Euhler&#39;s~constant~}(\approx2.718282) \\[2ex]
+\gamma &amp;= 1.5
+\end{split}
+\]</span></p>
+<div style="margin-left:1.5em;margin-bottom:1em;">
+Here the variation in the random error is a function of <em>X</em> and random noise. Report the syntax you used, and the first six <em>Y</em> values.
+</div>
+<ol start="3" type="1">
+<li><p>Create and report the scatterplot of the <em>Y</em>-values versus the <em>X</em>-values for this first trial of the simulation.</p></li>
+<li><p>Describe the pattern of heteroscedasticity.</p></li>
+<li><p>Does the pattern of heteroscedasticity you described in Question 4 make sense given how the error term was created. Explain.</p></li>
+</ol>
+<p>Carry out 1000 trials of the simulation. (Reminder: Be sure to use these same <em>X</em> values in each trial of the simulation; they are fixed.) For each trial, collect: (a) the estimate of the intercept, (b) the estimate of the slope, and (c) the estimate of the residual standard error.</p>
+<ol start="6" type="1">
+<li>Compute and report the mean value for the residual standard error.</li>
+</ol>
+<h1 id="simulation-2-homoskedastic-model">Simulation 2: Homoskedastic Model</h1>
+<p>To evaluate the different estimates from the heteroskedasticity model, we need to compare them to estimates drawn from a homoskedastic model with the same population coefficients. To make the comparisons “fair”, so that we are only evaluating the effects of the heteroskedasticity, we also need to run this simulation using a residual standard error that is equal to the mean from the heteroskedastic simulation (i.e., <span class="math inline">\(\mathtt{sd\neq1}\)</span> in the <code>rnorm()</code> function).</p>
+<ol start="7" type="1">
+<li>Carry out 1000 trials of the simulation for the appropriate homoskedastic model. (Reminder: Be sure to use these same <em>X</em> values in this simulation as in the previous simulation.) For each trial, collect: (a) the estimate of the intercept, (b) the estimate of the slope, and (c) the estimate of the residual standard error. Report your syntax.</li>
+</ol>
+<h1 id="comparing-results-from-the-two-simulations-evaluating-the-effects-of-hetroskedasticity">Comparing Results from the Two Simulations: Evaluating the Effects of Hetroskedasticity</h1>
+<ol start="8" type="1">
+<li><p>Create a density plot of the distribution of intercept estimates. Show the density curve for both models on the same plot, differentiating the curves using color, linetype, or both. Also add a vertical line to this plot at the population value of the intercept.</p></li>
+<li><p>Based on your responses to Question 8, does the intercept estimate seem to be biased under heteroskedasticity? Explain.</p></li>
+<li><p>Based on your responses to Question 8, does the intercept estimate seem to be less efficient under heteroskedasticity? Explain.</p></li>
+<li><p>Create a density plot of the distribution of slope estimates. Show the density curve for both models on the same plot, differentiating the curves using color, linetype, or both. Also add a vertical line to this plot at the population value of the slope</p></li>
+<li><p>Based on your responses to Question 11, does the slope estimate seem to be biased under heteroskedasticity? Explain.</p></li>
+<li><p>Based on your responses to Question 11, does the slope estimate seem to be less efficient under heteroskedasticity? Explain.</p></li>
+<li><p>Create a density plot of the distribution of residual standard error estimates. Show the density curve for both models on the same plot, differentiating the curves using color, linetype, or both. Also add a vertical line to this plot at the population value of the residual standard error</p></li>
+<li><p>Based on your responses to Question 14, does the residual standard error estimate seem to be biased under heteroskedasticity? Explain.</p></li>
+<li><p>Based on your responses to Question 14, does the residual standard error estimate seem to be less efficient under heteroskedasticity? Explain.</p></li>
+</ol>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
@@ -1501,6 +1556,15 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <div class="d-appendix">
 </div>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 
 <!--radix_placeholder_site_after_body-->
 <!--/radix_placeholder_site_after_body-->

@@ -1,14 +1,14 @@
 ---
 title: "`r paste(emo::ji('book'), 'OLS Regression using Matrices and its Properties')`"
 description: |
-  Reading for OLS Regression
+  Reading
 author:
   - name: andy
     url: {}
 date: 08-14-2021
 output:
   distill::distill_article:
-    self_contained: false
+    self_contained: true
 categories:
   - Reading
 ---

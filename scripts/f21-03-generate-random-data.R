@@ -59,6 +59,59 @@ summary(fitted_model)$fstatistic[[1]] #Extract F-statistic
 glance(fitted_model)$statistic[[1]]   #Extract F-statistic using glance() function
 
 
+#################################
+# Writing functions
+#################################
+
+set.seed(123456) #Make simulation reproducible
+n = 25
+x = runif(n, min = -3, max = 3)
+
+
+# Function to generate random data from a regression model with normally distributed errors
+lm_sim = function(beta_0, beta_1, sigma){
+  # Generate y-values from model
+  y = beta_0 + beta_1 * x + rnorm(n, mean = 0, sd = sigma)
+  
+  #output y
+  return(y)
+}
+
+
+# Use function
+lm_sim(beta_0 = 0.2, beta_1 = 0.5, sigma = 1)
+
+
+
+
+# Function to generate random data from a regression model with normally distributed errors, 
+# and plot the results
+lm_sim_plot = function(beta_0, beta_1, sigma){
+  # Generate y-values from model
+  y = beta_0 + beta_1 * x + rnorm(n, mean = 0, sd = sigma)
+  
+  # Plot the data and the regression lines
+  p1 = data.frame(x, y) %>%
+    ggplot(aes(x = x, y = y)) +
+    geom_point() +
+    xlim(-3, 3) +
+    ylim(-3.5, 3.5) +
+    theme_light() +
+    geom_abline(intercept = 0.2, slope = 0.5, color = "orange") + #population regression line
+    geom_smooth(method = "lm", se = FALSE, color = "blue", linetype = "dashed") #sample regression line
+  
+  #output plot
+  return(p1)
+}
+
+
+# Use function
+lm_sim_plot(beta_0 = 0.2, beta_1 = 0.5, sigma = 1)
+
+
+
+
+
 
 
 

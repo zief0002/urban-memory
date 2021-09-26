@@ -1,0 +1,93 @@
+---
+title: "`r paste(emo::ji('unicorn'), 'Assignment 03')`"
+subtitle: "Regression Diagnostics"
+description: |
+  The goal of this assignment is to give you experience using regression diagnostics for detecting problematic observations. 
+author: andy
+date: 09-24-2021
+output:
+  distill::distill_article:
+    self_contained: true
+categories:
+  - Assignments
+---
+
+There is a hypothesis in political science that suggests that income inequality is related to the democratic experience and economic development of a country. In this assignment, you are going to examine whether this hypothesis is supported by empirical evidence by using the data provided in the file *stack-1979.csv*. In particular, you are going to regress income inequality on voter turnout (democratic experience) and energy consumption (economic development). 
+
+
+- [[CSV]](https://raw.githubusercontent.com/zief0002/epsy-8264/master/data/stack-1979.csv)
+- [[Data Codebook]](http://zief0002.github.io/epsy-8264/codebooks/stack-1979.html)
+
+
+<!-- ```{r echo=FALSE, out.width="60%", fig.align='center'} -->
+<!-- knitr::include_graphics("figs/assign-01.png") -->
+<!-- ``` -->
+
+
+# Instructions
+
+Submit a printed document of your responses to the following questions. Please adhere to the following guidelines for further formatting your assignment:
+
+- All plots should be resized so that they do not take up more room than necessary. 
+- All figures and tables should have a name (e.g., Figure 1) *and* an appropriate caption.
+
+In questions that ask you to "use matrix algebra" to solve the problem, you can either show your syntax and output from carrying out the matrix operations, or you can use Equation Editor to input the matrices involved in your calculations.
+
+This assignment is worth 18 points.
+
+<br />
+
+
+# Exploratory Analysis
+
+1. Start by creating scatterplots to examine the relationship between each of the predictors and the outcome. Are there observations that look problematic in these plots? If so, identify the country(ies).
+
+2. Fit the regression model (specified in the introduction) to the data. Report the fitted equation.
+
+3. Create and include a set of plots that allow you to examine the assumptions for linear regression. Based on these plots, comment on the tenability of these assumptions.
+
+<br />
+
+# Outliers, Leverage, and Influence
+
+4. Compute the externally studentized residuals for the observations based on the fitted regression. Based on these values, identify any countries that you would consider as regression outliers. Explain why you identified these countries as regression outliers.
+
+5. Fit a mean-shift model that will allow you to test whether the observation with the largest absolute studentized residual is statistically different from zero. Report the coefficient-level output (*B*, *SE*, *t*, and *p*) for this model.
+
+6. Find (and report) the Bonferroni adjusted *p*-value for the observation with the largest absolute studentized residual. Based on this *p*-value, is there statistical evidence to call this observation a regression outlier? Explain.
+
+7. Create and include an index plot of the leverage values. Include a line in this plot that displays the cutpoint for "high" leverage. Based on this plot, identify any countries with large leverage values.
+
+8. Based on the evidence you have looked at in Questions #4--7, do you suspect that any of the countries might influence the regression coefficients? Explain.
+
+<br />
+
+# Influence Measures
+
+9. For each of the influence measures listed below, create and include an index plot of the influence measure. For each plot, also include a line that displays the cutpoint for "high" influence. **(3pts)**
+
+    a. Scaled (standardized) DFBETA values
+    b. Cook's *D*
+    c. DFFITS
+    d. COVRATIO
+
+10. Show how the Cook's *D* value for the country with the largest Cook's *D* value is calculated using the country's leverage value and standardized residual.
+
+11. Create and include the added-variable plots for each each of the coefficients. Based on these plots, identify any countries that you believe may be jointly influencing the regression coefficients.
+
+<br />
+
+# Remove and Refit
+
+12. Based on all of the evidence from the different influence measures you examined, identify and report the country(ies) that are influential. Explain how you decided on this set of observations.
+
+13. Remove the observations you identified in Question #12 from the data and refit the regression model omitting these observations. Report the fitted equation.
+
+14. Create and include a set of plots that allow you to examine the assumptions for linear regression. Based on these plots, comment on the tenability of these assumptions.
+
+15. Compare and contrast the coefficient-level inferences from the model fitted with the full data and that fitted with the omitted observations.
+
+16. Compare and contrast the model-level summaries, namely $R^2$ and the RMSE, from the model fitted with the full data and that fitted with the omitted observations.
+
+
+

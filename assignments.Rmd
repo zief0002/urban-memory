@@ -40,10 +40,10 @@ Below are the due dates for the assignments, as well as links to each assignment
 </tr>
 
 <tr>
-<td>Assignment 03: *Regression Diagnostics*</td>
+<td>`r emo::ji("unicorn")` Assignment 03: *Regression Diagnostics*</td>
 <td>Oct. 14</td>
 <td align="center" style="vertical-align:middle;">
-  <!-- <a class = "my-link" href="posts/2021-08-09-assignment-01"><span class="fas fa-link"></span></a> -->
+  <a class = "my-link" href="posts/2021-09-23-assignment-03"><span class="fas fa-link"></span></a>
 </td>
 </tr>
 

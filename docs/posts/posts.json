@@ -1,5 +1,43 @@
 [
   {
+    "path": "posts/2021-09-23-2021-09-23-notes-regression-diagnostics/",
+    "title": "📝 Regression Diagnostics",
+    "description": "Notes",
+    "author": [
+      {
+        "name": "andy",
+        "url": {}
+      }
+    ],
+    "date": "2021-09-26",
+    "categories": [
+      "Notes"
+    ],
+    "contents": "\nHere are links to several script files and handouts that we will use in class:\nSlides is a set of slides we will cover in class.\nScript File is a script file that provides syntax for generating data from a given population regression model.\n\n\n\n",
+    "preview": {},
+    "last_modified": "2021-09-26T08:39:53-05:00",
+    "input_file": {}
+  },
+  {
+    "path": "posts/2021-09-23-2021-09-24-assignment-03/",
+    "title": "🦄 Assignment 03",
+    "description": "The goal of this assignment is to give you experience using regression diagnostics for detecting problematic observations.",
+    "author": [
+      {
+        "name": "andy",
+        "url": {}
+      }
+    ],
+    "date": "2021-09-24",
+    "categories": [
+      "Assignments"
+    ],
+    "contents": "\nThere is a hypothesis in political science that suggests that income inequality is related to the democratic experience and economic development of a country. In this assignment, you are going to examine whether this hypothesis is supported by empirical evidence by using the data provided in the file stack-1979.csv. In particular, you are going to regress income inequality on voter turnout (democratic experience) and energy consumption (economic development).\n[CSV]\n[Data Codebook]\nInstructions\nSubmit a printed document of your responses to the following questions. Please adhere to the following guidelines for further formatting your assignment:\nAll plots should be resized so that they do not take up more room than necessary.\nAll figures and tables should have a name (e.g., Figure 1) and an appropriate caption.\nIn questions that ask you to “use matrix algebra” to solve the problem, you can either show your syntax and output from carrying out the matrix operations, or you can use Equation Editor to input the matrices involved in your calculations.\nThis assignment is worth 18 points.\n\nExploratory Analysis\nStart by creating scatterplots to examine the relationship between each of the predictors and the outcome. Are there observations that look problematic in these plots? If so, identify the country(ies).\nFit the regression model (specified in the introduction) to the data. Report the fitted equation.\nCreate and include a set of plots that allow you to examine the assumptions for linear regression. Based on these plots, comment on the tenability of these assumptions.\n\nOutliers, Leverage, and Influence\nCompute the externally studentized residuals for the observations based on the fitted regression. Based on these values, identify any countries that you would consider as regression outliers. Explain why you identified these countries as regression outliers.\nFit a mean-shift model that will allow you to test whether the observation with the largest absolute studentized residual is statistically different from zero. Report the coefficient-level output (B, SE, t, and p) for this model.\nFind (and report) the Bonferroni adjusted p-value for the observation with the largest absolute studentized residual. Based on this p-value, is there statistical evidence to call this observation a regression outlier? Explain.\nCreate and include an index plot of the leverage values. Include a line in this plot that displays the cutpoint for “high” leverage. Based on this plot, identify any countries with large leverage values.\nBased on the evidence you have looked at in Questions #4–7, do you suspect that any of the countries might influence the regression coefficients? Explain.\n\nInfluence Measures\nFor each of the influence measures listed below, create and include an index plot of the influence measure. For each plot, also include a line that displays the cutpoint for “high” influence. (3pts)\nScaled (standardized) DFBETA values\nCook’s D\nDFFITS\nCOVRATIO\n\nShow how the Cook’s D value for the country with the largest Cook’s D value is calculated using the country’s leverage value and standardized residual.\nCreate and include the added-variable plots for each each of the coefficients. Based on these plots, identify any countries that you believe may be jointly influencing the regression coefficients.\n\nRemove and Refit\nBased on all of the evidence from the different influence measures you examined, identify and report the country(ies) that are influential. Explain how you decided on this set of observations.\nRemove the observations you identified in Question #12 from the data and refit the regression model omitting these observations. Report the fitted equation.\nCreate and include a set of plots that allow you to examine the assumptions for linear regression. Based on these plots, comment on the tenability of these assumptions.\nCompare and contrast the coefficient-level inferences from the model fitted with the full data and that fitted with the omitted observations.\nCompare and contrast the model-level summaries, namely \\(R^2\\) and the RMSE, from the model fitted with the full data and that fitted with the omitted observations.\n\n\n\n",
+    "preview": {},
+    "last_modified": "2021-09-23T11:40:15-05:00",
+    "input_file": {}
+  },
+  {
     "path": "posts/2021-09-16-assignment-02/",
     "title": "🦒 Assignment 02",
     "description": "Simulating from the Regression Model",

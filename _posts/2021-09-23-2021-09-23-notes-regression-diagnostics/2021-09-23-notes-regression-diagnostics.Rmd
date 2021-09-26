@@ -1,0 +1,27 @@
+---
+title: "`r paste(emo::ji('memo'), 'Regression Diagnostics')`"
+description: |
+  Notes
+author:
+  - name: andy
+    url: {}
+date: 09-26-2021
+output:
+  distill::distill_article:
+    self_contained: true
+    code_folding: true
+categories:
+  - Notes
+---
+
+
+Here are links to several script files and handouts that we will use in class:
+
+- [Slides](../../handouts/07-regression-diagnostics.pdf) is a set of slides we will cover in class.
+- [Script File](../../scripts/f21-07-regression-diagnostics.R) is a script file that provides syntax for generating data from a given population regression model.
+
+
+
+
+
+

@@ -1,22 +1,6 @@
-/* Style code in text*/
-p code {
-    white-space: inherit;
-    font-size: 70%;
-}
-
-pre {
-  word-break: normal;
-  word-wrap: normal;
-}
-
-
-/* Style syntax */
-.sourceCode {
-  background-color: #303030;
-  border-color: #303030;
-  color: #cccccc;
-  padding-top: 5px;
-  padding-bottom: 5px;
+/* Style 'Show R Syntax' code folding text */
+summary {
+  color: #cc79a7;
 }
 
 
@@ -29,16 +13,5 @@ pre:not([class]) {
 
 pre:not([class]) code {
   background-color: #eff4f6;
-}
-
-
-
-.sourceLine {
-    padding-left: 10px;
-}
-
-/* Change line height so descenders show in syntax*/
-a.sourceLine {
-    line-height: 1.7;
 }
 

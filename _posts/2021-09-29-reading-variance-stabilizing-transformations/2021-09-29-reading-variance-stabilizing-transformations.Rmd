@@ -1,0 +1,27 @@
+---
+title: "`r paste(emo::ji('book'), 'Variance Stabilizing Transformations')`"
+description: |
+  Reading
+author:
+  - name: andy
+    url: {}
+date: 09-29-2021
+output:
+  distill::distill_article:
+    self_contained: true
+categories:
+  - Reading
+---
+
+
+Read the following article.
+
+- Osborne, J. W. (2009). [Notes on the use of data transformations](http://PAREonline.net/getvn.asp?v=8&n=6). *Practical Assessment, Research &amp; Evaluation, 8*(6). 
+
+<br />
+
+### Additional Resources
+
+- Kaufman, R. L. (2013). [Heteroskedasticity in regression: Detection and correction](https://primo.lib.umn.edu/permalink/f/1q7ssba/UMN_ALMA21449350120001701). Sage. https://dx-doi-org.ezp1.lib.umn.edu/10.4135/9781452270128.n4
+
+<br />

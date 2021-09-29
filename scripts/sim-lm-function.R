@@ -8,7 +8,7 @@ sim_lm = function(beta_0, beta_1, sigma, n){
   # Generate the y-values
   y = beta_0 + beta_1 * x + rnorm(n, mean = 0, sd = sigma)
   
-  # Cretae a plot
+  # Create a plot
   p1 = data.frame(x, y) %>%
     ggplot(aes(x = x, y = y)) +
     geom_point(size = 5, color = "blue") +
@@ -18,7 +18,7 @@ sim_lm = function(beta_0, beta_1, sigma, n){
     geom_abline(intercept = 0.2, slope = 0.5, color = "orange", lwd = 2) + #population regression line
     geom_smooth(method = "lm", se = FALSE, color = "blue", linetype = "dashed") #sample regression line
 
-  # Output the x-values, y-vlaues, and plot
+  # Output the x-values, y-values, and plot
   return( list(x = x, y = y, p1) )
 }
 

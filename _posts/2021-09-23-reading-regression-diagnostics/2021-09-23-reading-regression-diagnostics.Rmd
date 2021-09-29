@@ -1,0 +1,31 @@
+---
+title: "`r paste(emo::ji('book'), 'Regression Diagnostics')`"
+description: |
+  Reading
+author:
+  - name: andy
+    url: {}
+date: 09-23-2021
+output:
+  distill::distill_article:
+    self_contained: true
+categories:
+  - Reading
+---
+
+
+Read the following chapter. It should be accessible via the link after logging in with your x500 and password.
+
+- Fox, J. (1991). [Outlying and influential data](https://primo.lib.umn.edu/permalink/f/1q7ssba/UMN_ALMA21512855700001701). In *Regression diagnostics* (pp. 21--40). Sage. doi: https://dx-doi-org.ezp1.lib.umn.edu/10.4135/9781412985604.n4 
+
+
+<br />
+
+### Additional Resources
+
+- Kim, B. (2015). [Understanding diagnostic plots for linear regression analysis](https://data.library.virginia.edu/diagnostic-plots/). University of Virginia Library.
+- Cook, R. D. (1998). [Regression graphics: Ideas for studying regressions through graphics](http://www.stat.umn.edu/RegGraph/). Wiley.
+
+
+<br />
+

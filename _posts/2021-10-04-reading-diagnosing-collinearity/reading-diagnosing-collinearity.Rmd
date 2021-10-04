@@ -1,0 +1,27 @@
+---
+title: "`r paste(emo::ji('book'), 'Diagnosing Collinearity')`"
+description: |
+  Reading
+author:
+  - name: andy
+    url: {}
+date: 10-04-2021
+output:
+  distill::distill_article:
+    self_contained: true
+categories:
+  - Reading
+---
+
+
+Read the following:
+
+- Rodriguez, M., &amp; Zieffler, A. (2021). [Eigenvalues and Eigenvectors](https://zief0002.github.io/matrix-algebra/eigenvalues-and-eigenvectors.html). In *Matrix algebra for educational scientists*.  
+
+<br />
+
+### Additional Resources
+
+- Cook, D. (2019). [How to use a tour to check if your model suffers from multicollinearity.](http://dicook.org/2019/09/13/touring-to-check-for-multicollinearity/) Personal blog.
+
+<br />

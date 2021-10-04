@@ -16,7 +16,7 @@ residual_plots = function(object){
     geom_point() +
     geom_smooth(method = "loess", se = TRUE, n = 50, span = 0.67) +
     theme_light() +
-    xlab("FItted values") +
+    xlab("Fitted values") +
     ylab("Residuals")
   
   

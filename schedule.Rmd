@@ -169,15 +169,21 @@ The calendar below lists the tentative course topics. The dates listed are subje
 <!-- Unit 04: COLLINEARITY-->
 
 
-<!-- <tr> -->
-<!-- <td colspan="3"><b>Unit 04: Diagnosing Collinearity and Tools for Dealing with It</b></td> -->
-<!-- </tr> -->
+<tr>
+<td colspan="5"><b>Unit 05: Diagnosing Collinearity and Tools for Dealing with It</b></td>
+</tr>
 
-<!-- <tr> -->
-<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
-<!-- <td>Oct. 19</td> -->
-<!-- <td style="vertical-align:middle;">Collinearity Diagnostics</td> -->
-<!-- </tr> -->
+<tr>
+<td align="center" style="vertical-align:middle;">&nbsp;</td>
+<td>Oct. 19</td>
+<td align="center" style="vertical-align:middle;">
+  <a class="my-link" href="posts/2021-10-04-reading-diagnosing-collinearity"><span class="fa fa-book"></span></a>
+</td>
+<td style="vertical-align:middle;">Diagnosing Collinearity</td>
+<td align="center" style="vertical-align:middle;">
+  <a class = "my-link" href="posts/2021-09-30-notes-diagnosing-collinearity"><span class="fas fa-link"></span></a>
+</td>
+</tr>
 
 <!-- <tr> -->
 <!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->

@@ -1,0 +1,29 @@
+a:link {
+  color: rgb(0, 102, 119);
+  text-decoration: underline;
+}
+
+a:visited {
+  color: rgb(0, 102, 119);
+}
+
+a:active {
+  color: rgb(0, 102, 119);
+}
+
+a:hover {
+  color: #FF2600;
+}
+
+.references p {
+  padding-left: 36px; 
+  text-indent: -36px;
+}
+
+hr {
+  height: 0;
+  border-bottom: none;
+  border-top-width: thin;
+  border-top-style: solid;
+  border-top-color: #09557f;
+}

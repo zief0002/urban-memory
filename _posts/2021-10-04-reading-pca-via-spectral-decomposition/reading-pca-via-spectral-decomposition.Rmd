@@ -1,0 +1,29 @@
+---
+title: "`r paste(emo::ji('book'), 'Principal Components Analysis via Spectral Decomposition')`"
+description: |
+  Reading
+author:
+  - name: andy
+    url: {}
+date: 10-04-2021
+output:
+  distill::distill_article:
+    self_contained: true
+categories:
+  - Reading
+---
+
+
+Read the following:
+
+- Rodriguez, M., &amp; Zieffler, A. (2021). [Basis vectors and matrices](https://zief0002.github.io/matrix-algebra/basis-vectors-and-matrices.html). In *Matrix algebra for educational scientists*.  
+- Rodriguez, M., &amp; Zieffler, A. (2021). [Eigenvalues and eigenvectors](https://zief0002.github.io/matrix-algebra/eigenvalues-and-eigenvectors.html). In *Matrix algebra for educational scientists*.  
+- Rodriguez, M., &amp; Zieffler, A. (2021). [Spectral decomposition](https://zief0002.github.io/matrix-algebra/spectral-decompostion.html). In *Matrix algebra for educational scientists*.  
+
+<br />
+
+### Additional Resources
+
+- Wilke, C. O. (2020). [PCA tidyverse style.](https://clauswilke.com/blog/2020/09/07/pca-tidyverse-style/) Personal blog.
+
+<br />

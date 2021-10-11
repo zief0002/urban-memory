@@ -1,0 +1,353 @@
+---
+title: "`r paste(emo::ji('memo'), 'Principal Components Analysis via Singular Value Decomposition')`"
+description: |
+  A brief introduction to principal components analysis via eigendecomposition. Example taken from @Chatterjee:2012.
+author:
+  - name: andy
+    url: {}
+date: 10-05-2021
+output:
+  distill::distill_article:
+    self_contained: true
+    code_folding: false
+    css: ['../../style/syntax.css']
+bibliography: '../../style/epsy8264.bib'
+csl: '../../style/apa-single-spaced.csl'
+categories:
+  - Notes    
+---
+
+```{r knitr_init, echo=FALSE, cache=FALSE, message=FALSE}
+library(knitr)
+library(kableExtra)
+library(rmdformats)
+
+## Global options
+options(max.print = "75")
+opts_chunk$set(
+  echo=TRUE,
+  prompt=FALSE, 
+  comment=NA, 
+  message=FALSE, 
+  warning=FALSE, 
+  tidy=FALSE, 
+  fig.width=6, 
+  fig.height=6,
+  fig.align='center', 
+  out.width='40%'
+  )
+opts_knit$set(width=85)
+options(scipen=5)
+```
+
+In 1964, the US Congress passed the Civil Rights Act and also ordered a survey of school districts to evaluate the availability of equal educational opportunity in public education. The results of this survey were reported on in @Coleman:1966 and @Mosteller:1972. We will use a subset of the data collected (in *equal-educational-opportunity.csv*) to mimic one of the original regression analyses performed; examining whether the level of school facilities was an important predictor of student achievement after accounting for the variation in faculty credentials and peer influence.
+
+- [[CSV]](https://raw.githubusercontent.com/zief0002/epsy-8264/master/data/equal-educational-opportunity.csv)
+- [[R Script File]](https://raw.githubusercontent.com/zief0002/epsy-8264/master/scripts/f21-11-pca-via-svd.R)
+
+The data come from a random sample of 70 schools in 1965. The variables, which have all been mean-centered and standardized, include:
+
+- `achievement`: Measurement indicating the student achievement level
+- `faculty`: Measurement indicating the faculty's credentials
+- `peer`: Measurement indicating the influence of peer groups in the school
+- `school`: Measurement indicating the school facilities (e.g., building, teaching materials)
+
+```{r}
+# Load libraries
+library(broom)
+library(corrr)
+library(tidyverse)
+library(tidymodels)
+library(patchwork)
+
+# Read in data
+eeo = read_csv("~/Documents/github/epsy-8264/data/equal-education-opportunity.csv")
+head(eeo)
+
+# Source the residual_plots() function from the script file
+source("../../scripts/residual_plots.R")
+```
+
+The problem we faced from the last set of notes, was that the predictors in the model were collinear, so we encountered computational issues when trying to estimate the effects and standard errors. One method to deal with collinearity among a set of predictors is to combine the predictors into a smaller subset of orthogonal measures (called principal components) that can be used instead of the original predictors. This subset of measures will not have the collinearity problems (they are orthogonal to one another), but constitute a slightly smaller amount of "variance accounted for" than the original set of predictors. 
+
+<br />
+
+
+# Singular Value Decomposition
+
+Another decomposition method that creates orthogonal unit vectors (i.e., basis) is [singular value decomposition (SVD)](https://zief0002.github.io/matrix-algebra/singular-value-decompostion.html). This decomposition method decomposes a matrix **A** into the product of three matrices, namely:
+
+$$
+\mathbf{A} = \mathbf{U}\mathbf{D}\mathbf{V}^{\intercal}
+$$
+
+where, **U** and **V** are an orthogonal matrices and **D** is a diagonal matrix. 
+
+
+### PCA using SVD: Matrix Algebra
+
+To carry out a principal components analysis, we need to use SVD to decompose the matrix $\mathbf{X}^{\intercal}_{\mathrm{Predictor}}\mathbf{X}_{\mathrm{Predictor}}$, where $\mathbf{X}_{\mathrm{Predictor}}$ is a matrix of the predictors being used in the PCA. Below, we create the $\mathbf{X}_{\mathrm{Predictor}}$ matrix we use the `svd()` function to decompose the $\mathbf{X}^{\intercal}_{\mathrm{Predictor}}\mathbf{X}_{\mathrm{Predictor}}$ matrix using singular value decomposition.
+
+
+```{r}
+# Create matrix of predictors
+X_p = as.matrix(eeo[ , c("faculty", "peer", "school")])
+
+# SVD decomposition
+sv_decomp = svd(t(X_p) %*% X_p)
+
+# View results
+sv_decomp
+```
+
+$$
+\begin{split}
+\mathbf{X}^{\intercal}_{\mathrm{Predictor}}\mathbf{X}_{\mathrm{Predictor}} &= \mathbf{U}\mathbf{D}\mathbf{V}^{\intercal} \\[1em]
+\begin{bmatrix}81.123 & 66.518 & 75.512 \\ 66.518 & 59.163 & 64.251 \\ 75.512 & 64.251 & 72.358\end{bmatrix} &= \begin{bmatrix}0.617 & 0.670 & -0.412 \\ -0.524 & -0.741 & -0.419 \\ -0.586 & -0.042 & 0.809\end{bmatrix} \begin{bmatrix}209.330 & 0 & 0 \\ 0 & 2.730 & 0 \\ 0 & 0 & 0.583 \end{bmatrix} \begin{bmatrix}-0.617 & -0.524 & -0.586 \\ 0.670 & -0.741 & -0.042 \\ -0.412 & -0.419 &  0.809 \end{bmatrix}
+\end{split}
+$$
+
+<br />
+
+### Understanding What the Matrix Algebra is Doing
+
+Mathematically, since any matrix can be decomposed using SVD, we can also decompose $\mathbf{X}_{\mathrm{Predictor}} = \mathbf{U}\mathbf{D}\mathbf{V}^{\intercal}$. Then we can write the $\mathbf{X}^{\intercal}_{\mathrm{Predictor}}\mathbf{X}_{\mathrm{Predictor}}$ matrix, $\mathbf{X}^{\intercal}\mathbf{X}$, as:
+
+$$
+\mathbf{X}^{\intercal}_{\mathrm{Predictor}}\mathbf{X}_{\mathrm{Predictor}} = (\mathbf{U}\mathbf{D}\mathbf{V}^{\intercal})^{\intercal} (\mathbf{U}\mathbf{D}\mathbf{V}^{\intercal})
+$$
+
+Re-expressing this we get:
+
+$$
+\begin{split}
+\mathbf{X}^{\intercal}_{\mathrm{Predictor}}\mathbf{X}_{\mathrm{Predictor}} &= \mathbf{V}\mathbf{D}^{\intercal}\mathbf{U}^{\intercal}\mathbf{U}\mathbf{D}\mathbf{V}^{\intercal} \\[0.5em]
+\end{split}
+$$
+
+Since **D** is a diagonal matrix, $\mathbf{D}^{\intercal}\mathbf{D} = \mathbf{D}^2$, so reducing this expression gives:
+
+$$
+\mathbf{X}^{\intercal}_{\mathrm{Predictor}}\mathbf{X}_{\mathrm{Predictor}} = \mathbf{V}\mathbf{D}^2\mathbf{V}^{\intercal}
+$$
+
+The matrices **V** and $\mathbf{V}^{\intercal}$ are both orthogonal basis matrices that ultimately act to change the coordinate system by rotating the original basis vectors used in the predictor space. The $\mathbf{D}^2$ matrix is diagonalizing the $\mathbf{X}^{\intercal}_{\mathrm{Predictor}}\mathbf{X}_{\mathrm{Predictor}}$ matrix which amounts to finding the the major axes in the data ellipse along which our data varies.
+
+<br />
+
+# Using the SVD Decomposition as PCA
+
+As was pointed out in the previous section, the important matrices from the SVD are the **V** matrix (rotation matrix) and the **D** matrix (diagonalization matrix). The **V** matrix are the principal components:
+
+$$
+\mathbf{V} = \begin{bmatrix}-0.617 & 0.670 & -0.412 \\ -0.524 &  -0.741 & -0.419 \\ -0.586 & -0.042  & 0.809 \end{bmatrix}
+$$
+
+Note these are the same principal components we obtained using the eigendecomposition. The values in the **D** matrix are mathematically related to the eigenvalues. Because we based the SVD on the $\mathbf{X}^{\intercal}_{\mathrm{Predictor}}\mathbf{X}_{\mathrm{Predictor}}$ matrix, the diagonal elements on **D** are the eigenvalues! That is, 
+
+$$
+\lambda_i = d_{ii}
+$$
+
+The eigenvalues (which are the variances) can then be used to compute the proportion of variance for each of the principal components.
+
+```{r}
+# Compute proportion of variance
+sv_decomp$d / sum(sv_decomp$d)
+```
+
+The principal component scores can be obtained by postmultiplying the mean centered predictor matrix by the **V** matrix.
+
+```{r}
+# Mean center each predictor
+X_p[, 1] = X_p[, 1] - mean(X_p[, 1])
+X_p[, 2] = X_p[, 2] - mean(X_p[, 2])
+X_p[, 3] = X_p[, 3] - mean(X_p[, 3])
+
+# Compute PC scores
+pc_scores = X_p %*% sv_decomp$v
+head(pc_scores)
+```
+
+
+# Using the prcomp() Function to Carry out PCA using SVD
+
+In practice, we will use R functions (not the matrix algebra) to carry out a PCA using SVD. The `prcomp()` function carries out PCA using SVD decomposition. Different elements of the The `prcomp()` object can then be accessed to obtain output from the PCA.
+
+```{r}
+# Fit the PCA using SVD decomposition
+svd_pca = eeo %>%
+  select(faculty, peer, school) %>%
+  scale(center = TRUE, scale = FALSE) %>% # center data
+  prcomp()
+
+# View standard deviations and rotation matrix (eigenvector matrix)
+svd_pca 
+```
+
+Again, to compute the variances we can square the standard deviations output by the function and then use those variances to compute the variance accounted for by the principal components.
+
+```{r}
+# Compute variances
+var_pc = svd_pca[[1]] ^ 2
+var_pc
+
+# Compute variance accounted for
+var_pc / sum(var_pc)
+```
+
+We can also obtain the scores on each principal component for each observation in the sample using the `augment()` function from the `{broom}` package.
+
+
+```{r}
+# Obtain PC scores
+augment(svd_pca)
+```
+
+<aside>
+In general it is more efficient to use singular value decomposition than eigendecomposition when carrying out a PCA. As such the use of `prcomp()` rather than `princomp()` is recommended in practice. 
+</aside>
+
+
+<br />
+
+### Scaling the Predictors
+
+In practice, it is important to scale all the predictors used in the PCA. This is especially true when the variables are measured in different metrics or have varying degrees of magnitude. In these cases, not scaling the predictors will often result in results in which variables with large magnitudes of scale dominate the PCA. It also is helpful when the predictors are measured using qualitatively different scales (e.g., one is measured in dollars and another in years of education). 
+
+<aside>
+Recall, the $\mathbf{X}^{\intercal}_{\mathrm{Predictor}}\mathbf{X}_{\mathrm{Predictor}}$ matrix for a set of standardized predictors his the correlation matrix of the predictors. Thus, the SVD is actually being carried out on the correlation matrix rather than the raw  $\mathbf{X}^{\intercal}_{\mathrm{Predictor}}\mathbf{X}_{\mathrm{Predictor}}$ matrix. 
+</aside>
+
+While it isn't necessary to also center the predictors, it is common to simply standardize the set of predictors being used in the PCA (i.e., convert them to *z*-scores); thus both centering and scaling them. To do this, we will pipe the selected predictors into the `scale()` function prior to piping into the `prcomp()` function.
+
+```{r}
+# Fit the PCA using SVD decomposition on standardized predictors
+svd_pca_z = eeo %>%
+  select(faculty, peer, school) %>%
+  scale(center = TRUE, scale = TRUE) %>%
+  prcomp()
+
+# View standard deviations and rotation matrix (eigenvector matrix)
+svd_pca_z
+
+# tidy version of the rotation matrix (good for graphing)
+svd_pca_z %>%
+  tidy(matrix = "rotation")
+
+# View sds, variance accounted for
+svd_pca_z %>%
+  tidy(matrix = "eigenvalues")
+
+# Obtain PC scores
+pc_scores = augment(svd_pca_z)
+pc_scores
+```
+
+Here the results from using the standardized predictors are not that different from the previous results since the variables were already reported as *z*-scores to begin with. The variance accounted for by the principal components is comparable (within rounding); the standardization of the predictors does not change this. The actual principal components in the **V** (rotation) matrix are different because of the centering and scaling, but the interpretations are the same as when we used the decomposition based on the $\mathbf{X}^{\intercal}_{\mathrm{Predictor}}\mathbf{X}_{\mathrm{Predictor}}$ matrix. Similarly, because of the centering and scaling, the PC scores are different.
+
+<br />
+
+### Behind the Scenes
+
+By standardizing the predictors, we are carrying out the SVD on the correlation matrix of the predictors rather than on the $\mathbf{X}^{\intercal}_{\mathrm{Predictor}}\mathbf{X}_{\mathrm{Predictor}}$ matrix. To see this, recall that the correlation matrix of the predictors ($\mathbf{R_X}$) is based on the standardized predictors, namely,
+
+<aside>
+This implies that you can also carry out PCA on summaries of the predictors (rather than the raw data) by decomposing either the covariance matrix of the predictors or the correlation matrix of the predictors. This can be useful for example, when trying to reproduce the results of a PCA from a published paper, in which authors will often report summaries of the data used (e.g., correlation matrices) but not the raw data.
+</aside>
+
+$$
+\mathbf{R_X} = \frac{1}{n-1} \big(\mathbf{X}^{\intercal}_{\mathrm{Standardized~Predictor}}\mathbf{X}_{\mathrm{Standardized~Predictor}}\big)
+$$
+
+The $1/(n-1)$ component is a scalar and is pulled out so that the decomposition is carried out on the $\mathbf{X}^{\intercal}_{\mathrm{Standardized~Predictor}}\mathbf{X}_{\mathrm{Standardized~Predictor}}$ matrix:
+
+$$
+\frac{1}{n-1} \big(\mathbf{X}^{\intercal}_{\mathrm{Standardized~Predictor}}\mathbf{X}_{\mathrm{Standardized~Predictor}}\big) = \frac{1}{n-1}\mathbf{U}\mathbf{D}\mathbf{V}^{\intercal}
+$$
+
+Similarly, we can also decompose the covariance matrix of the predictors ($\boldsymbol\Sigma_{\mathbf{X}}$), which is based on the centered predictors,
+
+$$
+\boldsymbol\Sigma_{\mathbf{X}} = \frac{1}{n-1} \big( \mathbf{X}^{\intercal}_{\mathrm{Centered~Predictor}}\mathbf{X}_{\mathrm{Centered~Predictor}}\big)
+$$
+
+In this case, the decomposition is carried out on the $\mathbf{X}^{\intercal}_{\mathrm{Centered~Predictor}}\mathbf{X}_{\mathrm{Centered~Predictor}}$ matrix. To do this using `prcomp()` we would change the `scale=` argument to `FALSE` in the `scale()` function, while still leaving `center=TRUE`.
+
+<br />
+
+
+# Using the Principal Components in a Regression Model
+
+Remember, we undertook the PCA because of the collinearity in the original predictors. Rather than using the original predictor values in our regression, we can use the scores from the PCA. Since we created the principal components to be orthogonal, this should alleviate any collinearity problems. 
+
+
+```{r}
+# Add the PC scores to the original data
+eeo2 = eeo %>%
+  bind_cols(pc_scores)
+
+# View data
+eeo2
+
+# Fit model using PC scores
+lm.pc = lm(achievement ~ 1 + .fittedPC1 + .fittedPC2 + .fittedPC3, data = eeo2)
+
+# Check for collinearity -- correlations
+eeo2 %>%
+  select(starts_with(".fitted")) %>%
+  correlate()
+
+# Check for collinearity -- VIF
+car::vif(lm.pc)
+```
+
+Examining some of the collinearity diagnostics we see that the predictors in this model are completely uncorrelated and the VIF values are 1; indicating that the SEs for these coefficients are exactly as large as they would be if the predictors were independent (which they are). Looking at the model- and coefficient-level output:
+
+```{r}
+# Model-level output
+glance(lm.pc)
+
+# Coefficient-level output
+tidy(lm.pc, conf.int = 0.95)
+```
+
+The model-level output from this model is exactly the same as the model-level output from the model fitted with the original predictors. The coefficient-level output is where we start to see differences. Because there is no collinearity in this model, we now see a statistically significant result at the coefficient level (PC1). The other thing to remember here is that each principal component is a composite variable composed of all three predictors and perhaps had a more substantive interpretation. We need to use those substantive interpretations in the interpretations of coefficients:
+
+- The intercept is the predicted average achievement for cases where all the composite variables are 0.
+- The positive slope associated with the first composite indicates that higher values on this composite are associated with higher achievement, on average. In other words, higher values on all three predictors are associated with higher achievement, on average.
+- The negative slope associated with the second composite indicates that higher values on this composite are associated with lower achievement, on average. In other words, larger contrasts between faculty credentials and peer influence are associated with lower achievement, on average.
+- The positive slope associated with the third composite indicates that higher values on this composite are associated with higher achievement, on average. In other words, larger contrasts between school facilities and faculty credentials/peer influence are associated with higher achievement, on average.
+
+Again, these interpretations may not be satisfactory---it all depends on whether the loadings offer a reasonable interpretation of the composite variable.
+
+<br />
+
+
+## Dimension Reduction
+
+One of the most useful qualities of a PCA, aside from fixing collinearity issues, can be to reduce the size of the predictor space in a regression model; thereby reducing the complexity of the model and improving statistical power. To do this, we consider the variance accounted for by each of the principal components. 
+
+In our example, the first principal component accounted for most of the variance in the original predictor space (approximately 98%). The other two principal components did not account for that much variation, which suggests that they may not be necessary. We can capture most of the variation in the original three predictors by just using the first principal component.
+
+```{r}
+# Fit reduced model using PC1
+lm.pc.2 = lm(achievement ~ 1 + .fittedPC1, data = eeo2)
+
+# Model-level output
+glance(lm.pc.2)
+
+# Coefficient-level output
+tidy(lm.pc.2, conf.int = 0.95)
+```
+
+In this model, the model $R^2$ value is slightly smaller (0.183 rather than 0.206) since the first principal component did not account for all of the variance in the original predictors. However, this difference is negligible, and the model is still explains a statistically relevant amount of variation in achievement scores, $F(1,68)=15.25$, $p=0.0002$. 
+
+From the coefficient-level output, we see that the magnitude of the intercept and slope are comparable to those in the model where all three composites were used. The standard error and *p*-value for the composite in this model are slightly smaller than when we used all of the predictors. This represents the additional two degrees of freedom in the error term that we got from reducing the number of predictors. (In this example, the differences are negligible.)
+
+<br />
+
+
+
+
+

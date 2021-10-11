@@ -6,6 +6,11 @@ library(broom)
 library(car)
 library(corrr)
 library(tidyverse)
+library(patchwork)
+
+
+# Load residual_plots() function
+source("../../scripts/residual_plots.R")
 
 
 
@@ -27,8 +32,7 @@ lm.1 = lm(achievement ~ faculty + peer + school, data = eeo)
 
 
 # Examine assumptions
-qqPlot(lm.1)
-residualPlot(lm.1)
+residual_plots(lm.1)
 
 
 # Index plots of several regression diagnostics

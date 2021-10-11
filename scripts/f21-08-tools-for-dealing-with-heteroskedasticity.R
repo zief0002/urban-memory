@@ -15,7 +15,7 @@ librafry(patchwork)
 ### Import and prepare data
 ##################################################
 
-slid = read_csv(here::here("data/slid.csv"))
+slid = read_csv("data/slid.csv")
 head(slid)
 
 

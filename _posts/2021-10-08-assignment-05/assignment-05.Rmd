@@ -1,0 +1,99 @@
+---
+title: "`r paste(emo::ji('vampire'), 'Assignment 05')`"
+subtitle: "Collinearity and Dimension Reduction"
+description: |
+  This goal of this assignment is to give you experience diagnosing collinearity and using principal components analysis to create orthogonal composites that can be used in a regression model.
+author: andy
+date: 09-29-2021
+output:
+  distill::distill_article:
+    self_contained: true
+categories:
+  - Assignments
+---
+
+
+In 2018, Iowa attorneys rated the 64 judges who were up for election on 12 different attributes in a Judicial Performance Review. They also indicated whether or not the judge should be retained. In this assignment, you are going to examine whether those ratings we can explain variation in the percentage of attorneys who endorsed retention using the data provided in the file *iowa-judges.csv*.
+
+- [[CSV]](https://raw.githubusercontent.com/zief0002/epsy-8264/master/data/iowa-judges.csv)
+- [[Data Codebook]](http://zief0002.github.io/epsy-8264/codebooks/iowa-judges.html)
+
+<br />
+
+# Instructions
+
+Submit a printed document of your responses to the following questions. Please adhere to the following guidelines for further formatting your assignment:
+
+- All plots should be resized so that they do not take up more room than necessary. 
+- All figures and tables should have a name (e.g., Figure 1) *and* an appropriate caption.
+
+In questions that ask you to "use matrix algebra" to solve the problem, you can either show your syntax and output from carrying out the matrix operations, or you can use Equation Editor to input the matrices involved in your calculations.
+
+This assignment is worth 22 points.
+
+<br />
+
+# Exploratory Analysis
+
+1. Compute and report the correlation matrix of the 12 predictors.
+
+2. Based on the correlations, comment on whether there may be any potential collinearity problems. Explain.
+
+3. Compute and report the eigenvalues for the correlation matrix you created in Question 1.
+
+4. Based on the eigenvalues, comment on whether there may be any potential collinearity problems. Explain.
+
+<br />
+
+# Initial Model
+
+Since the ratings are assigned based on different numbers of attorneys, use a weight equal to the number of respondents to fit a WLS model that regresses the standardized retention percentage on the 12 standardized predictors. 
+
+5. Report the coefficient-level output, including the estimated coefficients (beta weights), standard errors, *t*-values, and *p*-values. 
+
+6. Based on the VIF values, comment on whether there may be any potential collinearity problems. Explain.
+
+7. Using the predictor with the largest VIF value, use the VIF value to indicate how the standard error for this predictor will be impacted by the collinearity.
+
+<br />
+
+# Principal Components Analysis
+
+In this section you are going to carry out the principal components analysis by using singular value decomposition on *the correlation matrix of the predictors*.
+
+8. Compute the composite score based on the first principal component for the first observation (Judge John J. Bauercamper). Show your work.
+
+Read the section on scree plots (Section 4) [in this web article](https://medium.com/@bioturing/how-to-read-pca-biplots-and-scree-plots-186246aae063).  
+
+9. Create a scree plot showing the eigenvalues for the 12 principal components from the previous analysis.
+
+10. Using the "elbow criterion", how many principal components are sufficient to describe the data? Explain by referring to your scree plot.
+
+11. Using the "Kaiser criterion", how many principal components are sufficient to describe the data? Explain.
+
+12. Using the "80% proportion of variance criterion", how many principal components are sufficient to describe the data? Explain.
+
+<br />
+
+
+# Revisit the Regression Analysis
+
+The evidence from the previous section suggests that the first two principal components are sufficient to explain the variation in the predictor space.
+
+13. By examining the pattern of correlations (size and directions) in the first two principal components, identify the construct defined by the composites of these two components. Explain.
+
+14. Fit the regression analysis using the first two principal components as predictors of retention percentage. (Don't forget your weights.) Create and report the plot of the residuals vs. fitted values. What does this suggest about the validity of the linearity assumption?
+
+15. Again, fit the same regression model using the first two principal components as predictors of retention percentage, but this time also include a quadratic effect of the first principal component. Create and report the plot of the residuals vs. fitted values. What does this suggest about the validity of the linearity assumption?
+
+16. Interpret the effect of the first principal component from this model.
+
+<br />
+
+# Influential Values
+
+17. Based on Cook's *D*, identify the name of any judges (and their Cook's *D* value) that are influential observations.
+
+18. Remove any influential observations identified in Question 17. Re-fit the same model. Based on comparing the model- and coefficient-level output for this model and the model which included all the observations, comment on how these observations were influencing the $R^2$ value, the estimate of the quadratic effect of PC1, and the effect of PC2.
+
+<br />

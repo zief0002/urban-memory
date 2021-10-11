@@ -1,0 +1,27 @@
+---
+title: "`r paste(emo::ji('book'), 'Principal Components Analysis via Singular Value Decomposition')`"
+description: |
+  Reading
+author:
+  - name: andy
+    url: {}
+date: 10-04-2021
+output:
+  distill::distill_article:
+    self_contained: true
+categories:
+  - Reading
+---
+
+
+Read the following:
+
+- Rodriguez, M., &amp; Zieffler, A. (2021). [Singular value decomposition](https://zief0002.github.io/matrix-algebra/singular-value-decompostion.html). In *Matrix algebra for educational scientists*. 
+
+<br />
+
+### Additional Resources
+
+- Gundersen, G. (2018). [Singular value decomposition as simply as possible](http://gregorygundersen.com/blog/2018/12/10/svd/).
+- Wang, Z. (2019). [PCA and SVD explained with numpy](https://towardsdatascience.com/pca-and-svd-explained-with-numpy-5d13b0d2a4d8).
+- Wikipdeia. (2020). [Singular value decomposition](https://en.wikipedia.org/wiki/Singular_value_decomposition).

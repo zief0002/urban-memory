@@ -10,7 +10,7 @@ library(patchwork)
 
 
 # Load residual_plots() function
-source("../../scripts/residual_plots.R")
+source("/Users/zief0002/Dropbox/My Mac (CEHD-m1752583)/Documents/github/epsy-8264/scripts/residual_plots.R")
 
 
 
@@ -51,11 +51,16 @@ tidy(lm.1, conf.int = 0.95)
 ### Toy example showing model mis-specification
 ##################################################
 
+# Create vector of outcomes
+y = c(15, 15, 10, 15, 30)
+
+
 # Create design matrix
-X = data.frame(
-  b_0 = rep(1, 5),
-  employed = c(1, 1, 0, 0, 1),
-  not_employed = c(0, 0, 1, 1, 0)
+X = matrix(
+  data = c(rep(1, 5),
+         c(1, 1, 0, 0, 1),
+         c(0, 0, 1, 1, 0)
+  ), ncol = 3
 )
 
 
@@ -64,23 +69,30 @@ X
 
 
 # Check rank of matrix
-Matrix::rankMatrix(X)
+Matrix::rankMatrix(X2)
 
+X2 = t(X) %*% X
 
-# Create vector of outcomes
-Y = c(15, 15, 10, 15, 30)
+solve(t(X) %*% X)
+
+solve(t(X) %*% X) %*% t(X) %*% y
+
 
 # Create data frame of Y and X
-my_data = cbind(Y, X)
+my_data = data.frame(
+  y = y,
+  employed = c(1, 1, 0, 0, 1),
+  not_employed = c(0, 0, 1, 1, 0)
+  )
 my_data
 
 
 # Coefficients (including all three terms)
-coef(lm(Y ~ 1 + employed + not_employed, data = my_data))
+tidy(lm(y ~ 1 + employed + not_employed, data = my_data))
 
 
 # Coefficients (omitting intercept)
-coef(lm(Y ~ -1 + employed + not_employed, data = my_data))
+tidy(lm(y ~ -1 + employed + not_employed, data = my_data))
 
 
 
@@ -131,7 +143,7 @@ r_xx
 
 
 # Compute eigenvalues and eigenvectors
-eigen(r_xx)
+eigen(r_xx)$values
 
 
 # Sum of reciprocal of eigenvalues

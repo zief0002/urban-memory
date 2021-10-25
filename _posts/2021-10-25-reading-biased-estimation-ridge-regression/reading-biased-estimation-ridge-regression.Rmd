@@ -1,0 +1,32 @@
+---
+title: "`r paste(emo::ji('book'), 'Biased Estimation: Ridge Regression')`"
+description: |
+  Reading
+author:
+  - name: andy
+    url: {}
+date: 10-25-2021
+output:
+  distill::distill_article:
+    self_contained: true
+categories:
+  - Reading
+---
+
+
+Read the following:
+
+- Fortmann-Roe, S. (2012). [Understanding the bias-variance tradeoff](http://scott.fortmann-roe.com/docs/BiasVariance.html).
+
+<br />
+
+### Additional Resources
+
+- Cross-Validated. (2014). [Why is ridge regression called "ridge", why is it needed, and what happens when $\lambda$ goes to infinity?](https://stats.stackexchange.com/questions/151304/why-is-ridge-regression-called-ridge-why-is-it-needed-and-what-happens-when).
+- James, G., Witten, D., Hastie, T., &amp; Tibshirani, R. (2013). [An introduction to statistical learning: with applications in R](https://www-bcf.usc.edu/~gareth/ISL/). New York: Springer.
+- [Statistical Learning MOOC](https://lagunita.stanford.edu/courses/HumanitiesSciences/StatLearning/Winter2016/about) taught by Hastie and Tibshirani
+
+
+
+
+

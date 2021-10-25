@@ -6,15 +6,15 @@
       "description": "This blog includes content for the Fall 2021 section of EPsy 8264.",
       "author": [],
       "contents": "\n\n\n\nInstructor: Andrew Zieffler Email: zief0002@umn.edu Physical Office: Education Sciences Building 178 Office Hours: Wednesday 9:00 AM–10:00 AM; and by appointment Virtual Office: If you want to meet virtually, send me a Google calendar invite and include a Zoom link.\n\n\n\n\n\n\n\n\n\n",
-      "last_modified": "2021-10-11T10:18:00-05:00"
+      "last_modified": "2021-10-25T11:04:05-05:00"
     },
     {
       "path": "assignments.html",
       "title": "Assignments",
       "description": "Assignment due dates.",
       "author": [],
-      "contents": "\nBelow are the due dates for the assignments, as well as links to each assignment. The due dates may change at the instructor’s discretion. Any revised due dates will be announced in class and posted to the website.\n\n\nAssignment\n\n\nDue Date\n\n\nHTML\n\n\n🐧 Assignment 01: Matrix Algebra for Linear Regression \n\n\nSept. 28\n\n\n\n\n\n🦒 Assignment 02: Simulating from the Regression Model\n\n\nOct. 07\n\n\n\n\n\n🦄 Assignment 03: Regression Diagnostics\n\n\nOct. 14\n\n\n\n\n\n🐉 Assignment 04: Using WLS to Model Data with Outliers\n\n\nOct. 21\n\n\n\n\n\n🧛 Assignment 05: Collinearity and Dimension Reduction\n\n\nNov. 02\n\n\n\n\n\nAssignment 06: Shrinkage Methods\n\n\nNov. 09\n\n\n\n\n\nAssignment 07: Cross-Validation\n\n\nNov. 23\n\n\n\n\n\nAssignment 08: Bootstrapping and Prediction\n\n\nDec. 16\n\n\n\n\n\n\n\n",
-      "last_modified": "2021-10-11T10:18:03-05:00"
+      "contents": "\nBelow are the due dates for the assignments, as well as links to each assignment. The due dates may change at the instructor’s discretion. Any revised due dates will be announced in class and posted to the website.\n\n\nAssignment\n\n\nDue Date\n\n\nHTML\n\n\n🐧 Assignment 01: Matrix Algebra for Linear Regression \n\n\nSept. 28\n\n\n\n\n\n🦒 Assignment 02: Simulating from the Regression Model\n\n\nOct. 07\n\n\n\n\n\n🦄 Assignment 03: Regression Diagnostics\n\n\nOct. 14\n\n\n\n\n\n🐉 Assignment 04: Using WLS to Model Data with Outliers\n\n\nOct. 21\n\n\n\n\n\n🧛 Assignment 05: Collinearity and Dimension Reduction\n\n\nNov. 02\n\n\n\n\n\n🐐 Assignment 06: Ridge Regression\n\n\nNov. 09\n\n\n\n\n\nAssignment 07: Cross-Validation\n\n\nNov. 23\n\n\n\n\n\nAssignment 08: Bootstrapping and Prediction\n\n\nDec. 16\n\n\n\n\n\n\n\n",
+      "last_modified": "2021-10-25T11:04:07-05:00"
     },
     {
       "path": "data.html",
@@ -22,22 +22,22 @@
       "description": "Datasets and codebooks used in the course.",
       "author": [],
       "contents": "\n\n\nName\n\n\nData\n\n\nCodebook\n\n\nbluegills.csv\n\n\n  \n\n\n\n\n\n\n\ncanadian-prestige.csv\n\n\n  \n\n\n\n\n\n\n\ncontraception.csv\n\n\n  \n\n\n  \n\n\ncredit.csv\n\n\n  \n\n\n  \n\n\ndavis.csv\n\n\n  \n\n\n\n\n\n\n\ndavis-corrected.csv\n\n\n  \n\n\n\n\n\n\n\nduff.csv\n\n\n  \n\n\n\n\n\n\n\nduncan.csv\n\n\n  \n\n\n\n\n\n\n\neducation-expenditures.csv\n\n\n  \n\n\n\n\n\n\n\nequal-education-opportunity.csv\n\n\n  \n\n\n\n\n\n\n\nevaluations.csv\n\n\n  \n\n\n  \n\n\nfake-piecewise-data.csv\n\n\n  \n\n\n\n\n\n\n\ngalton.csv\n\n\n  \n\n\n\n\n\n\n\ngrade_data.csv\n\n\n  \n\n\n\n\n\n\n\nhouston.csv\n\n\n  \n\n\n\n\n\n\n\niowa-judges.csv\n\n\n  \n\n\n  \n\n\nloess.csv\n\n\n  \n\n\n\n\n\n\n\nmcycle.csv\n\n\n  \n\n\n  \n\n\nmpls-violent-crime.csv\n\n\n  \n\n\n  \n\n\npolynomial-example.csv\n\n\n  \n\n\n\n\n\n\n\nrelate.csv\n\n\n  \n\n\n\n\n\n\n\nslid.csv\n\n\n  \n\n\n\n\n\n\n\nstack-1979.csv\n\n\n  \n\n\n  \n\n\nstates-2019.csv\n\n\n  \n\n\n  \n\n\ntokyo-water-use.csv\n\n\n  \n\n\n\n\n\n\n\n\n\n",
-      "last_modified": "2021-10-11T10:18:04-05:00"
+      "last_modified": "2021-10-25T11:04:09-05:00"
     },
     {
       "path": "index.html",
       "title": "EPsy 8264",
       "author": [],
       "contents": "\nWelcome\nWelcome to EPsy 8264: Advanced Multiple Regression Analysis. This is an advanced seminar for doctoral students in education covering a diverse set of regression methodologies. We will begin with a brief review of the General Linear Model and establishment of a mathematical foundation for the estimation of regression coefficients and standard errors in these models through the use of matrix algebra. The course will also cover more advanced modeling techniques, such as regression diagnostics, WLS and sandwich estimation, PCA, shrinkage methods, model selection and local models.\n\n\n\nClassroom\nTuesday/Thursday (9:45–11:00): Appleby Hall 102\n\nSyllabus\nThe course syllabus is available here.\nMessage from Snoop Dogg about the syllabus\n\nTextbooks\nThe course textbook is available via the University of Minnesota library.\nFox, J. (2013). A mathematical primer for social statistics. Sage.\n\n\n\n\n",
-      "last_modified": "2021-10-11T10:18:07-05:00"
+      "last_modified": "2021-10-25T11:04:12-05:00"
     },
     {
       "path": "schedule.html",
       "title": "Calendar",
       "description": "Tentative calendar of topics.",
       "author": [],
-      "contents": "\nThe calendar below lists the tentative course topics. The dates listed are subject to change at the instructor’s discretion.\n\n\n\n\nDate\n\n\nReading\n\n\nTopic\n\n\nNotes\n\n\n \n\n\nSept. 07\n\n\n\n\n\nWelcome to EPsy 8264\n\n\n \n\n\nUnit 01: Mathematical and Computational Foundations\n\n\n \n\n\nSept. 09\n\n\n\n\n\nIntroduction to Matrix Algebra\n\n\n\n\n\n \n\n\nSept. 14\n\n\n \n\n\nSept. 16\n\n\n\n\n\nOLS Regression using Matrices and its Properties\n\n\n\n\n\n \n\n\nSept. 21\n\n\nUnit 02: Simulation\n\n\n \n\n\nSept. 23\n\n\n\n\n\nSimulating from the Regression Model\n\n\n\n\n\n \n\n\nSept. 28\n\n\n \n\n\nSept. 30\n\n\nUnit 03: Regression Diagnostics\n\n\n \n\n\nOct. 05\n\n\n\n\n\nRegression Diagnostics\n\n\n\n\n\n \n\n\nOct. 07\n\n\nUnit 04: Tools for Dealing with Heteroskedasticity\n\n\n \n\n\nOct. 12\n\n\n\n\n\nVariance Stabilizing Transformations\n\n\n\n\n\n \n\n\nOct. 14\n\n\n\n\n\nWeighted Least Squares (WLS) and Sandwich Estimation\n\n\n\n\n\nUnit 05: Diagnosing Collinearity and Tools for Dealing with It\n\n\n \n\n\nOct. 19\n\n\n\n\n\nDiagnosing Collinearity\n\n\n\n\n\n \n\n\nOct. 21\n\n\n\n\n\nPrincipal Components Analysis via Spectral Decomposition\n\n\n\n\n\n \n\n\nOct. 26\n\n\n\n\n\nPrincipal Components Analysis via Singular Value Decomposition\n\n\n\n\n\n\n\n",
-      "last_modified": "2021-10-11T10:18:08-05:00"
+      "contents": "\nThe calendar below lists the tentative course topics. The dates listed are subject to change at the instructor’s discretion.\n\n\n\n\nDate\n\n\nReading\n\n\nTopic\n\n\nNotes\n\n\n \n\n\nSept. 07\n\n\n\n\n\nWelcome to EPsy 8264\n\n\n \n\n\nUnit 01: Mathematical and Computational Foundations\n\n\n \n\n\nSept. 09\n\n\n\n\n\nIntroduction to Matrix Algebra\n\n\n\n\n\n \n\n\nSept. 14\n\n\n \n\n\nSept. 16\n\n\n\n\n\nOLS Regression using Matrices and its Properties\n\n\n\n\n\n \n\n\nSept. 21\n\n\nUnit 02: Simulation\n\n\n \n\n\nSept. 23\n\n\n\n\n\nSimulating from the Regression Model\n\n\n\n\n\n \n\n\nSept. 28\n\n\n \n\n\nSept. 30\n\n\nUnit 03: Regression Diagnostics\n\n\n \n\n\nOct. 05\n\n\n\n\n\nRegression Diagnostics\n\n\n\n\n\n \n\n\nOct. 07\n\n\nUnit 04: Tools for Dealing with Heteroskedasticity\n\n\n \n\n\nOct. 12\n\n\n\n\n\nVariance Stabilizing Transformations\n\n\n\n\n\n \n\n\nOct. 14\n\n\n\n\n\nWeighted Least Squares (WLS) and Sandwich Estimation\n\n\n\n\n\nUnit 05: Diagnosing Collinearity and Tools for Dealing with It\n\n\n \n\n\nOct. 19\n\n\n\n\n\nDiagnosing Collinearity\n\n\n\n\n\n \n\n\nOct. 21\n\n\n\n\n\nPrincipal Components Analysis via Spectral Decomposition\n\n\n\n\n\n \n\n\nOct. 26\n\n\n\n\n\nPrincipal Components Analysis via Singular Value Decomposition\n\n\n\n\n\n \n\n\nOct. 28\n\n\n\n\nNO CLASS: Mental Health Day\n\n\n\n\n \n\n\nNov. 02\n\n\n\n\n\nBiased Estimation: Ridge Regression\n\n\n\n\n\n \n\n\nNov. 04\n\n\n\n\n",
+      "last_modified": "2021-10-25T11:04:13-05:00"
     }
   ],
   "collections": ["posts/posts.json"]

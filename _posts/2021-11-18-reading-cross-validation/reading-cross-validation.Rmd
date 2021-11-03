@@ -8,7 +8,8 @@ author:
 date: 11-18-2021
 output:
   distill::distill_article:
-    self_contained: true
+    self_contained: false
+draft: true
 categories:
   - Reading
 ---

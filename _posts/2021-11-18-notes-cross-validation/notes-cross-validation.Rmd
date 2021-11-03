@@ -8,13 +8,14 @@ author:
 date: 11-18-2021
 output:
   distill::distill_article:
-    self_contained: true
+    self_contained: false
     code_folding: false
     css: ['../../style/syntax.css', '../../style/notes.css']
 bibliography: '../../style/epsy8264.bib'
 csl: '../../style/apa-single-spaced.csl'
 categories:
-  - Notes    
+  - Notes
+draft: true
 ---
 
 ```{r knitr_init, echo=FALSE, cache=FALSE, message=FALSE}

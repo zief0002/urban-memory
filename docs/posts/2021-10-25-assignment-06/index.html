@@ -463,7 +463,7 @@ d-title {
 
 </style>
 
-<script src="../../site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="../../site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <link href="../../site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet"/>
 <link href="../../site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet"/>
 <script src="../../site_libs/headroom-0.9.4/headroom.min.js"></script>
@@ -1870,7 +1870,10 @@ function init_distill() {
 
     // hoverable references
     $('span.citation[data-cites]').each(function() {
-      var refHtml = $('#ref-' + $(this).attr('data-cites')).html();
+      var refs = $(this).attr('data-cites').split(" ");
+      var refHtml = refs.map(function(ref) {
+        return "<p>" + $('#ref-' + ref).html() + "</p>";
+      }).join("\n");
       window.tippy(this, {
         allowHTML: true,
         content: refHtml,
@@ -2092,7 +2095,7 @@ body {
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"🐐 Assignment 06","description":"This goal of this assignment is to give you experience using ridge regression for alleviating interpretability problems that arise because of collinearity.","authors":[{"author":"andy","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2021-10-25T00:00:00.000+00:00","citationText":"andy, 2021"}
+{"title":"🐐 Assignment 06","description":"This goal of this assignment is to give you experience using ridge regression for alleviating interpretability problems that arise because of collinearity.","authors":[{"author":"andy","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2021-10-25T00:00:00.000-05:00","citationText":"andy, 2021"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2161,9 +2164,9 @@ body {
 </ol>
 <p><br /></p>
 <h1 id="finding-an-optimal-lambda-value">Finding an Optimal <span class="math inline">\(\lambda\)</span> Value</h1>
-<p>In this section, you will find a <span class="math inline">\(\lambda\)</span> value to use in a ridge regression analysis to alleviate estimation problems associated with the near perfect collinearity.</p>
+<p>In this section, you will find a <span class="math inline">\(\lambda\)</span> value to use in a ridge regression analysis to alleviate estimation problems associated with the near perfect collinearity. Consider all <span class="math inline">\(\lambda\)</span> values between 0 and 10 (inclusive). Make sure that you can identify <span class="math inline">\(\lambda\)</span> to the nearest 1000th.</p>
 <ol start="7" type="1">
-<li><p>Use the AIC to help you select the <span class="math inline">\(\lambda\)</span> value to use in the ridge regression. What is the value of <span class="math inline">\(\lambda\)</span> you will use in the ridge regression? Show your work.</p></li>
+<li><p>Use the AIC to help you select the optimal <span class="math inline">\(\lambda\)</span> value to use in the ridge regression. What is the value of <span class="math inline">\(\lambda\)</span> you will use in the ridge regression? Show your work.</p></li>
 <li><p>Create a ridge trace plot that includes the values of <span class="math inline">\(\lambda\)</span> you examined in Question 7. Also include a guideline indicating the value of <span class="math inline">\(\lambda\)</span> chosen by the AIC.</p></li>
 <li><p>Use the ridge trace plot you created to indicate the direction of bias for each of the coefficients. Explain.</p></li>
 </ol>

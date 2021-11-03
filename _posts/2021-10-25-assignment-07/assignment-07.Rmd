@@ -1,0 +1,148 @@
+---
+title: "`r paste(emo::ji('bee'), 'Assignment 07')`"
+subtitle: "Cross-Validation"
+description: |
+  This goal of this assignment is to give you experience using cross-validation methods in regression analyses.
+author: andy
+date: 10-25-2021
+output:
+  distill::distill_article:
+    self_contained: true
+categories:
+  - Assignments
+---
+
+# Instructions
+
+Submit a printed document of your responses to the following questions. Please adhere to the following guidelines for further formatting your assignment:
+
+- All plots should be resized so that they do not take up more room than necessary. 
+- All figures and tables should have a name (e.g., Figure 1) *and* an appropriate caption.
+
+In questions that ask you to "use matrix algebra" to solve the problem, you can either show your syntax and output from carrying out the matrix operations, or you can use Equation Editor to input the matrices involved in your calculations.
+
+This assignment is worth 20 points.
+
+<br />
+
+# Part I: Minneapolis Violent Crime
+
+For the first part of this assignment, you will use the data provided in the file *mpls-violent-crime.csv* to build a model that examines the trend in violent crime rate over time.
+
+- [[CSV]](https://raw.githubusercontent.com/zief0002/epsy-8264/master/data/mpls-violent-crime.csv)
+- [[Data Codebook]](http://zief0002.github.io/epsy-8264/codebooks/mpls-violent-crime.html)
+
+<br />
+
+
+
+### Preparation
+
+Create a variable that indicates the number of years since 2000. Use this variable in all analyses for Part I rather than the `year` variable.
+
+<br />
+
+### Description
+
+1. Create a scatterplot showing the violent crime rate as a function of time.  
+
+2. Based on the plot, describe the trend in violent crime rate over time.
+
+3. If you were going to fit a polynomial model to these data, what degree polynomial would you fit? Explain.
+
+<br />
+
+
+### Use p-Value methods for Model Selection
+
+4. Fit a series of polynomial models starting with a linear model, and then models that also include higher order polynomials that allow you to evaluate your response to Question #3. Be sure to fit models up to degree $k+1$, where $k$ is the degree you hypothesized in Question #3. Analyze each of the polynomial terms (including the linear term) by using a series of nested *F*-tests. Report these results in an ANOVA table. (Note: If you need a refresher on fitting polynomial models and carrying out a nested *F*-test, see the [Polynomial Regression notes](https://zief0002.github.io/epsy-8252/#schedule) from EPsy 8252.)
+
+5. Based on these results, which polynomial model would you adopt? Explain.
+
+<br />
+
+
+### Using LOOCV for Model Selection
+
+In this section of the assignment, you are going to use LOOCV to evaluate the MSE for the same set of polynomial models you evaluated in Question #4. 
+
+6. Write and include syntax that will carry out the LOOCV.
+
+7. Report the cross-validated MSE for each of the models in your set of polynomial models.
+
+8. Based on these results, which degree polynomial model should be adopted? Explain.
+ 
+<br />
+
+
+# Part II: Course Evaluations
+
+For the second part of this assignment, you will use the data provided in the file *evaluations.csv* to build a model that predicts variation in course evaluation scores.
+
+- [[CSV]](https://raw.githubusercontent.com/zief0002/epsy-8264/master/data/evaluations.csv)
+- [[Data Codebook]](http://zief0002.github.io/epsy-8264/codebooks/evaluations.html)
+
+<br />
+
+
+### Preparation
+
+Begin by fitting a model that predicts average course evaluation score using the following predictors: beauty, number of courses for which the professor has evaluations, whether the professor is a native English speaker, and whether the professor is female.
+
+<br />
+
+
+### Description
+
+9. Using average course evaluation scores (*y*), compute the total sum of squares (SST). Show your work.
+
+10. Using average course evaluation scores (*y*) and the predicted values from the model ($\hat{y}$), compute the sum of squared errors (SSE). Show your work.
+
+11. Compute the model $R^2$ value using the formula: $1 - \frac{\mathrm{SSE}}{\mathrm{SST}}$.
+
+<br />
+
+
+### Using k-Fold Cross-Validation to Estimate $R^2$
+
+As we know, the estimate for $R^2$ is biased. We can obtain a better estimate of $R^2$ by using cross-validation. You will use 5-fold cross-validation to estimate the $R^2$ value. The algorithm for this will be:
+
+- Randomly divide the beauty data into 5 folds.
+- Hold out 1 fold as your validation data and use the remaining 4 folds as your training data.
+  + Fit the model to the training data.
+  + Use the estimated coefficients from those fits to compute $\hat{y}$ values using the validation data. 
+  + Compute the SST and SSE values for the validation data, and use those to compute $R^2$ based on the formula $1 - \frac{\mathrm{SSE}}{\mathrm{SST}}$. (Note that sometimes the $R^2$ may be negative when we compte it in this manner.)
+- Repeat for each fold.
+- Compute the cross-validated $R^2$ by finding the mean of the five $R^2$ from the cross-validations.
+
+
+12. Write and include syntax that will carry out the 5-fold cross-validation. In this syntax use `set.seed(1000)` so that you and the answer key will get the same results. (This website may be useful in using the **purrr** package to obtain the *y*- and $\hat{y}$-values in order to compute the SST and SSE values: https://drsimonj.svbtle.com/k-fold-cross-validation-with-modelr-and-broom)
+
+13. Report the five $R^2$ values from your analysis and the cross-validated $R^2$ value. 
+
+14. How does this value compare to the $R^2$ value you computed in Question #11, based on the data. 
+
+15. Explain why the cross-validated estimate of $R^2$ is a better estimate than the data-based $R^2$.
+
+<br />
+
+
+# Part III: Credit Balance
+
+For the third part of this assignment, you will again use the file the data provided in the file *credit.csv* to build a model that predicts customers' credit card balance. Do not forget to standardize all the variables.
+
+- [[CSV]](https://raw.githubusercontent.com/zief0002/epsy-8264/master/data/credit.csv)
+- [[Data Codebook]](http://zief0002.github.io/epsy-8264/codebooks/credit.html)
+
+<br />
+
+
+16. Use the `lm.ridge()` function to fit the same sequence of $\lambda$ values you used in Question #7 from Assignment 6. Running `select()` on this output, provides $\lambda$ values based on different criteria. Report the $\lambda$ value associated with the generalized cross-validation (GCV) metric.
+
+17. Re-do Question #7 from Assignment 6, except this time, select the optimal $\lambda$ value based on using the AICc. How does this compare to the $\lambda$ value you found using the GCV metric from the previous question? (Show your syntax.)
+
+18. Compute the coefficients, standard errors based on the ridge regression model based on the $\lambda$ value you identified in Question #17. Also compute the *t*-values, and *p*-values for each coefficient. Report all of these in a coefficient table.
+
+
+
+

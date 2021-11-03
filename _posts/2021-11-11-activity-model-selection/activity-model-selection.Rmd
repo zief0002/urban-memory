@@ -1,0 +1,41 @@
+---
+title: "`r paste(emo::ji('muscle'), 'Model Selection (In-Class Activity)')`"
+description: |
+  An activity in model selection
+author:
+  - name: andy
+    url: {}
+date: 11-11-2021
+output:
+  distill::distill_article:
+    self_contained: true
+    code_folding: false
+    css: ['../../style/syntax.css']
+bibliography: '../../style/epsy8264.bib'
+csl: '../../style/apa-single-spaced.csl'
+categories:
+  - Notes    
+---
+
+The data in *states-2019.csv* include statistics collected from Wikipedia, the 2019 American Community Survey, and the National Centers for Environmental Information. 
+
+- [[CSV]](https://raw.githubusercontent.com/zief0002/epsy-8264/master/data/states-2019.csv)
+- [[Data Codebook]](http://zief0002.github.io/epsy-8264/codebooks/states-2019.html)
+
+<br />
+
+Your goal is to use the data (and everything you've learned so far in your coursework) to create a model to predict variation in life expectancy. Keep track of the process you use to create this model, including:
+
+- Which predictors should be included in the model? 
+    + What is the criteria/evidence you are using to make these decisions?
+- When in the process do you identify problematic observations?
+    + Do you remove those problematic observations or not? 
+    + What criteria/evidence are you using to make these decisions?
+- When in the process do you examine the model for collinearity?
+    + What is the criteria/evidence you are using to make this decision?
+    + What (if anything) will you do to fix this?
+- When in the process do you examine the tenability of assumptions?
+
+Also pay attention to when in the process you are making decisions based on sample evidence (graphs/statistics) versus when those decisions are being made using statistical inference (hypothesis tests, confidence intervals). **Your group will be asked to report back to the class on the process, criteria, and evidence you used.**
+
+

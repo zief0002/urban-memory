@@ -42,7 +42,7 @@ options(scipen=5)
 
 In 1964, the US Congress passed the Civil Rights Act and also ordered a survey of school districts to evaluate the availability of equal educational opportunity in public education. The results of this survey were reported on in @Coleman:1966 and @Mosteller:1972. We will use a subset of the data collected (in *equal-educational-opportunity.csv*) to mimic one of the original regression analyses performed; examining whether the level of school facilities was an important predictor of student achievement after accounting for the variation in faculty credentials and peer influence.
 
-- [[CSV]](https://raw.githubusercontent.com/zief0002/epsy-8264/master/data/equal-educational-opportunity.csv)
+- [[CSV]](https://raw.githubusercontent.com/zief0002/epsy-8264/master/data/equal-education-opportunity.csv)
 - [[R Script File]](https://raw.githubusercontent.com/zief0002/epsy-8264/master/scripts/f21-12-biased-estimation-ridge-regression.R)
 
 The data come from a random sample of 70 schools in 1965. The variables, which have all been mean-centered and standardized, include:
@@ -65,6 +65,7 @@ head(eeo)
 
 <br />
 
+
 # Biased Estimation
 
 The [Gauss-Markov Theorem](https://en.wikipedia.org/wiki/Gauss%E2%80%93Markov_theorem) posits many attractive features of the OLS regression model. Two of these properties are that the OLS estimators will be unbiased and that the sampling variances of the coefficients are as small as possible^[At least within the class of linear, unbiased estimators.]. In our example, the fitted model using faculty credentials, peer influence, and school facilities to predict variation in achievement showed strong evidence of collinearity; which makes the SEs super large even if they are the minimum of all possible linear, unbiased estimates.  
@@ -76,6 +77,7 @@ The bias--variance tradeoff is a commonplace, especially in prediction models. Y
 </aside>
 
 <br />
+
 
 # Ridge Regression
 
@@ -301,7 +303,8 @@ To create this plot, we fit a ridge regression that includes a sequence of value
 
 ```{r fig.width=8, fig.height=6, out.width='70%', fig.cap="Ridge plot showing the size of the standardized regression coefficients for $\\lambda$ values between 0 (OLS) and 100."}
 # Fit ridge model across several lambda values
-ridge_models = lm.ridge(achievement ~ -1 + faculty + peer + school, data = z_data, lambda = seq(from = 0, to = 100, by = 0.01))
+ridge_models = lm.ridge(achievement ~ -1 + faculty + peer + school, data = z_data, 
+                        lambda = seq(from = 0, to = 100, by = 0.01))
 
 # Get tidy() output
 ridge_trace = tidy(ridge_models)
@@ -399,7 +402,8 @@ A $\lambda$ value of 22.36 produces the smallest AIC value, so this is the $\lam
 
 ```{r}
 # Re-fit ridge regression using lambda = 22.36
-ridge_smallest_aic = lm.ridge(achievement ~ -1 + faculty + peer + school, data = z_data, lambda = 22.36)
+ridge_smallest_aic = lm.ridge(achievement ~ -1 + faculty + peer + school, data = z_data, 
+                              lambda = 22.36)
 
 # View coefficients
 tidy(ridge_smallest_aic)

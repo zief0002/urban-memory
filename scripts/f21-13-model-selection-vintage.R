@@ -15,15 +15,13 @@ library(tidyverse)
 
 # Import and view data
 usa = read_csv("data/states-2019.csv")
-head(usa)
+usa
 
 
-# Create data frame that includes all rows/columns except the state names
-usa2 = usa[ , -1]
-
-
-# Create standardized variables after removing state names
-z_usa = scale(usa[ , -1]) %>%
+# Create data frame of standardized variables after removing state names
+z_usa = usa %>%
+  select(-state) %>% 
+  scale() %>%
   data.frame()
 
 
@@ -32,7 +30,7 @@ z_usa = scale(usa[ , -1]) %>%
 ### Fit main effects model with all predictors
 ##################################################
 
-lm.all = lm(life_expectancy ~ ., data = usa2)
+lm.all = lm(life_expectancy ~ ., data = z_usa)
 
 glance(lm.all)
 tidy(lm.all)
@@ -51,7 +49,7 @@ tidy(lm.all)
 ##################################################
 
 # Step 0: Fit intercept-only model
-# tidy(lm(life_expectancy ~ 1, data = usa2))
+# tidy(lm(life_expectancy ~ 1, data = z_usa))
 
 
 # Step 1: Fit all one-predictor models

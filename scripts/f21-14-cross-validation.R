@@ -3,8 +3,6 @@
 ##################################################
 
 library(AICcmodavg)
-library(car)
-library(corrr)
 library(modelr)
 library(patchwork)
 library(tidyverse)
@@ -17,12 +15,14 @@ library(tidymodels) # Loads broom, rsample, parsnip, recipes, workflow, tune, ya
 ### Import and prepare data
 ##################################################
 
-usa = read_csv("data/states-2019.csv")
-head(usa)
+usa = read_csv("https://raw.githubusercontent.com/zief0002/epsy-8264/master/data/states-2019.csv")
+usa
 
 
-# Create standardized variables after removing state names
-z_usa = scale(usa[ , -1]) %>%
+# Create data frame of standardized variables after removing state names
+z_usa = usa %>%
+  slect(-state) %>%
+  scale(center = TRUE, scale = TRUE) %>%
   data.frame()
 
 
@@ -73,44 +73,60 @@ sum((validate$life_expectancy - yhat_4) ^ 2) / nrow(validate)
 
 
 ##################################################
-### Leave-one-out cross-validation (LOOCV)
+### Leave-one-out cross-validation (LOOCV) -- FUNCTION
 ##################################################
 
-# Set up empty vector to store results
-mse_1 = rep(NA, 52)
-mse_2 = rep(NA, 52)
-mse_3 = rep(NA, 52)
-mse_4 = rep(NA, 52)
-
-
-# Loop through the cross-validation
-for(i in 1:nrow(z_usa)){
-  train = z_usa %>% filter(row_number() != i)
-  validate = z_usa %>% filter(row_number() == i)
+# Function to compute CV-MSE for LOOCV
+cv_mse_i = function(case_index){
   
+  # Create training and validation data sets
+  train = z_usa %>% filter(row_number() != case_index)
+  validate = z_usa %>% filter(row_number() == case_index)
+  
+  # Fit models to training data
   lm.1 = lm(life_expectancy ~ -1 + income,                                    data = train)
   lm.2 = lm(life_expectancy ~ -1 + income + population,                       data = train)
   lm.3 = lm(life_expectancy ~ -1 + income + population + illiteracy,          data = train)
   lm.4 = lm(life_expectancy ~ -1 + income + population + illiteracy + murder, data = train)
   
+  # Compute fitted value for validation data
   yhat_1 = predict(lm.1, newdata = validate)
   yhat_2 = predict(lm.2, newdata = validate)
   yhat_3 = predict(lm.3, newdata = validate)
   yhat_4 = predict(lm.4, newdata = validate)
   
-  mse_1[i] = (validate$life_expectancy - yhat_1) ^ 2
-  mse_2[i] = (validate$life_expectancy - yhat_2) ^ 2
-  mse_3[i] = (validate$life_expectancy - yhat_3) ^ 2
-  mse_4[i] = (validate$life_expectancy - yhat_4) ^ 2
+  # Compute CV-MSE_i for each model
+  cv_mse_1 = (validate$life_expectancy - yhat_1) ^ 2
+  cv_mse_2 = (validate$life_expectancy - yhat_2) ^ 2
+  cv_mse_3 = (validate$life_expectancy - yhat_3) ^ 2
+  cv_mse_4 = (validate$life_expectancy - yhat_4) ^ 2
   
+  # Output a data frame
+  return(data.frame(cv_mse_1, cv_mse_2, cv_mse_3, cv_mse_4))
 }
 
 
-# Compute CV-MSE
-mean(mse_1)
-mean(mse_2)
-mean(mse_3)
-mean(mse_4)
+# Test function on Case 1
+cv_mse_i(1)
+
+
+# Apply cv_mse_i() function to all cases
+my_cv_mse = data.frame(case = 1:52) %>%
+  rowwise() %>%
+  mutate(
+    cv_mse = map(case, cv_mse_i) #New list column that includes the data frame of output
+  ) %>%
+  unnest(cols = cv_mse) #Turn list column into multiple columns
+
+
+# View output
+my_cv_mse
+
+
+# Compute average CV-MSE
+my_cv_mse %>%
+  select(-case) %>%
+  summarize_all(mean)
 
 
 

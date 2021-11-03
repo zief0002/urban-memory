@@ -220,6 +220,14 @@ The calendar below lists the tentative course topics. The dates listed are subje
 <tr>
 <td align="center" style="vertical-align:middle;">&nbsp;</td>
 <td>Nov. 02</td>
+<td align="center" style="vertical-align:middle;"></td>
+<td style="vertical-align:middle;">SVD using Different Inputs</td>
+<td align="center" style="vertical-align:middle;"></td>
+</tr>
+
+<tr>
+<td align="center" style="vertical-align:middle;">&nbsp;</td>
+<td>Nov. 04</td>
 <td align="center" style="vertical-align:middle;" rowspan="2">
   <a class="my-link" href="posts/2021-10-25-reading-biased-estimation-ridge-regression"><span class="fa fa-book"></span></a>
 </td>
@@ -231,57 +239,77 @@ The calendar below lists the tentative course topics. The dates listed are subje
 
 <tr>
 <td align="center" style="vertical-align:middle;">&nbsp;</td>
-<td>Nov. 04</td>
+<td>Nov. 09</td>
 </tr>
-
-
-
-<!-- <tr> -->
-<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
-<!-- <td>Oct. 28</td> -->
-<!-- <td style="vertical-align:middle;" rowspan="2">Biased Estimation and Shrinkage</td> -->
-<!-- </tr> -->
-
-<!-- <tr> -->
-<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
-<!-- <td>Nov. 02</td> -->
-<!-- </tr> -->
 
 
 <!-- Unit 05: MODEL SELECTION -->
 
 
-<!-- <tr> -->
-<!-- <td colspan="3"><b>Unit 05: Model Selection</b></td> -->
-<!-- </tr> -->
+<tr>
+<td colspan="5"><b>Unit 05: Model Selection</b></td>
+</tr>
 
-<!-- <tr> -->
-<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
-<!-- <td>Nov. 03</td> -->
-<!-- <td style="vertical-align:middle;">NO CLASS&mdash; Election Day</td> -->
-<!-- </tr> -->
+<tr>
+<td align="center" style="vertical-align:middle;">&nbsp;</td>
+<td>Nov. 11</td>
+<td align="center" style="vertical-align:middle;"></td>
+<td style="vertical-align:middle;">Model Selection Activity</td>
+<td align="center" style="vertical-align:middle;"></td>
+</tr>
 
-<!-- <tr> -->
-<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
-<!-- <td>Nov. 04</td> -->
-<!-- <td style="vertical-align:middle;" rowspan="2">Traditional Methods of Model Selection</td> -->
-<!-- </tr> -->
 
-<!-- <tr> -->
-<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
-<!-- <td>Nov. 09</td> -->
-<!-- </tr> -->
+<tr>
+<td align="center" style="vertical-align:middle;">&nbsp;</td>
+<td>Nov. 16</td>
+<td align="center" style="vertical-align:middle;" rowspan="2">
+  <!--<a class="my-link" href="posts/2021-11-03-reading-cross-validation"><span class="fa fa-book"></span></a>-->
+</td>
+<td style="vertical-align:middle;" rowspan="2">Model Selection: The 'Vintage' Methods</td>
+<td align="center" style="vertical-align:middle;" rowspan="2">
+  <!--<a class = "my-link" href="posts/2021-11-03-notes-cross-validation"><span class="fas fa-link"></span></a>-->
+</td>
+</tr>
 
-<!-- <tr> -->
-<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
-<!-- <td>Nov. 11</td> -->
-<!-- <td style="vertical-align:middle;" rowspan="2">Cross-Validation</td> -->
-<!-- </tr> -->
+<tr>
+<td align="center" style="vertical-align:middle;">&nbsp;</td>
+<td>Nov. 18</td>
+</tr>
 
-<!-- <tr> -->
-<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
-<!-- <td>Nov. 16</td> -->
-<!-- </tr> -->
+
+<tr>
+<td align="center" style="vertical-align:middle;">&nbsp;</td>
+<td>Nov. 23</td>
+<td align="center" style="vertical-align:middle;">
+  <!--<a class="my-link" href="posts/2021-11-18-reading-cross-validation"><span class="fa fa-book"></span></a>-->
+</td>
+<td style="vertical-align:middle;">Model Selection: Cross-Validation Methods</td>
+<td align="center" style="vertical-align:middle;">
+  <!--<a class = "my-link" href="posts/2021-11-18-notes-cross-validation"><span class="fas fa-link"></span></a>-->
+</td>
+</tr>
+
+<tr>
+<td align="center" style="vertical-align:middle;">&nbsp;</td>
+<td>Nov. 25</td>
+<td align="center" style="vertical-align:middle;"></td>
+<td style="vertical-align:middle;">NO CLASS --- Thanksgiving Break</td>
+<td align="center" style="vertical-align:middle;"></td>
+</tr>
+
+
+
+<tr>
+<td align="center" style="vertical-align:middle;">&nbsp;</td>
+<td>Nov. 30</td>
+<td align="center" style="vertical-align:middle;">
+  <!--<a class="my-link" href="posts/2021-11-18-reading-cross-validation"><span class="fa fa-book"></span></a>-->
+</td>
+<td style="vertical-align:middle;">Model Selection: Cross-Validation Methods</td>
+<td align="center" style="vertical-align:middle;">
+  <!--<a class = "my-link" href="posts/2021-11-18-notes-cross-validation"><span class="fas fa-link"></span></a>-->
+</td>
+</tr>
 
 
 <!-- Unit 06: BOOTSTRAPPING -->

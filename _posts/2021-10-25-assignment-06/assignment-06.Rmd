@@ -54,9 +54,9 @@ This assignment is worth 20 points.
 
 # Finding an Optimal $\lambda$ Value
 
-In this section, you will find a $\lambda$ value to use in a ridge regression analysis to alleviate estimation problems associated with the near perfect collinearity.  
+In this section, you will find a $\lambda$ value to use in a ridge regression analysis to alleviate estimation problems associated with the near perfect collinearity. Consider all $\lambda$ values between 0 and 10 (inclusive). Make sure that you can identify $\lambda$ to the nearest 1000th.
 
-7. Use the AIC to help you select the $\lambda$ value to use in the ridge regression. What is the value of $\lambda$ you will use in the ridge regression? Show your work.
+7. Use the AIC to help you select the optimal $\lambda$ value to use in the ridge regression. What is the value of $\lambda$ you will use in the ridge regression? Show your work.
 
 8. Create a ridge trace plot that includes the values of $\lambda$ you examined in Question 7. Also include a guideline indicating the value of $\lambda$ chosen by the AIC.
 

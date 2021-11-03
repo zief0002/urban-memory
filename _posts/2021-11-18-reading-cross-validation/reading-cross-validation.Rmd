@@ -1,0 +1,30 @@
+---
+title: "`r paste(emo::ji('book'), 'Cross-Validation')`"
+description: |
+  Reading
+author:
+  - name: andy
+    url: {}
+date: 11-18-2021
+output:
+  distill::distill_article:
+    self_contained: true
+categories:
+  - Reading
+---
+
+
+Read the following:
+
+- Feick, L. (2019). [Evaluating model performance by building cross-validation from scratch.](https://www.statworx.com/de/blog/evaluating-model-performance-by-building-cross-validation-from-scratch/) STATWORX Blog.
+
+<br />
+
+### Additional Resources
+
+- James, G., Witten, D., Hastie, T., &amp; Tibshirani, R. (2013). Cross-validation. In *[An introduction to statistical learning: with applications in R](https://www-bcf.usc.edu/~gareth/ISL/)* (pp. 176--186). New York: Springer.
+
+
+
+
+

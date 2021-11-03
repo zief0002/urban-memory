@@ -65,17 +65,17 @@ Below are the due dates for the assignments, as well as links to each assignment
 
 <tr>
 <td>`r emo::ji("goat")` Assignment 06: *Ridge Regression*</td>
-<td>Nov. 09</td>
+<td>Nov. 16</td>
 <td align="center" style="vertical-align:middle;">
   <a class = "my-link" href="posts/2021-10-25-assignment-06"><span class="fas fa-link"></span></a>
 </td>
 </tr>
 
 <tr>
-<td>Assignment 07: *Cross-Validation*</td>
-<td>Nov. 23</td>
+<td>`r emo::ji("bee")` Assignment 07: *Cross-Validation*</td>
+<td>Dec. 07</td>
 <td align="center" style="vertical-align:middle;">
-  <!-- <a class = "my-link" href="posts/2021-08-09-assignment-01"><span class="fas fa-link"></span></a> -->
+  <a class = "my-link" href="posts/2021-10-25-assignment-07"><span class="fas fa-link"></span></a>
 </td>
 </tr>
 

@@ -1,0 +1,30 @@
+---
+title: "`r paste(emo::ji('book'), 'Model Selection')`"
+description: |
+  Reading
+author:
+  - name: andy
+    url: {}
+date: 11-12-2021
+output:
+  distill::distill_article:
+    self_contained: true
+categories:
+  - Reading
+---
+
+
+Read the following:
+
+- Heinze, G., Wallisch, C., &amp; Dunkler, D. (2018). [Variable selection --- A review and recommendations for the practicing statistician.](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5969114/) *Biometrical Journal. Biometrische Zeitschrift, 60*(3), 431--449. https://doi.org/10.1002/bimj.201700067
+
+<br />
+
+### Additional Resources
+
+- [olsrr Vignette](https://cran.r-project.org/web/packages/olsrr/vignettes/intro.html)
+- Williams, B., Hansen, G., Baraban, A., &amp; Santoni, A. (2015). [A practical approach to variable selection---A comparison of various techniques.](https://www.casact.org/pubs/forum/15sumforum/Williams-Hansen-Baraban-Santoni.pdf) *Casualty Actuarial Society E-Forum, Summer*, 1--20.
+
+
+
+

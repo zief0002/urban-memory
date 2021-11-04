@@ -31,6 +31,35 @@ head(X)
 
 
 ##################################################
+### What does it mean to be ill-conditioned?
+##################################################
+
+z_eeo_data = eeo %>% 
+  scale() %>%
+  data.frame()
+
+
+tidy(lm(achievement ~ 0 + faculty + peer + school, data = z_eeo_data))
+
+
+# Add small perturbations to inputs
+set.seed(250)
+z_eeo_data %>%
+  mutate(
+    achievement = achievement + rnorm(70, mean = 0, sd = 0.01),
+    faculty = faculty + rnorm(70, mean = 0, sd = 0.01),
+    peer = peer + rnorm(70, mean = 0, sd = 0.01),
+    school = school + rnorm(70, mean = 0, sd = 0.01),
+    ) %>%
+  lm(achievement ~ 0 + faculty + peer + school, data = .) %>%
+  tidy() %>%
+  mutate(
+    delta = c(0.525, 0.945, -1.03)  - estimate
+  )
+
+
+
+##################################################
 ### Compute condition number for X^T(X)
 ##################################################
 
@@ -38,7 +67,8 @@ head(X)
 eig_val = eigen(t(X) %*% X)$values
 
 # Compute condition number
-abs(max(eig_val)) / abs(min(eig_val))
+sqrt(abs(max(eig_val)) / abs(min(eig_val)))
+
 
 
 
@@ -53,7 +83,7 @@ inflated = t(X) %*% X + 10*diag(3)
 eig_val_inflated = eigen(inflated)$values
 
 # Compute condition number
-abs(max(eig_val_inflated)) / abs(min(eig_val_inflated))
+sqrt(abs(max(eig_val_inflated)) / abs(min(eig_val_inflated)))
 
 
 

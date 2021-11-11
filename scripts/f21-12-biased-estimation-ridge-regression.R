@@ -125,7 +125,9 @@ tidy(ridge_1)
 ##################################################
 
 # Fit model
-lm.1 = lm(achievement ~ faculty + peer + school - 1, data = z_data)
+lm.1 = lm(achievement ~ -1 + faculty + peer + school, data = z_data)
+tidy(lm.1)
+
 
 # Obtain coefficients
 coef(lm.1)
@@ -137,7 +139,8 @@ coef(lm.1)
 ##################################################
 
 # Fit ridge model across several lambda values
-ridge_models = ridge_1 = lm.ridge(achievement ~ -1 + faculty + peer + school, data = z_data, lambda = seq(from = 0, to = 100, by = 0.001))
+ridge_models = ridge_1 = lm.ridge(achievement ~ -1 + faculty + peer + school, data = z_data, 
+                                  lambda = seq(from = 0, to = 100, by = 0.1))
 
 # Get tidy() output
 ridge_trace = tidy(ridge_models)
@@ -153,18 +156,22 @@ ggplot(data = ridge_trace, aes(x = lambda, y = estimate)) +
 
 
 
+ridge_1 = lm.ridge(achievement ~ -1 + faculty + peer + school, data = z_data, lambda = 50)
+tidy(ridge_1)
+
+
 ##################################################
 ### Compute AIC for ridge model with lambda = 0.1
 ##################################################
 
 # Compute coefficients for ridge model
-b = solve(t(X) %*% X + 0.1*diag(3)) %*% t(X) %*% y
+b = solve(t(X) %*% X + 40*diag(3)) %*% t(X) %*% y
 
 # Compute residual vector
 e = y - (X %*% b)
 
 # Compute H matrix
-H = X %*% solve(t(X) %*% X + 0.1*diag(3)) %*% t(X)
+H = X %*% solve(t(X) %*% X + 40*diag(3)) %*% t(X)
 
 # Compute df
 df = sum(diag(H))
@@ -186,7 +193,7 @@ ridge_aic = function(lambda){
 
 # Try function
 ridge_aic(lambda = 0.1)
-
+ridge_aic(lambda = 50)
 
 
 ##################################################
@@ -212,11 +219,11 @@ my_models %>%
 
 
 ##################################################
-### Refit ridge regression with d = 212.36
+### Refit ridge regression with d = 21.8
 ##################################################
 
-# Re-fit ridge regression using lambda = 22.36
-ridge_smallest_aic = lm.ridge(achievement ~ -1 + faculty + peer + school, data = z_data, lambda = 22.36)
+# Re-fit ridge regression using lambda = 21.8
+ridge_smallest_aic = lm.ridge(achievement ~ -1 + faculty + peer + school, data = z_data, lambda = 21.8)
 
 # View coefficients
 tidy(ridge_smallest_aic)
@@ -231,10 +238,10 @@ tidy(ridge_smallest_aic)
 b_ols = solve(t(X) %*% X) %*% t(X) %*% y
 
 # Compute lambda(I)
-lambda_I = 22.36*diag(3)
+lambda = 21.8
 
 # Estimate bias in ridge regression coefficients
--22.36 * solve(t(X) %*% X + lambda_I) %*% b_ols
+lambda * solve(t(X) %*% X + lambda*diag(3)) %*% b_ols
 
 
 # Ridge trace
@@ -263,7 +270,7 @@ glance(lm(achievement ~ -1 + faculty + peer + school, data = z_data))
 resid_var = 0.9041214 ^ 2
 
 # Compute variance-covariance matrix of ridge estimates
-W = solve(t(X) %*% X + 22.36*diag(3))
+W = solve(t(X) %*% X + 21.8*diag(3))
 var_b = resid_var * W %*% t(X) %*% X %*% W
 
 # Compute SEs

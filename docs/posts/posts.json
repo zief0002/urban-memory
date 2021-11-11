@@ -1,5 +1,24 @@
 [
   {
+    "path": "posts/2021-11-11-activity-model-selection/",
+    "title": "💪 Model Selection (In-Class Activity)",
+    "description": "An activity in model selection",
+    "author": [
+      {
+        "name": "andy",
+        "url": {}
+      }
+    ],
+    "date": "2021-11-11",
+    "categories": [
+      "Notes"
+    ],
+    "contents": "\nThe data in states-2019.csv include statistics collected from Wikipedia, the 2019 American Community Survey, and the National Centers for Environmental Information.\n[CSV]\n[Data Codebook]\n\nYour goal is to use the data (and everything you’ve learned so far in your coursework) to create a model to predict variation in life expectancy. Keep track of the process you use to create this model, including:\nWhich predictors should be included in the model?\nWhat is the criteria/evidence you are using to make these decisions?\n\nWhen in the process do you identify problematic observations?\nDo you remove those problematic observations or not?\nWhat criteria/evidence are you using to make these decisions?\n\nWhen in the process do you examine the model for collinearity?\nWhat is the criteria/evidence you are using to make this decision?\nWhat (if anything) will you do to fix this?\n\nWhen in the process do you examine the tenability of assumptions?\nAlso pay attention to when in the process you are making decisions based on sample evidence (graphs/statistics) versus when those decisions are being made using statistical inference (hypothesis tests, confidence intervals). Your group will be asked to report back to the class on the process, criteria, and evidence you used.\n\n\n\n",
+    "preview": {},
+    "last_modified": "2021-11-11T07:43:31-06:00",
+    "input_file": {}
+  },
+  {
     "path": "posts/2021-10-25-assignment-06/",
     "title": "🐐 Assignment 06",
     "description": "This goal of this assignment is to give you experience using ridge regression for alleviating interpretability problems that arise because of collinearity.",

@@ -265,11 +265,11 @@ The calendar below lists the tentative course topics. The dates listed are subje
 <td align="center" style="vertical-align:middle;">&nbsp;</td>
 <td>Nov. 16</td>
 <td align="center" style="vertical-align:middle;" rowspan="2">
-  <!--<a class="my-link" href="posts/2021-11-03-reading-cross-validation"><span class="fa fa-book"></span></a>-->
+  <a class="my-link" href="posts/2021-11-12-reading-model-selection"><span class="fa fa-book"></span></a>
 </td>
 <td style="vertical-align:middle;" rowspan="2">Model Selection: The 'Vintage' Methods</td>
 <td align="center" style="vertical-align:middle;" rowspan="2">
-  <!--<a class = "my-link" href="posts/2021-11-03-notes-cross-validation"><span class="fas fa-link"></span></a>-->
+  <a class = "my-link" href="handouts/2021-10-26-notes-model-selection.pdf"><span class="fas fa-link"></span></a>
 </td>
 </tr>
 
@@ -283,11 +283,11 @@ The calendar below lists the tentative course topics. The dates listed are subje
 <td align="center" style="vertical-align:middle;">&nbsp;</td>
 <td>Nov. 23</td>
 <td align="center" style="vertical-align:middle;">
-  <!--<a class="my-link" href="posts/2021-11-18-reading-cross-validation"><span class="fa fa-book"></span></a>-->
+  <a class="my-link" href="posts/2021-11-18-reading-cross-validation"><span class="fa fa-book"></span></a>
 </td>
 <td style="vertical-align:middle;">Model Selection: Cross-Validation Methods</td>
 <td align="center" style="vertical-align:middle;">
-  <!--<a class = "my-link" href="posts/2021-11-18-notes-cross-validation"><span class="fas fa-link"></span></a>-->
+  <a class = "my-link" href="posts/2021-11-18-notes-cross-validation"><span class="fas fa-link"></span></a>
 </td>
 </tr>
 
@@ -305,11 +305,11 @@ The calendar below lists the tentative course topics. The dates listed are subje
 <td align="center" style="vertical-align:middle;">&nbsp;</td>
 <td>Nov. 30</td>
 <td align="center" style="vertical-align:middle;">
-  <!--<a class="my-link" href="posts/2021-11-18-reading-cross-validation"><span class="fa fa-book"></span></a>-->
+  <a class="my-link" href="posts/2021-11-18-reading-cross-validation"><span class="fa fa-book"></span></a>
 </td>
 <td style="vertical-align:middle;">Model Selection: Cross-Validation Methods</td>
 <td align="center" style="vertical-align:middle;">
-  <!--<a class = "my-link" href="posts/2021-11-18-notes-cross-validation"><span class="fas fa-link"></span></a>-->
+  <a class = "my-link" href="posts/2021-11-18-notes-cross-validation"><span class="fas fa-link"></span></a>
 </td>
 </tr>
 

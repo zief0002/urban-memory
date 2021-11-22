@@ -314,17 +314,23 @@ The calendar below lists the tentative course topics. The dates listed are subje
 </tr>
 
 
-<!-- Unit 06: BOOTSTRAPPING -->
+<!-- Unit 06:PATH ANALYSIS -->
 
-<!-- <tr> -->
-<!-- <td colspan="3"><b>Unit 06: Bootstrapping</b></td> -->
-<!-- </tr> -->
+<tr>
+<td colspan="5"><b>Unit 06: Path Analysis</b></td>
+</tr>
 
-<!-- <tr> -->
-<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
-<!-- <td>Nov. 18</td> -->
-<!-- <td style="vertical-align:middle;" rowspan="2">Bootstrapping</td> -->
-<!-- </tr> -->
+<tr>
+<td align="center" style="vertical-align:middle;">&nbsp;</td>
+<td>Dec. 02</td>
+<td align="center" style="vertical-align:middle;">
+  <a class="my-link" href="posts/2021-11-22-reading-regression-from-summary-measures"><span class="fa fa-book"></span></a>
+</td>
+<td style="vertical-align:middle;">Regression from Summary Measures</td>
+<td align="center" style="vertical-align:middle;">
+  <a class = "my-link" href="posts/2021-11-22-notes-regression-from-summary-measures"><span class="fas fa-link"></span></a>
+</td>
+</tr>
 
 <!-- <tr> -->
 <!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->

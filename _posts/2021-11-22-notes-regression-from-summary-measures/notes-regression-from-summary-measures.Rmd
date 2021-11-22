@@ -1,0 +1,570 @@
+---
+title: "`r paste(emo::ji('memo'), 'Regression via Summary Measures')`"
+description: |
+  A brief introduction to computing coefficient-level and model-level regression summaries from descriptive statistics.
+author:
+  - name: andy
+    url: {}
+date: 11-22-2021
+output:
+  distill::distill_article:
+    self_contained: true
+    code_folding: false
+    css: ['../../style/syntax.css', '../../style/notes.css']
+bibliography: '../../style/epsy8264.bib'
+csl: '../../style/apa-single-spaced.csl'
+categories:
+  - Notes
+---
+
+
+```{r knitr_init, echo=FALSE, cache=FALSE, message=FALSE}
+library(knitr)
+library(kableExtra)
+library(rmdformats)
+
+## Global options
+options(max.print = "75")
+opts_chunk$set(
+  echo=TRUE,
+  prompt=FALSE, 
+  comment=NA, 
+  message=FALSE, 
+  warning=FALSE, 
+  tidy=FALSE, 
+  fig.width=6, 
+  fig.height=6,
+  fig.align='center', 
+  out.width='40%'
+  )
+opts_knit$set(width=85)
+options(scipen=5)
+```
+
+<!-- In this set of notes, we will use the data collected in *keith-achievement.csv* to fit a model to explain variation in students' academic achievment. -->
+
+<!-- - [[CSV]](https://raw.githubusercontent.com/zief0002/epsy-8264/master/data/keith-achievement.csv) -->
+- [[R Script File]](https://raw.githubusercontent.com/zief0002/epsy-8264/master/scripts/f21-15-regression-from-summary-measures.R)
+
+<!-- The data were simulated from include attributes for 1000 students. The variables include: -->
+
+<!-- - `achievement`: Measurement indicating the student achievement level -->
+<!-- - `faculty`: Measurement indicating the faculty's credentials -->
+<!-- - `peer`: Measurement indicating the influence of peer groups in the school -->
+<!-- - `school`: Measurement indicating the school facilities (e.g., building, teaching materials) -->
+
+<!-- ```{r} -->
+<!-- keith = read_csv() -->
+<!-- ``` -->
+
+When we have raw data, we can fit a regression model using the `lm()` function and obtain model- and coefficient-level summaries using the `glance()` and `tidy()` functions respectively. However, there are times we might want to compute regression coefficients and standard errors, but are not given the raw data. This is common for example in articles, which often report summaries rather than providing raw data.
+
+So long as we have certain pieces of statistical information we can compute the regression coefficients and standarad errors without having the raw data. To do this, we need the sample size, means, standard deviations, and correlations between variables. For example, consider the following summary table:
+
+```{r echo=FALSE}
+data.frame(
+ Measure = c("1. Achievement", "2. Ability", "3. Motivation", "4. Previous Coursework", "5. Family Background"),
+ achieve = c("50 (10)", "0.737", "0.255", "0.615", "0.417"),
+ ability = c("---", "100 (15)", "0.205", "0.498", "0.417"),
+ motivate = c("---", "---", "50 (10)", "0.375", "0.190"),
+ courses = c("---", "---", "---", "4 (2)", "0.372"),
+ fam_back = c("---", "---", "---", "---", "0 (1)")
+) %>%
+  kable(
+  caption = "Correlation matrix for five attributes measured on *n* = 1,000 students. Means (standard deviations) for each attribute are provided on the main diagonal",
+  table.attr = "style='width:60%;'",
+  col.names = c("Measure", "1.", "2.", "3.", "4.", "5.") ,
+  align =c("l", rep("c", 5))
+  )  %>%
+  kable_classic(full_width = TRUE) %>%
+  row_spec(row = 0, align = "c")
+```
+
+Say we wanted to use this information to fit a regression model to predict variation in achievement using the other four predictors. Mathematically,
+
+$$
+\begin{split}
+\mathrm{Achievement}_i = &\beta_0 + \beta_1(\mathrm{Ability}_i) + \beta_2(\mathrm{Motivation}_i) + \\
+&\beta_3(\mathrm{Coursework~}_i) + \beta_4(\mathrm{Family~Background}_i) + \epsilon_i
+\end{split}
+$$
+
+To do this we are going to create the correlation matrix, the vector of attribute means, and the vector of attribute standard deviations.
+
+```{r}
+# Create correlation matrix
+corrs = matrix(
+  data = c(
+    1.000, 0.737, 0.255, 0.615, 0.417,
+    0.737, 1.000, 0.205, 0.498, 0.417,
+    0.255, 0.205, 1.000, 0.375, 0.190,
+    0.615, 0.498, 0.375, 1.000, 0.372,
+    0.417, 0.417, 0.190, 0.372, 1.000
+  ),
+  nrow = 5
+)
+
+# View correlation matrix
+corrs
+
+# Create mean vector
+means = c(50, 100, 50, 4, 0)
+
+# Create sd vector
+sds = c(10, 15, 10, 2, 1)
+
+# Set sample size
+n = 1000
+```
+
+To compute the coefficients from raw data, recall that we solve the normal equations based on:
+
+$$
+\mathbf{X}^\intercal\mathbf{Xb} = \mathbf{X}^\intercal\mathbf{y}
+$$
+
+Recall that if we mean center the variables in a regression analysis, the coefficients for this set of predictors would be exactly the same as if we used the raw predictors. (The intercept would differ, but ignore that for now.) That is if we solved the normal equations based on
+
+$$
+\mathbf{X}_{\mathrm{Dev}}^\intercal\mathbf{X}_{\mathrm{Dev}}\mathbf{b} = \mathbf{X}_{\mathrm{Dev}}^\intercal\mathbf{y}_{\mathrm{Dev}}
+$$
+
+the elements of **b** associated with the predictors in this set of equations would be the same as those from solving for **b** in $\mathbf{X}^\intercal\mathbf{Xb} = \mathbf{X}^\intercal\mathbf{y}$. 
+
+So, if our goal is to find the coefficients associated with the predictors, it doesn't matter if we use the raw or mean centered predictors. This is useful since there is a direct relationship between the $\mathbf{X}_{\mathrm{Dev}}^\intercal\mathbf{X}_{\mathrm{Dev}}$ matrix and the variance-covariance matrix of the raw predictors:
+
+$$
+\mathrm{Cov}(X,X) = \frac{\mathbf{X}_{\mathrm{Dev}}^\intercal\mathbf{X}_{\mathrm{Dev}}}{n-1}
+$$
+
+Similarly, there is a direct relationship between the $\mathbf{X}_{\mathrm{Dev}}^\intercal\mathbf{y}_{\mathrm{Dev}}$ matrix and the vector of covariances between the raw predictors and the raw outcome:
+
+$$
+\mathrm{Cov}(X,y) = \frac{\mathbf{X}_{\mathrm{Dev}}^\intercal\mathbf{y}_{\mathrm{Dev}}}{n-1}
+$$
+
+This means we can write our second set of normal equations (using the mean centered variables) as:
+
+$$
+\mathrm{Cov}(X,X)\mathbf{b} = \mathrm{Cov}(X,y)
+$$
+
+Which we can use to solve for **b**:
+
+$$
+\mathbf{b} = \mathrm{Cov}(X,X)^{-1}\mathrm{Cov}(X,y)
+$$
+
+<br />
+
+
+## Going From the Correlations to Covariances
+
+The summary measures we have give correlations, not covariances. However, it is quite easy to convert a correlation matrix to a covariance matrix. From the chapter [Statistical Application: SSCP, Variance–Covariance, and Correlation Matrices](https://zief0002.github.io/matrix-algebra/statistical-application-sscp-variancecovariance-and-correlation-matrices.html) in *Matrix Algebra for Educational Scientists*, know that:
+
+$$
+\mathbf{R} = \mathbf{S} \boldsymbol\Sigma \mathbf{S} 
+$$
+
+where **R** is the correlation matrix, $\boldsymbol\Sigma$ is the covariance matrix, and **S** is a diagonal scaling matrix with diagonal elements equal to the reciprocal of the standard deviations of each of the variables in the covariance matrix. Re-arranging this:
+
+$$
+\boldsymbol\Sigma = \mathbf{S}^{-1} \mathbf{R} \mathbf{S}^{-1} 
+$$
+
+Recall that the inverse of a diagonal matrix is another diagonal matrix where the diagonal elements are the resciprocals of the original. Thus the diagonal elements of the inverse of our scaling matrix will be the standard deviations of the variables. Using this formula, we can now convert the given correlation matrix to a covariance matrix.
+
+```{r}
+# Compute the scaling matrix S^(-1)
+S_inv = diag(sds)
+S_inv
+
+# Compute covariance matrix
+covs = S_inv %*% corrs %*% S_inv
+covs
+```
+
+Adding in the row and column names:
+
+
+```{r echo=FALSE}
+covs2 = covs
+rownames(covs2) = c("Achievement", "Ability", "Motivation", "Previous Coursework", "Family Background")
+colnames(covs2) = c("Achievement", "Ability", "Motivation", "Previous Coursework", "Family Background")
+
+covs2 %>%
+  data.frame() %>%
+  kable(
+  caption = "Variance-covariance matrix for five attributes measured on *n* = 1,000 students.",
+  table.attr = "style='width:80%;'",
+  align =c("l", rep("c", 5))
+  )  %>%
+  kable_classic(full_width = TRUE) %>%
+  row_spec(row = 0, align = "c")
+```
+
+Remember, the diagonal elements in the covariance matrix are variances of each variable and the off-diagonal elements are the covariances between two variables. For example, the first diagonal element is 100, which is the variance of the achievement variable. The remaining elements in the first column indicate the covariances between achievement and ability, achievement and motivation, achievement and previous coursework, and achievement and family background. 
+
+<br />
+
+
+## Finding the Predictor Coefficients
+
+To compute the coefficients for the predictors, we need to obtain two things:
+
+- Cov(X,X): The variance-covariance matrix of the predictors, and
+- Cov(X, y): The vector that contains the covariances between the outcome and each predictor. (Note: This vector does not include the variance of the outcome, only the covariances with the predictors.)
+
+In our example, the elements in the first column (or row) of the variance-covariance matrix *other than the variance of the outcome* are the values in the vector Cov(X, y). The elements in the other rows/columns make up the elements of the Cov(X, X) matrix.
+
+```{r echo=FALSE}
+covs2 %>%
+  data.frame() %>%
+  kable(
+  caption = "Variance-covariance matrix for five attributes measured on *n* = 1,000 students.",
+  table.attr = "style='width:80%;'",
+  align =c("l", rep("c", 5))
+  )  %>%
+  kable_classic(full_width = TRUE) %>%
+  row_spec(row = 0, align = "c") %>%
+  column_spec(3:6, color = "#cc79a7") %>%
+  column_spec(2, color = "#0072b2") %>%
+  row_spec(1, color = "#222222")
+```
+
+Here the blue elements compose Cov(X, y) and the reddish-purple elements constitute Cov(X, X). We can create this vector and matrix using indexing.
+
+```{r}
+# Create Cov(X, y)
+cov_xy = covs[-1 , 1]
+cov_xy
+
+# Create Cov(X, X)
+cov_xx = covs[-1 , -1]
+cov_xx
+```
+
+
+Then we can use these to compute the predictor coefficients.
+
+```{r}
+# Compute predictor coefficients
+b = solve(cov_xx) %*% cov_xy
+b
+```
+
+Thus the coefficient estimates are:
+
+- $\hat\beta_{\mathrm{Ability}} = 0.367$
+- $\hat\beta_{\mathrm{Motivation}} = 0.013$
+- $\hat\beta_{\mathrm{Previous~Coursework}} = 1.550$
+- $\hat\beta_{\mathrm{Family~Background}} = 0.695$
+
+<br />
+
+
+## Computing the Intercept
+
+To compute the intercept, we can use the following:
+
+$$
+\hat\beta_0 = \bar{y} - \bar{\mathbf{x}}^\intercal\mathbf{b}
+$$
+
+where $\bar{y}$ is the mean of the outcome, $\bar{\mathbf{x}}$ is the vector of predictor means, and **b** is the associated vector of predictor coefficients.
+
+In our example,
+
+```{r}
+# Compute intercept
+b_0 = means[1] - t(means[2:5]) %*% b
+b_0
+```
+
+Thus the fitted equation for the unstandardized model is:
+
+$$
+\begin{split}
+\widehat{\mathrm{Achievement}_i} = &6.434 + 0.367(\mathrm{Ability}_i) + 0.013(\mathrm{Motivation}_i) + \\
+&1.550(\mathrm{Coursework~}_i) + 0.695(\mathrm{Family~Background}_i)
+\end{split}
+$$
+<br />
+
+
+# Standard Errors for the Coefficients
+
+Using the raw data, we estimated the standard error for the coefficients by taking the square root of the diagonal elements of the variance-covariance matrix of the coefficients, where the the variance-covariance matrix of the coefficients was computed as:
+
+$$
+\hat\sigma^2_{e} (\mathbf{X}^\intercal\mathbf{X})^{-1}
+$$
+
+We can use the summary values we have to also obtain the $\hat\sigma^2_{e}$ estimate and to compute the elements of the $\mathbf{X}^\intercal\mathbf{X}$ matrix.
+
+<br />
+
+The estimate of the residual variance is found using:
+
+$$
+\hat\sigma^2_{e} = \hat\sigma^2_y (1 - R^2_{\mathrm{Adj}})
+$$
+
+where $\hat\sigma^2_y$ is the variance of the outcome and $R^2_{\mathrm{Adj}}$ is the Adjusted $R^2$ value which is found using:
+
+$$
+R^2_{\mathrm{Adj}} = 1 - \frac{\mathrm{df}_{\mathrm{Total}}}{\mathrm{df}_{\mathrm{Residual}}}(1 -R^2)
+$$
+
+To find the $R^2$ value, we can invert the correlation matrix and compute one minus the reciprocal of the diagonal elements of this inverted matrix. The results are the $R^2$ values for the given term as an outcome variable and all other terms in the correlation matrix as predictors.
+
+```{r}
+# Invert correlation matrix
+corr_inv = solve(corrs)
+
+# Compute the R2 values
+r2 = 1 - 1/diag(corr_inv)
+r2
+```
+
+Here the $R^2$ value from regressing achievement on all the other variables in the correlation matrix (e.g., ability, motivation, previous coursework, and family background) is 0.629. We can then use this to compute adjusted $R^2$ and subsequently use that to compute $\hat\sigma^2_y$.
+
+```{r}
+# Compute adjusted R2
+r2_adj = 1 - (999 / 995) * (1 - r2[1])
+r2_adj
+
+# Compute estimated residual variance
+s2_e = sds[1]^2 * (1 - r2_adj)
+s2_e
+```
+
+Our estimate for $\hat\sigma^2_y$ is 37.25.
+
+<br />
+
+## Compute $\mathbf{X}^\intercal\mathbf{X}$ Matrix
+
+The elements in the first row and column of the $\mathbf{X}^\intercal\mathbf{X}$ matrix are functions of the sample size and means of the predictor variables. Namely the first element in the first row and column is *n* and the remaining elements in the that row and column are created as $n\mathbf{M_x}$, where *n* is the sample size, and $\mathbf{M_x}$ is the vector of predictor means. The remaining elements constitute a submatrix defined as:
+
+$$
+(\mathbf{X}^\intercal\mathbf{X})_{\mathrm{Sub}} = (n-1)\mathrm{Cov}(X,X) + n(\mathbf{M_x})(\mathbf{M_x}^\intercal)
+$$
+
+where *n* is the sample size, Cov(X,X) is the variance covariance matrix ofthe predictors, and $\mathbf{M_x}$ is again the vector of predictor means. We cn then create the $\mathbf{X}^\intercal\mathbf{X}$ matrix as:
+
+$$
+\require{color}
+\begin{split} 
+\mathbf{X}^\intercal\mathbf{X} &= \begin{bmatrix}{\color[rgb]{0.044147,0.363972,0.636955}n} & {\color[rgb]{0.044147,0.363972,0.636955}n\mathbf{M_x}}\\{\color[rgb]{0.044147,0.363972,0.636955}n\mathbf{M_x}} & {\color[rgb]{0.748052,0.381230,0.589698}(\mathbf{X}^\intercal\mathbf{X})_{\mathrm{Sub}}}\end{bmatrix}
+ \\[2ex]
+&= \begin{bmatrix}{\color[rgb]{0.044147,0.363972,0.636955}n} & {\color[rgb]{0.044147,0.363972,0.636955}n\overline{X1}} & {\color[rgb]{0.044147,0.363972,0.636955}n\overline{X2}} &  {\color[rgb]{0.044147,0.363972,0.636955}n\overline{X3}} & {\color[rgb]{0.044147,0.363972,0.636955}\ldots} & {\color[rgb]{0.044147,0.363972,0.636955}n\overline{Xk}}\\ {\color[rgb]{0.044147,0.363972,0.636955}n\overline{X1}} & & & & &  \\ {\color[rgb]{0.044147,0.363972,0.636955}n\overline{X2}} & & & & &  \\ {\color[rgb]{0.044147,0.363972,0.636955}n\overline{X3}} & & & {\color[rgb]{0.748052,0.381230,0.589698}(\mathbf{X}^\intercal\mathbf{X})_{\mathrm{Sub}}} & &  \\ {\color[rgb]{0.044147,0.363972,0.636955}\vdots} & & & & &  \\ {\color[rgb]{0.044147,0.363972,0.636955}n\overline{Xk}} & & & & &   \end{bmatrix}
+\end{split}
+$$
+
+To create this matrix using R, we will:
+
+1. Compute the submatrix $(\mathbf{X}^\intercal\mathbf{X})_{\mathrm{Sub}}$.
+2. Bind the $n\mathbf{M_x}$ vector to the top of the submatrix.
+3. Bind the vector that contains *n* and $n\mathbf{M_x}$ to the left of the resulting matrix from Step 2.
+
+The resulting matrix is the $\mathbf{X}^\intercal\mathbf{X}$ matrix. For our example,
+
+```{r}
+# Step 1: Create submatrix
+sub_mat = 999 * cov_xx + 1000 * means[2:5] %*% t(means[2:5])
+sub_mat
+
+# Step 2: Bind n(M_x) to top of submatrix
+mat_2 = rbind(1000 * means[2:5], sub_mat)
+mat_2
+
+# Step 3: Bind vector to left of Step 2 matrix
+XtX = cbind(c(1000, 1000 * means[2:5]), mat_2)
+XtX
+```
+
+We can then scale this matrix using our previous estimate of the residual variance to obtain the variance-covariance matrix for the coefficients and compute the coefficient standard errors.
+
+```{r}
+# Compute var-cov matrix of b
+cov_b = s2_e * solve(XtX)
+cov_b
+
+# Compute SEs
+se = sqrt(diag(cov_b))
+se
+```
+
+These are the standard errors for the intercept and each predictor. Here I add the coefficients and standard errors to a data frame and use them to compute *t*-values, associated *p*-values, and confidence intervals. 
+
+```{r}
+# Load library
+library(tidyverse)
+
+# Create regression table
+data.frame(
+  Predictor = c("Intercept", "Ability", "Motivation", "Previous Coursework", "Family Background"),
+  B = c(b_0, b),
+  SE = se
+) %>%
+  mutate(
+    t = round(B /SE, 3),
+    p = round(2 * pt(-abs(t), df = 995), 5),
+    CI = paste0("(", round(B + qt(.025, df = 995)*SE, 3), ", ", round(B + qt(.975, df = 995)*SE, 3), ")")
+  )
+```
+
+<br />
+
+
+# Standardized Regression from Summaries
+
+We can also compute pertinent values from the standaradized regression coefficients in a similar manner; in fact it is easier since there is no intercept to compute in a standardized regression. In a standardized regression, the coefficients are based on the centered and scaled data. Similarly, the correlation matrix is a scaled version of the covariance matrix (which represents the centered data). This allows us to also use the correlation matrices in the set of normal equations:
+
+$$
+\mathrm{Cor}(X,X)\mathbf{b^*} = \mathrm{Cor}(X,y)
+$$
+
+Here we use the notation $\mathbf{b^*}$ to differentiate these predictor estimates from the unstandardized estimates. We can solve this for $\mathbf{b^*}$:
+
+$$
+\mathbf{b^*} = \mathrm{Cor}(X,X)^{-1}\mathrm{Cor}(X,y)
+$$
+
+
+This reminds us that the regression coefficients in a standardized regression are correlations (or partial correlations in the multiple regression) between a predictor and the outcome. Here we us the original correlation matrix to compute the standardized regression coefficients:
+
+```{r}
+# Compute standardized coefficients
+b_star = solve(corrs[-1 , -1]) %*% corrs[1 , 2:5]
+b_star
+```
+
+Writing the fitted equation:
+
+$$
+\begin{split}
+\hat{z}_{\mathrm{Achievement}_i} = &0.551(z_{\mathrm{Ability}_i}) + 0.012(z_{\mathrm{Motivation}_i}) + \\
+&0.310(z_{\mathrm{Coursework~}_i}) + 0.069(z_{\mathrm{Family~Background}_i})
+\end{split}
+$$
+
+We can also compute the associated standard errors using the following:
+
+$$
+\mathrm{SE}_{\mathrm{Std}} = \mathrm{SE}_{\mathrm{Unstd}} \bigg(\frac{b_{\mathrm{Unstd}}}{b_{\mathrm{Std}}}\bigg)
+$$
+
+In our example,
+
+```{r}
+# Compute SEs
+se[-1] * b_star / b
+```
+
+Here we had to remove the first element in the `se` object since it was related to the intercept. Using the estimates from the standardized regresion, the *t*-values and associated *p*-values are identical to those from the standardized model. In practice, if you are reporting standardized coefficients, it is typical to report the unstandardized estimates and standard errors, the standardized estimates, and the *t*- and *p*-values.
+
+```{r echo=FALSE}
+# Set NA to blank space in kable
+options(knitr.kable.NA = '')
+
+# Create regression table
+data.frame(
+  Predictor = c("Ability", "Motivation", "Previous Coursework", "Family Background", "Intercept"),
+  B = round(c(b, b_0), 2),
+  SE = round(c(se[2:5], se[1]), 2),
+  Beta = round(c(b_star, NA), 3)
+) %>%
+  mutate(
+    t = round(B /SE, 2),
+    p = round(2 * pt(-abs(t), df = 995), 5)
+  ) %>%
+  kable(
+  caption = "Unstandardized and standardized regression coefficients for fitting a model to predict variation in student achievement for *n* = 1,000 students.",
+  table.attr = "style='width:60%;'",
+  col.names = c("Predictor", "*B*", "*SE*", "$\\beta$", "*t*", "*p*") ,
+  align = c("l", rep("c", 5))
+  )  %>%
+  kable_classic(full_width = TRUE) %>%
+  row_spec(row = 0, align = "c") %>%
+  footnote(general = "R-squared =0.629; Residual Standard Error = 6.10", footnote_as_chunk = TRUE)
+```
+
+<br />
+
+# Simulating Data Using Summaries
+
+We can also simulate a set of data that mimics the correlation matrix, means, and standard deviations that were reported in the summaries. To do this, we need to make an assumption that the variables are all multivariatly normally disributed. If we make this strong assumption, then we can simulate using the `mvrnorm()` function from the `{MASS}` package. In this function we need to provide the sample size, the vector of means (for the outcome and predictors), and the variance-covariance matrix of all the variables. 
+
+```{r eval=FALSE}
+MASS::mvrnorm(n = 1000, mu = means, Sigma = covs)
+```
+
+
+This will draw a sample from a population where the variables have those means and variance-covariance matrix. This means that the data we draw will likely not have the same means, SDs, or correlations. If we want the data to reproduce these values exactly, we add the argument `empirical=TRUE`. Here we do this and assign the data to the `sim_dat` object
+
+```{r}
+# Set seed for reproducibility
+set.seed(1)
+
+# Simulate the data
+sim_dat <- MASS::mvrnorm(n = 1000, mu = means, Sigma = covs, empirical = TRUE)
+```
+
+This is a matrix object, so we convert it to a data frame and also assign column names so the data are easier to use in our functions.
+
+```{r}
+# Convert to data frame
+sim_dat = data.frame(sim_dat)
+
+# Change column names
+names(sim_dat) = c("achieve", "ability", "motivation", "coursework", "fam_back")
+
+# View data
+head(sim_dat)
+```
+
+Now we can check that the summaries are being reproduced.
+
+```{r}
+# Compute means and SDs
+sim_dat %>%
+  summarize(
+    across(.cols = everything(), .fns = list(Mean = mean, SD = sd))
+  ) %>%
+  round(3)
+
+# Compute correlation matrix
+sim_dat %>%
+  corrr::correlate()
+```
+
+Finally, we should be able to reproduce the regression estimates we have computed.
+
+```{r}
+# Fit unstandardized model
+lm_unstd = lm(achieve ~ 1 + ability + motivation + coursework + fam_back, data = sim_dat)
+
+# Load broom library
+library(broom)
+
+# Model-level output
+glance(lm_unstd) %>%
+  print(width = Inf)
+
+# Coefficient-level output
+tidy(lm_unstd)
+
+# Standardized model
+sim_dat %>%
+  scale() %>%
+  data.frame() %>%
+  lm(achieve ~ 1 + ability + motivation + coursework + fam_back, data = .) %>%
+  tidy() %>%
+  filter(term != "(Intercept)")
+```
+
+
+
+

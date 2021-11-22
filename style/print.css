@@ -1,0 +1,35 @@
+@media print {
+  
+  /* Remove header, footer, etc. for printing */
+  header, footer, nav, form, iframe, .menu, .hero, .adslot {
+    display: none;
+  }
+
+
+  /* Change font size for printing*/
+  body {
+    margin: 0;
+    width: 100%;
+    font-size: 12px;
+  }
+
+
+  /* Change link appearance for printing*/
+  .my-link {
+    text-decoration: underline;
+    border-bottom: 1;
+  }
+  
+  /* Style code output */
+pre:not([class]) {
+  background-color: #eff4f6;
+  padding: 0px;
+  border: 1px solid black;
+}
+
+pre:not([class]) code {
+  background-color: #eff4f6;
+}
+
+
+}

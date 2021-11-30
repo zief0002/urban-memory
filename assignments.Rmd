@@ -80,10 +80,10 @@ Below are the due dates for the assignments, as well as links to each assignment
 </tr>
 
 <tr>
-<td>Assignment 08: *Bootstrapping and Prediction*</td>
+<td>`r emo::ji("dog")` Assignment 08: *Path Analysis*</td>
 <td>Dec. 16</td>
 <td align="center" style="vertical-align:middle;">
-  <!-- <a class = "my-link" href="posts/2021-08-09-assignment-01"><span class="fas fa-link"></span></a> -->
+  <a class = "my-link" href="posts/2021-11-26-assignment-08"><span class="fas fa-link"></span></a>
 </td>
 </tr>
 

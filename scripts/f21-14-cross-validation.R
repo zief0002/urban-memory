@@ -21,7 +21,7 @@ usa
 
 # Create data frame of standardized variables after removing state names
 z_usa = usa %>%
-  slect(-state) %>%
+  select(-state) %>%
   scale(center = TRUE, scale = TRUE) %>%
   data.frame()
 

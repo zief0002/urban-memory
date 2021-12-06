@@ -12,8 +12,7 @@ tidy_dagitty(dagified)
 ggdag(dagified, layout = "circle")
 
 
-# SIMULATE
-g <- dagitty('dag{z -> x [beta=-.6] x <- y [beta=-.6] }')
+# INPUT MODEL
 
 g <- dagitty('
   dag{
@@ -37,8 +36,10 @@ g <- dagitty('
 
 ggdag(g)
 
+# SIMULATE FROM TECHNOLOGY MODEL
 x <- simulateSEM(g, empirical = TRUE, N = 232) 
 
+# Check correlations
 x %>%
   select(intend, knowledge, ease, students, teachers, attitude) %>%
   corrr::correlate()
@@ -141,3 +142,25 @@ digraph path_model {
 
 
 write_csv(x, file = "~/Desktop/technology-path-analysis.csv")
+
+
+################################
+
+library(lavaan)
+
+technology.model = "
+  ease ~ p1*knowledge
+  students ~ p2*ease
+  teachers ~ p3*ease + p4*students
+  attitude ~ p5*students + p6*teachers + ease
+  intend ~ knowledge + p8*attitude + teachers + p7*ease
+  indirect_knowledge := p1*p3*p6*p8 + p1*p7 + p1*p2*p5*p8 + p1*p2*p4*p6*p8
+  indirect_teachers := p6*p8
+  indirect_ease := p3*p6*p8 + p2*p5*p8 + p2*p4*p6*p8
+  indirect_students := p5*p8 + p4*p6*p8
+  total_ease := p7 + p3*p6*p8 + p2*p5*p8 + p2*p4*p6*p8
+"
+
+pm.1 = sem(technology.model, data = x)
+
+summary(pm.1, ci = TRUE, rsquare = TRUE)

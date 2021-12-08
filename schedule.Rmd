@@ -322,7 +322,7 @@ The calendar below lists the tentative course topics. The dates listed are subje
 
 <tr>
 <td align="center" style="vertical-align:middle;">&nbsp;</td>
-<td>Dec. 02</td>
+<td>Dec. 07</td>
 <td align="center" style="vertical-align:middle;">
   <a class="my-link" href="posts/2021-11-22-reading-regression-from-summary-measures"><span class="fa fa-book"></span></a>
 </td>
@@ -332,50 +332,28 @@ The calendar below lists the tentative course topics. The dates listed are subje
 </td>
 </tr>
 
-<!-- <tr> -->
-<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
-<!-- <td>Nov. 23</td> -->
-<!-- </tr> -->
+<tr>
+<td align="center" style="vertical-align:middle;">&nbsp;</td>
+<td>Dec. 07</td>
+<td align="center" style="vertical-align:middle;" rowspan="2"></td>
+<td style="vertical-align:middle;" rowspan="2">Path Analysis</td>
+<td align="center" style="vertical-align:middle;" rowspan="2">
+  <a class = "my-link" href="posts/2021-12-08-notes-path-models"><span class="fas fa-link"></span></a>
+</td>
+</tr>
 
-<!-- <tr> -->
-<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
-<!-- <td>Nov. 25</td> -->
-<!-- <td style="vertical-align:middle;">NO CLASS&mdash;Thanksgiving Break</td> -->
-<!-- </tr> -->
+<tr>
+<td align="center" style="vertical-align:middle;">&nbsp;</td>
+<td>Dec. 09</td>
+</tr>
 
-<!-- <tr> -->
-<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
-<!-- <td>Nov. 30</td> -->
-<!-- <td style="vertical-align:middle;">Bootstrapping (cntd.)</td> -->
-<!-- </tr> -->
-
-<!-- Unit 07: PREDICTION -->
-
-<!-- <tr> -->
-<!-- <td colspan="3"><b>Unit 07: Prediction</b></td> -->
-<!-- </tr> -->
-
-<!-- <tr> -->
-<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
-<!-- <td>Dec. 02</td> -->
-<!-- <td style="vertical-align:middle;" rowspan="4">Prediction</td> -->
-<!-- </tr> -->
-
-<!-- <tr> -->
-<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
-<!-- <td>Dec. 07</td> -->
-<!-- </tr> -->
-
-<!-- <tr> -->
-<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
-<!-- <td>Dec. 09</td> -->
-<!-- </tr> -->
-
-<!-- <tr> -->
-<!-- <td align="center" style="vertical-align:middle;">&nbsp;</td> -->
-<!-- <td>Dec. 14</td> -->
-<!-- </tr> -->
-
+<tr>
+<td align="center" style="vertical-align:middle;">&nbsp;</td>
+<td>Dec. 14</td>
+<td align="center" style="vertical-align:middle;"></td>
+<td style="vertical-align:middle;">NO CLASS</td>
+<td align="center" style="vertical-align:middle;"></td>
+</tr>
 
 </tbody>
 </table>
